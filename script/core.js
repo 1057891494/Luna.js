@@ -185,6 +185,19 @@
 
     Luna.__isLoad__ = false;
 
+    /*动画相关全局定义*/
+    Luna.clock = {
+        //当前正在运动的动画的tick函数堆栈
+        timers: [],
+        //唯一定时器的定时间隔
+        interval: 13,
+        //指定了动画时长duration默认值
+        speeds: 400,
+        //定时器ID
+        timerId: null
+    };
+
+
     window.Luna = window.$ = Luna;
 
 });

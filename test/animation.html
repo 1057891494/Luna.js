@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset='utf-8'>
+    <title>luna - 单元测试</title>
+    <link rel="icon" href="../luna.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="Keywords" content="luna - 单元测试" />
+    <meta name="description" content="luna - 单元测试" />
+    <meta name="author" content="心叶" />
+    <link rel="apple-touch-icon" sizes="52x52" href="52icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
+    <script src="../luna.js"></script>
+    <script>
+        $(function() {
+            console.log(new Date());
+            $.animation(function(deep) {
+                console.log("1 >>> " + deep + "%");
+            }, 1000, function() {
+                console.log("1 >>> " + new Date());
+            });
+            $.animation(function(deep) {
+                console.log("2 >>> " + deep + "%");
+            }, 500, function() {
+                console.log("2 >>> " + new Date());
+            });
+            $.animation(function(deep) {
+                console.log("3 >>> " + deep + "%");
+            }, 100, function() {
+                console.log("3 >>> " + new Date());
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>luna - 单元测试</h1>
+    <article>
+        <header>
+            luna说明
+        </header>
+        <section>
+            luna的定位是个人使用和技巧积累，同时是快速测试环境和相关项目开发快速助手，总体而言，都只是个人使用。
+        </section>
+        <section>
+            luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
+        </section>
+    </article>
+</body>
+
+</html>
+
+<!--
+    =================================================
+    走一步，再走一步。
+    =================================================
+-->
