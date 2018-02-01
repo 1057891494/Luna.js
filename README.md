@@ -1,7 +1,7 @@
 # Luna.js
 
 
-<div align=center><img width="100" height="100" src="https://github.com/yelloxing/Luna.js/blob/master/luna.png"/></div>
+<div align=left><img width="100" height="100" src="https://github.com/yelloxing/Luna.js/blob/master/luna.png"/></div>
 
 ****
 ### Author:心叶
