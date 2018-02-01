@@ -1,0 +1,17 @@
+{
+    "name": "luna",
+    "version": "0.0.1",
+    "type":"alpha",
+    "description": "个人内部使用的小型js工具库",
+    "scripts": {
+        "start": "node_modules/.bin/grunt"
+    },
+    "author": "心叶",
+    "license": "MIT",
+    "devDependencies": {
+        "grunt": "^1.0.1",
+        "grunt-contrib-concat": "^1.0.1",
+        "grunt-contrib-jshint": "^1.1.0",
+        "grunt-contrib-uglify": "^3.3.0"
+    }
+}

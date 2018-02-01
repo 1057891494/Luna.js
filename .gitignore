@@ -1,0 +1,13 @@
+#
+# ===========================
+# git提交的忽略文件
+# ===========================
+#
+
+.git
+.DS_Store
+.project
+style.css.map
+.sass-cache
+node_modules
+jshint.debug.txt
