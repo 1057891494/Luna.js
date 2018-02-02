@@ -78,7 +78,7 @@
                 return this;
             } else {
                 //内置小型sizzle选择器
-                if (!Luna.doSelector) {
+                if (!Luna.sizzle) {
                     throw new Error("Sizzle is necessary for Luna!");
                 }
                 var nodes = Luna.sizzle(selector, context);
@@ -197,6 +197,8 @@
         timerId: null
     };
 
+    /*sizzle特殊使用 */
+    Luna._sizzle_ = {};
 
     window.Luna = window.$ = Luna;
 
