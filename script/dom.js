@@ -68,6 +68,19 @@
         },
 
         /**
+         * 判断是否存在指定的class
+         */
+        "hasClass": function(val) {
+            var $this = Luna(this[0]);
+            if (typeof val === "string" && val) {
+                if ((" " + $this.class() + " ").search(" "+val+" ") >= 0) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
          * 向被选元素添加一个或多个类
          */
         "addClass": function(val) {

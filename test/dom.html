@@ -52,14 +52,15 @@
             toEqual('', $(document.getElementById('append')).text().trim());
             console.warn($(document.getElementById('prepend')).remove());
             toEqual(0, $(document.getElementById('prepend')), 'length');
-
+            toEqual(true, $('#luna').hasClass('luna'));
+            toEqual(false, $('#luna').hasClass('luna1'));
         });
     </script>
 </head>
 
 <body>
     <h1>luna - 单元测试</h1>
-    <article id='luna'>
+    <article id='luna' class='luna luna12'>
         <header id='header'>
             <label>luna说明</label>
         </header>

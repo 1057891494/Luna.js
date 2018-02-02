@@ -315,6 +315,19 @@
         },
 
         /**
+         * 判断是否存在指定的class
+         */
+        "hasClass": function(val) {
+            var $this = Luna(this[0]);
+            if (typeof val === "string" && val) {
+                if ((" " + $this.class() + " ").search(" "+val+" ") >= 0) {
+                    return true;
+                }
+            }
+            return false;
+        },
+
+        /**
          * 向被选元素添加一个或多个类
          */
         "addClass": function(val) {
@@ -709,15 +722,24 @@
             //第一部分：最单纯的选择器
             else if (Luna._sizzle_.isSingle(selector)) {
                 if (Luna._sizzle_.isID(selector)) {
-                    //id选择器 上下文只能是HTML文档
+                    //id选择器 上下文只能是HTML文档，考虑id的唯一性，直接全局查找
                     //浏览器支持情况：IE 6+, Firefox 3+, Safari 3+, Chrome 4+, and Opera 10+；
                     resultData.push(document.getElementById(selector.replace(/^#/, "")));
                 } else if (Luna._sizzle_.isClass(selector)) {
-                    //class选择器
-                    //浏览器支持情况：IE 9+, Firefox 3+, Safari4+, Chrome 4+, and Opera 10+；
-                    elems = context.getElementsByClassName(selector.replace(/^./, ""));
-                    for (flag = 0; flag < elems.length; flag++) {
-                        resultData.push(elems[flag]);
+                    //class选择器 上下文可以是HTML文档，XML文档及元素节点
+                    if (context.getElementsByClassName) {
+                        //浏览器支持情况：IE 9+, Firefox 3+, Safari4+, Chrome 4+, and Opera 10+；
+                        elems = context.getElementsByClassName(selector.replace(/^./, ""));
+                        for (flag = 0; flag < elems.length; flag++) {
+                            resultData.push(elems[flag]);
+                        }
+                    } else {
+                        elems = context.getElementsByTagName('*');
+                        for (flag = 0; flag < elems.length; flag++) {
+                            if (Luna(elems[flag]).hasClass(selector.replace(/^./, ""))) {
+                                resultData.push(elems[flag]);
+                            }
+                        }
                     }
                 } else if (Luna._sizzle_.isElemment(selector)) {
                     //元素选择器 上下文可以是HTML文档，XML文档及元素节点
@@ -726,19 +748,33 @@
                         resultData.push(elems[flag]);
                     }
                 } else if (Luna._sizzle_.isAttr(selector)) {
-                    //属性选择器
-
+                    if (!context.querySelectorAll) {
+                        // 浏览器支持情况：IE 8+, Firefox 3.5+, Safari 3+, Chrome 4+, and Opera 10+；
+                        // 上下文可以是HTML文档，XML文档及元素节点
+                        elems = context.querySelectorAll(selector);
+                        for (flag = 0; flag < elems.length; flag++) {
+                            resultData.push(elems[flag]);
+                        }
+                    } else {
+                        elems = context.getElementsByTagName('*');
+                        var selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                        for (flag = 0; flag < elems.length; flag++) {
+                            if (selector_exec[3] == Luna(elems[flag]).attr(selector_exec[1])) {
+                                resultData.push(elems[flag]);
+                            }
+                        }
+                    }
                 } else {
                     throw new Error('非法的选择器:' + selector);
                 }
             }
             //第二部分：复合的单选择器
             else if (Luna._sizzle_.notLayer(selector)) {
-                resultData.push('第二部分：复合的单选择器');
+                resultData.push('第二部分：复合的单选择器   开发中');
             }
             //第三部分：关系选择器 【'>',"空","~","+"】
             else {
-                resultData.push('第三部分：关系选择器 【' > ',"空","~","+"】');
+                resultData.push('第三部分：关系选择器 【' > ',"空","~","+"】     开发中');
             }
             return resultData;
         }
@@ -805,7 +841,7 @@
         },
         "isAttr": function(selector) {
             //[attr="val"] 前置条件：已经知道是最单纯的选择器
-            if (/^\[/.test(selector)) {
+            if (/^\[([^=]+)=(["'])([^=]+)\2\]$/.test(selector)) {
                 return true;
             } else {
                 return false;
