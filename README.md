@@ -2,6 +2,7 @@
 
 [![hompage](https://github.com/yelloxing/Luna.js/blob/master/SVG/build.svg)](https://yelloxing.github.io)
 [![Luna Code](https://github.com/yelloxing/Luna.js/blob/master/SVG/luna.svg)](https://github.com/yelloxing/Luna.js)
+[![Luna Code](https://github.com/yelloxing/Luna.js/blob/master/SVG/license.svg)](https://github.com/yelloxing/Luna.js/blob/master/LICENSE)
 
 <img align="right" height="100" src="https://github.com/yelloxing/Luna.js/blob/master/luna.png">
 
