@@ -48,9 +48,9 @@
             toEqual('prepend内部内容appendafter', $(document.getElementById('mul')).text().trim());
             $(document.getElementById('prepend')).before('<label>before</label>');
             toEqual('beforeprepend内部内容appendafter', $(document.getElementById('mul')).text().trim());
-            $(document.getElementById('append')).empty();
+            console.warn($(document.getElementById('append')).empty());
             toEqual('', $(document.getElementById('append')).text().trim());
-            $(document.getElementById('prepend')).remove();
+            console.warn($(document.getElementById('prepend')).remove());
             toEqual(0, $(document.getElementById('prepend')), 'length');
 
         });

@@ -3,7 +3,7 @@
     个人内部使用的小型js工具库
     心叶
     V0.0.1-alpha
-    最后修改于：2018-02-01
+    最后修改于：2018-02-02
 ====================================
 */
 (function(global, factory, undefined) {
@@ -256,7 +256,10 @@
             if ('' != template && !template) {
                 return $this[0].innerHTML;
             } else {
-                $this[0].innerHTML = template;
+                var flag = 0;
+                for (; flag < $this.length; flag++) {
+                    $this[flag].innerHTML = template;
+                }
                 return $this;
             }
         },
@@ -268,9 +271,13 @@
             var $this = Luna(this);
             if (!val) {
                 return $this[0].innerText;
+            } else {
+                var flag = 0;
+                for (; flag < $this.length; flag++) {
+                    $this[0].innerText = val;
+                }
+                return $this;
             }
-            $this[0].innerText = val;
-            return $this;
         },
 
         /**
@@ -280,9 +287,13 @@
             var $this = Luna(this);
             if (!val) {
                 return $this[0].value;
+            } else {
+                var flag = 0;
+                for (; flag < $this.length; flag++) {
+                    $this[0].value = val;
+                }
+                return $this;
             }
-            $this[0].value = val;
-            return $this;
         },
 
         /**
@@ -292,10 +303,13 @@
             var $this = Luna(this);
             if (!val) {
                 return $this[0].getAttribute(attr);
+            } else {
+                var flag = 0;
+                for (; flag < $this.length; flag++) {
+                    $this[0].setAttribute(attr, val);
+                }
+                return $this;
             }
-
-            $this[0].setAttribute(attr, val);
-            return $this;
         },
 
         /**
@@ -381,15 +395,20 @@
          * 设置或返回被选元素的一个样式属性
          */
         "css": function(name, style) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (typeof name === 'string' && arguments.length === 1) {
                 return $this[0].style[name];
             }
             if (typeof name === 'string' && typeof style === 'string') {
-                $this[0].style[name] = style;
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].style[name] = style;
+                }
             } else if (typeof name === 'object') {
                 for (var key in name) {
-                    $this[0].style[key] = name[key];
+                    for (flag = 0; flag < $this.length; flag++) {
+                        $this[flag].style[key] = name[key];
+                    }
                 }
             } else {
                 throw new Error("Not acceptable type!");
@@ -401,13 +420,20 @@
          * 在被选元素内部的结尾插入内容
          */
         "append": function(node) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                $this[0].appendChild(node);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].appendChild(node);
+                }
             } else if (node.isTouch) {
-                $this[0].appendChild(node[0]);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].appendChild(node[0]);
+                }
             } else if (typeof node == 'string') {
-                $this[0].appendChild(Luna(node)[0]);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].appendChild(Luna(node)[0]);
+                }
             } else {
                 throw new Error("Not acceptable type!");
             }
@@ -418,13 +444,20 @@
          * 在被选元素内部的开头插入内容
          */
         "prepend": function(node) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                $this[0].insertBefore(node, $this[0].childNodes[0]);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].insertBefore(node, $this[0].childNodes[0]);
+                }
             } else if (node.isTouch) {
-                $this[0].insertBefore(node[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].insertBefore(node[0], $this[0].childNodes[0]);
+                }
             } else if (typeof node == 'string') {
-                $this[0].insertBefore(Luna(node)[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].insertBefore(Luna(node)[0], $this[0].childNodes[0]);
+                }
             } else {
                 throw new Error("Not acceptable type!");
             }
@@ -435,16 +468,19 @@
          * 在被选元素之后插入内容
          */
         "after": function(node) {
-            var $this = Luna(this);
-            var $parent = $this[0].parentNode || Luna('body')[0];
-            if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                $parent.insertBefore(node, $this[0].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
-            } else if (node.isTouch) {
-                $parent.insertBefore(node[0], $this[0].nextSibling);
-            } else if (typeof node == 'string') {
-                $parent.insertBefore(Luna(node)[0], $this[0].nextSibling);
-            } else {
-                throw new Error("Not acceptable type!");
+            var $this = Luna(this),
+                flag, $parent;
+            for (flag = 0; flag < $this.length; flag++) {
+                $parent = $this[flag].parentNode || Luna('body')[0];
+                if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
+                    $parent.insertBefore(node, $this[0].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
+                } else if (node.isTouch) {
+                    $parent.insertBefore(node[0], $this[0].nextSibling);
+                } else if (typeof node == 'string') {
+                    $parent.insertBefore(Luna(node)[0], $this[0].nextSibling);
+                } else {
+                    throw new Error("Not acceptable type!");
+                }
             }
             return $this;
         },
@@ -453,16 +489,19 @@
          * 在被选元素之前插入内容
          */
         "before": function(node) {
-            var $this = Luna(this);
-            var $parent = $this[0].parentNode || Luna('body')[0];
-            if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                $parent.insertBefore(node, $this[0]);
-            } else if (node.isTouch) {
-                $parent.insertBefore(node[0], $this[0]);
-            } else if (typeof node == 'string') {
-                $parent.insertBefore(Luna(node)[0], $this[0]);
-            } else {
-                throw new Error("Not acceptable type!");
+            var $this = Luna(this),
+                $parent, flag;
+            for (flag = 0; flag < $this.length; flag++) {
+                $parent = $this[0].parentNode || Luna('body')[0];
+                if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
+                    $parent.insertBefore(node, $this[0]);
+                } else if (node.isTouch) {
+                    $parent.insertBefore(node[0], $this[0]);
+                } else if (typeof node == 'string') {
+                    $parent.insertBefore(Luna(node)[0], $this[0]);
+                } else {
+                    throw new Error("Not acceptable type!");
+                }
             }
             return $this;
         },
@@ -471,9 +510,12 @@
          * 删除被选元素（及其子元素）
          */
         "remove": function() {
-            var $this = Luna(this);
-            var $parent = $this[0].parentNode || Luna('body')[0];
-            $parent.removeChild($this[0]);
+            var $this = Luna(this),
+                flag, $parent;
+            for (flag = 0; flag < $this.length; flag++) {
+                var $parent = $this[flag].parentNode || Luna('body')[0];
+                $parent.removeChild($this[0]);
+            }
             return $this;
         },
 
@@ -481,8 +523,11 @@
          * 从被选元素中删除子元素
          */
         "empty": function() {
-            var $this = Luna(this);
-            $this.html('');
+            var $this = Luna(this),
+                flag;
+            for (flag = 0; flag < $this.length; flag++) {
+                $($this[flag]).html('');
+            }
             return $this;
         }
     });
