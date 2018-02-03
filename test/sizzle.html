@@ -25,6 +25,12 @@
             toEqual('luna - 单元测试', $('.cls').text());
             toEqual('luna - 单元测试', $('[class="cls"]').text());
             toEqual('luna - 单元测试', $('h1').text());
+
+            //第二部分：复合的单选择器
+            toEqual('luna说明', ($('header#dd.info[name="info"]')).text().trim());
+            toEqual('luna说明', ($('header#dd.info[name="info"][class="info"]')).text().trim());
+            toEqual('luna说明', ($('header.info[name="info"]')).text().trim());
+            toEqual('luna说明', ($('header.info')).text().trim());
         });
     </script>
 </head>
@@ -32,7 +38,7 @@
 <body>
     <h1 id='i' class='cls'>luna - 单元测试</h1>
     <article id='luna'>
-        <header name='info' class='info'>
+        <header name='info' class='info' id='dd'>
             luna说明
         </header>
         <section name='info' class='info'>
