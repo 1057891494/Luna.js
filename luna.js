@@ -3,7 +3,7 @@
     个人内部使用的小型js工具库
     心叶
     V0.0.1-alpha
-    最后修改于：2018-02-03
+    最后修改于：2018-02-04
 ====================================
 */
 (function(global, factory, undefined) {
@@ -63,6 +63,14 @@
         if (selector == "body") {
             this.context = document;
             this[0] = document.body;
+            this.isTouch = true;
+            this.length = 1;
+            return this;
+        }
+        //document比较特殊，直接提出来
+        if (selector == "document") {
+            this.context = null;
+            this[0] = document;
             this.isTouch = true;
             this.length = 1;
             return this;
@@ -207,6 +215,13 @@
 
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
+
+    /* 一些核心说明 */
+    Luna.author = '心叶';
+    Luna.author_english = 'yelloxing';
+    Luna.email = 'yelloxing@gmail.com';
+    Luna.description = '不断优化的小型js工具库';
+    Luna.build = '2018/02/01';
 
     window.Luna = window.$ = Luna;
 
@@ -528,7 +543,7 @@
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
-                var $parent = $this[flag].parentNode || Luna('body')[0];
+                $parent = $this[flag].parentNode || Luna('body')[0];
                 $parent.removeChild($this[0]);
             }
             return $this;
@@ -827,8 +842,12 @@
                     }
                 }
                 if (!!selectorObj._class_ && selectorObj._class_.length > 0 && isAccept) { //2.检测class
-                    tempClass = needCheckResultArray[flag].getAttribute('class') || '';
-                    tempClass = " " + tempClass + " ";
+                    if (!needCheckResultArray[flag].getAttribute) {
+                        isAccept = false;
+                    } else {
+                        tempClass = needCheckResultArray[flag].getAttribute('class') || '';
+                        tempClass = " " + tempClass + " ";
+                    }
                     for (innerFlag = 0; innerFlag < selectorObj._class_.length && isAccept; innerFlag++) {
                         if (tempClass.search(" " + selectorObj._class_[innerFlag] + " ") < 0) {
                             isAccept = false;
@@ -837,8 +856,8 @@
                 }
                 if (!!selectorObj._attr_ && selectorObj._attr_.length > 0 && isAccept) { //3.检测attr
                     for (innerFlag = 0; innerFlag < selectorObj._attr_.length && isAccept; innerFlag++) {
-                        var selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
-                        if (needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
+                        selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
+                        if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
                             isAccept = false;
                         }
                     }
@@ -848,6 +867,60 @@
                 }
             }
             return resultData;
+        },
+        "filter": function(tempResult, selector) {
+            var selector_exec,
+                helpResult, flag;
+            if (!!selector && selector != "*") {
+                selector = selector.trim();
+                if (Luna._sizzle_.isSingle(selector)) {
+                    if (Luna._sizzle_.isID(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].getAttribute && ("#" + helpResult[flag].getAttribute('id')) == selector) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isClass(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].getAttribute && (" " + helpResult[flag].getAttribute('class') + " ").search(" " + (selector.replace(/^\./, '')) + " ") >= 0) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isElemment(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].tagName == ((selector + "").toUpperCase())) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isAttr(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                            if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else {
+                        throw new Error('invalid selector1:' + selector);
+                    }
+                } else if (Luna._sizzle_.notLayer(selector)) {
+                    if (Luna._sizzle_.isValidComplex(selector)) {
+                        tempResult = Luna._sizzle_.checkedElems(tempResult, Luna._sizzle_.toComplexSelectorObject(selector));
+                    } else {
+                        throw new Error('invalid selector2:' + selector);
+                    }
+                } else {
+                    throw new Error('undesigned selector:' + selector);
+                }
+            }
+            return tempResult;
         }
     });
 
@@ -949,4 +1022,280 @@
     });
 
 
+})(window, window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.prototype.extend({
+        /**
+         * 返回全部被选元素的直接父元素
+         */
+        "parent": function() {
+            var $this = Luna(this),
+                flag, num = 0,
+                parent;
+            for (flag = 0; flag < $this.length; flag++) {
+                if (!!$this[flag]) {
+                    parent = $this[flag].parentNode;
+                }
+                while (parent && parent.nodeType !== 1 && parent.nodeType !== 11 && parent.nodeType !== 9 && parent.parentNode) {
+                    parent = parent.parentNode;
+                }
+                if (parent && (parent.nodeType === 1 || parent.nodeType === 11 || parent.nodeType === 9)) {
+                    $this[num] = parent;
+                    num++;
+                }
+            }
+            for (flag = num; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = num;
+            $this.selector = $this.selector + ":parent()";
+            return $this;
+        },
+
+        /**
+         * 返回被选元素的所有祖先元素（不包括祖先的兄弟）
+         * selector只支持二类选择器
+         */
+        "parents": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag,
+                parent = $this[0],
+                tempResult = [];
+            while (parent && parent.parentNode) {
+                parent = parent.parentNode;
+                if (parent.nodeType === 1 || parent.nodeType === 11 || parent.nodeType === 9) {
+                    tempResult.push(parent);
+                }
+            }
+            tempResult = Luna._sizzle_.filter(tempResult, selector);
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":parents('" + selector + "')";
+            return $this;
+        },
+
+        /**
+         * 返回被选元素的所有直接子元素
+         * selector只支持二类选择器
+         */
+        "children": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag,
+                child = $this[0],
+                tempResult = [];
+            if (!child) {
+                tempResult = [];
+            } else {
+                child = child.childNodes;
+                for (flag = 0; flag < child.length; flag++) {
+                    if (child[flag].nodeType === 1 || child[flag].nodeType === 11 || child[flag].nodeType === 9) {
+                        tempResult.push(child[flag]);
+                    }
+                }
+                tempResult = Luna._sizzle_.filter(tempResult, selector);
+            }
+
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":children('" + selector + "')";
+            return $this;
+        },
+
+        /**
+         * 返回被选元素的所有同胞元素，包括自己
+         * selector只支持二类选择器
+         */
+        "siblings": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag,
+                sibling = $this[0],
+                tempResult = [];
+            if (!sibling) {
+                tempResult = [];
+            } else {
+                sibling = sibling.parentNode;
+                while (sibling && sibling.nodeType !== 1 && sibling.nodeType !== 11 && sibling.nodeType !== 9 && sibling.parentNode) {
+                    sibling = sibling.parentNode;
+                }
+                if (!sibling) {
+                    tempResult = [];
+                } else {
+                    sibling = sibling.childNodes;
+                    for (flag = 0; flag < sibling.length; flag++) {
+                        if (sibling[flag].nodeType === 1 || sibling[flag].nodeType === 11 || sibling[flag].nodeType === 9) {
+                            tempResult.push(sibling[flag]);
+                        }
+                    }
+                    tempResult = Luna._sizzle_.filter(tempResult, selector);
+                }
+
+            }
+
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":siblings('" + selector + "')";
+            return $this;
+        },
+
+        /**
+         * 返回全部被选元素的下一个同胞元素
+         */
+        "next": function() {
+            var $this = Luna(this),
+                flag, num = 0,
+                next;
+            for (flag = 0; flag < $this.length; flag++) {
+                if (!!$this[flag]) {
+                    next = $this[flag].nextSibling;
+                }
+                while (next && next.nodeType !== 1 && next.nodeType !== 11 && next.nodeType !== 9 && next.nextSibling) {
+                    next = next.nextSibling;
+                }
+                if (next && (next.nodeType === 1 || next.nodeType === 11 || next.nodeType === 9)) {
+                    $this[num] = next;
+                    num++;
+                }
+            }
+            for (flag = num; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = num;
+            $this.selector = $this.selector + ":next()";
+            return $this;
+        },
+
+        /**
+         * 返回被选元素的所有跟随的同胞元素
+         * selector只支持二类选择器
+         */
+        "nextAll": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag,
+                next = $this[0],
+                tempResult = [];
+            while (next && next.nextSibling) {
+                next = next.nextSibling;
+                if (next.nodeType === 1 || next.nodeType === 11 || next.nodeType === 9) {
+                    tempResult.push(next);
+                }
+            }
+            tempResult = Luna._sizzle_.filter(tempResult, selector);
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":nextAll('" + selector + "')";
+            return $this;
+        },
+
+        /**
+         * 返回全部被选元素的前一个同胞元素
+         */
+        "prev": function() {
+            var $this = Luna(this),
+                flag, num = 0,
+                prev;
+            for (flag = 0; flag < $this.length; flag++) {
+                if (!!$this[flag]) {
+                    prev = $this[flag].previousSibling;
+                }
+                while (prev && prev.nodeType !== 1 && prev.nodeType !== 11 && prev.nodeType !== 9 && prev.previousSibling) {
+                    prev = prev.previousSibling;
+                }
+                if (prev && (prev.nodeType === 1 || prev.nodeType === 11 || prev.nodeType === 9)) {
+                    $this[num] = prev;
+                    num++;
+                }
+            }
+            for (flag = num; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = num;
+            $this.selector = $this.selector + ":prev()";
+            return $this;
+        },
+
+        /**
+         * 返回被选元素的所有之前的同胞元素
+         * selector只支持二类选择器
+         */
+        "prevAll": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag,
+                prev = $this[0],
+                tempResult = [];
+            while (prev && prev.previousSibling) {
+                prev = prev.previousSibling;
+                if (prev.nodeType === 1 || prev.nodeType === 11 || prev.nodeType === 9) {
+                    tempResult.push(prev);
+                }
+            }
+            tempResult = Luna._sizzle_.filter(tempResult, selector);
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":prevAll('" + selector + "')";
+            return $this;
+        },
+
+        /**
+         * 查找结点
+         * selector支持三类选择器
+         */
+        "find": function(selector) {
+            return '设计中......';
+        },
+        /**
+         * 根据选择器过滤已经选择的节点
+         * selector只支持二类选择器
+         */
+        "filter": function(selector) {
+            selector = selector || '';
+            var $this = Luna(this),
+                flag, tempResult = [];
+            for (flag = 0; flag < $this.length; flag++) {
+                tempResult.push($this[flag]);
+            }
+            tempResult = Luna._sizzle_.filter(tempResult, selector);
+            for (flag = tempResult.length; flag < $this.length; flag++) {
+                delete $this[flag];
+            }
+            $this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $this[flag] = tempResult[flag];
+            }
+            $this.selector = $this.selector + ":filter('" + selector + "')";
+            return $this;
+        }
+    });
 })(window, window.Luna);
