@@ -208,7 +208,7 @@
         "sizzle": function(selector, context) {
             selector = selector.trim();
             var resultData = [],
-                flag, elems;
+                flag, elems, innerFlag;
 
             //第0部分：选择全部
             if (selector == '*') {
@@ -291,11 +291,106 @@
                     throw new Error('invalid selector2:' + selector);
                 }
             }
-            //第三部分：关系选择器 【'>',"空","~","+"】
-            else if (false) {
-                resultData.push('第三部分：关系选择器 【' > ',"空","~","+"】     开发中');
-            } else {
-                throw new Error('undesigned selector:' + selector);
+            //第三部分：关系选择器 【'>',"空","~","+"】【儿子选择器，子孙选择器，后续兄弟选择器，后续第一个兄弟选择器】
+            else {
+                //切割第三部分选择器为之前部分选择器，用关系符号分割
+                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');;
+
+                //层次上检测
+                for (flag = 0; flag < layerSelectorArray.length; flag++) {
+                    if (layerSelectorArray[flag] == "") {
+                        throw new Error('invalid selector3:' + selector);
+                    }
+                }
+
+                //关系上没有问题以后，开始查找，内部错误会有对应的处理函数暴露，和这里没有关系
+                var nodes = Luna.sizzle(layerSelectorArray[layerSelectorArray.length - 1], context);
+                var helpNodes = [];
+                for (flag = 0; flag < nodes.length; flag++) {
+                    helpNodes.push({
+                        "0": nodes[flag],
+                        "length": 1
+                    });
+                }
+
+                //过滤
+                var filterSelector, filterLayer, _inFlag_, num, tempLuna, tempHelpNodes, tempFlag;
+                for (flag = layerSelectorArray.length - 1; flag > 1; flag = flag - 2) {
+                    filterSelector = layerSelectorArray[flag - 2];
+                    filterLayer = layerSelectorArray[flag - 1];
+                    if ('>' == filterLayer) { //如果是>
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    if (tempLuna.length > 0) {
+                                        helpNodes[innerFlag][num] = tempLuna;
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                            }
+                        }
+                    } else if ('~' == filterLayer) { //如果是~
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                tempHelpNodes = [];
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
+                                        tempHelpNodes[num] = tempLuna[tempFlag];
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                                for (tempFlag = 0; tempFlag < tempHelpNodes.length; tempFlag++) {
+                                    helpNodes[innerFlag][tempFlag] = tempHelpNodes[tempFlag];
+                                }
+                            }
+                        }
+                    } else if ('+' == filterLayer) { //如果是+
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    if (tempLuna.length > 0) {
+                                        helpNodes[innerFlag][num] = tempLuna;
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                            }
+                        }
+                    } else { //上面都不是，就只可能是空格了
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) {
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                tempHelpNodes = [];
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
+                                        tempHelpNodes[num] = tempLuna[tempFlag];
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                                for (tempFlag = 0; tempFlag < tempHelpNodes.length; tempFlag++) {
+                                    helpNodes[innerFlag][tempFlag] = tempHelpNodes[tempFlag];
+                                }
+                            }
+                        }
+                    }
+                }
+                //最后被留下的就是我们需要的
+                for (flag = 0; flag < nodes.length; flag++) {
+                    if (!!helpNodes[flag] && helpNodes[flag].length > 0) {
+                        resultData.push(nodes[flag]);
+                    }
+                }
+
             }
             return resultData;
         }

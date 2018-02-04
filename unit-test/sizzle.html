@@ -26,11 +26,19 @@
             toEqual('luna - 单元测试', $('[class="cls"]').text());
             toEqual('luna - 单元测试', $('h1').text());
 
-            //第二部分：复合的单选择器
+            // //第二部分：复合的单选择器
             toEqual('luna说明', ($('header#dd.info[name="info"]')).text().trim());
             toEqual('luna说明', ($('header#dd.info[name="info"][class="info"]')).text().trim());
             toEqual('luna说明', ($('header.info[name="info"]')).text().trim());
             toEqual('luna说明', ($('header.info')).text().trim());
+            //第三部分：关系选择器 【'>',"空","~","+"】
+            toEqual(2, $("article>.info"), 'length');
+            toEqual(2, $("article .info"), 'length');
+            toEqual(3, $(".info"), 'length');
+            toEqual(2, $("article .info~section"), 'length');
+            toEqual(2, $("article header.info~section"), 'length');
+            toEqual(1, $("article header.info+section"), 'length');
+
         });
     </script>
 </head>
@@ -48,6 +56,9 @@
             luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
         </section>
     </article>
+    <section class='info'>
+        你好
+    </section>
 </body>
 
 </html>
