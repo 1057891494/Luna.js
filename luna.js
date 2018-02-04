@@ -1362,14 +1362,6 @@
             $this.selector = $this.selector + ":prevAll('" + selector + "')";
             return $this;
         },
-
-        /**
-         * 查找结点
-         * selector支持三类选择器
-         */
-        "find": function(selector) {
-            return '设计中......';
-        },
         /**
          * 根据选择器过滤已经选择的节点
          * selector只支持二类选择器
