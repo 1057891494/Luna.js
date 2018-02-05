@@ -6,6 +6,10 @@
     "scripts": {
         "start": "node_modules/.bin/grunt"
     },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/yelloxing/Luna.js.git"
+    },
     "author": "心叶",
     "license": "MIT",
     "devDependencies": {
