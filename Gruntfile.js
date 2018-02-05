@@ -6,9 +6,10 @@ var sourceScript = [
     './script/dom.js',
     './script/tool.js',
     './script/animation.js',
-    './script/sizzle.js'
+    './script/sizzle.js',
+    './script/search.js'
 ];
-var banner = '/*! \n====================================\n    <%= pkg.description %>\n    <%= pkg.author %>\n    V<%=pkg.version%>-<%=pkg.type%>\n    最后修改于：<%= grunt.template.today("yyyy-mm-dd") %>\n====================================\n*/\n';
+var banner = '/*! \n====================================\n    <%= pkg.description %>\n    <%= pkg.author %>\n    V<%=pkg.version%>-<%=pkg.type%>\n    最后修改于：<%= grunt.template.today("yyyy-mm-dd") %>\n    repository:<%= pkg.repository.url %>\n====================================\n*/\n';
 module.exports = function(grunt) {
     /*配置插件*/
     grunt.initConfig({

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset='utf-8'>
+    <title>luna - 单元测试</title>
+    <link rel="icon" href="../luna.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="Keywords" content="luna - 单元测试" />
+    <meta name="description" content="luna - 单元测试" />
+    <meta name="author" content="心叶" />
+    <link rel="apple-touch-icon" sizes="52x52" href="52icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
+    <script src="../luna.js"></script>
+    <script src="./LunaUnit.js"></script>
+    <script>
+        $(function() {
+            //第一部分：最单纯的选择器
+            toEqual('luna - 单元测试', $('#i').text());
+            toEqual('luna - 单元测试', $('.cls').text());
+            toEqual('luna - 单元测试', $('[class="cls"]').text());
+            toEqual('luna - 单元测试', $('h1').text());
+
+            // //第二部分：复合的单选择器
+            toEqual('luna说明', ($('header#dd.info[name="info"]')).text().trim());
+            toEqual('luna说明', ($('header#dd.info[name="info"][class="info"]')).text().trim());
+            toEqual('luna说明', ($('header.info[name="info"]')).text().trim());
+            toEqual('luna说明', ($('header.info')).text().trim());
+            //第三部分：关系选择器 【'>',"空","~","+"】
+            toEqual(2, $("article>.info"), 'length');
+            toEqual(2, $("article .info"), 'length');
+            toEqual(3, $(".info"), 'length');
+            toEqual(2, $("article .info~section"), 'length');
+            toEqual(2, $("article header.info~section"), 'length');
+            toEqual(1, $("article header.info+section"), 'length');
+
+        });
+    </script>
+</head>
+
+<body>
+    <h1 id='i' class='cls'>luna - 单元测试</h1>
+    <article id='luna'>
+        <header name='info' class='info' id='dd'>
+            luna说明
+        </header>
+        <section name='info' class='info'>
+            luna的定位是个人使用和技巧积累，同时是快速测试环境和相关项目开发快速助手，总体而言，都只是个人使用。
+        </section>
+        <section>
+            luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
+        </section>
+    </article>
+    <section class='info'>
+        你好
+    </section>
+</body>
+
+</html>
+
+<!--
+    =================================================
+    走一步，再走一步。
+    =================================================
+-->

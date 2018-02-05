@@ -59,6 +59,14 @@
             this.length = 1;
             return this;
         }
+        //document比较特殊，直接提出来
+        if (selector == "document") {
+            this.context = null;
+            this[0] = document;
+            this.isTouch = true;
+            this.length = 1;
+            return this;
+        }
 
         //如果是字符串
         if (typeof selector === 'string') {
@@ -199,6 +207,13 @@
 
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
+
+    /* 一些核心说明 */
+    Luna.author = '心叶';
+    Luna.author_english = 'yelloxing';
+    Luna.email = 'yelloxing@gmail.com';
+    Luna.description = '不断优化的小型js工具库';
+    Luna.build = '2018/02/01';
 
     window.Luna = window.$ = Luna;
 

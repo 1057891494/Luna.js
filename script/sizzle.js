@@ -122,8 +122,12 @@
                     }
                 }
                 if (!!selectorObj._class_ && selectorObj._class_.length > 0 && isAccept) { //2.检测class
-                    tempClass = needCheckResultArray[flag].getAttribute('class') || '';
-                    tempClass = " " + tempClass + " ";
+                    if (!needCheckResultArray[flag].getAttribute) {
+                        isAccept = false;
+                    } else {
+                        tempClass = needCheckResultArray[flag].getAttribute('class') || '';
+                        tempClass = " " + tempClass + " ";
+                    }
                     for (innerFlag = 0; innerFlag < selectorObj._class_.length && isAccept; innerFlag++) {
                         if (tempClass.search(" " + selectorObj._class_[innerFlag] + " ") < 0) {
                             isAccept = false;
@@ -132,8 +136,8 @@
                 }
                 if (!!selectorObj._attr_ && selectorObj._attr_.length > 0 && isAccept) { //3.检测attr
                     for (innerFlag = 0; innerFlag < selectorObj._attr_.length && isAccept; innerFlag++) {
-                        var selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
-                        if (needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
+                        selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
+                        if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
                             isAccept = false;
                         }
                     }
@@ -143,6 +147,60 @@
                 }
             }
             return resultData;
+        },
+        "filter": function(tempResult, selector) {
+            var selector_exec,
+                helpResult, flag;
+            if (!!selector && selector != "*") {
+                selector = selector.trim();
+                if (Luna._sizzle_.isSingle(selector)) {
+                    if (Luna._sizzle_.isID(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].getAttribute && ("#" + helpResult[flag].getAttribute('id')) == selector) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isClass(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].getAttribute && (" " + helpResult[flag].getAttribute('class') + " ").search(" " + (selector.replace(/^\./, '')) + " ") >= 0) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isElemment(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            if (helpResult[flag].tagName == ((selector + "").toUpperCase())) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else if (Luna._sizzle_.isAttr(selector)) {
+                        helpResult = tempResult;
+                        tempResult = [];
+                        for (flag = 0; flag < helpResult.length; flag++) {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                            if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
+                                tempResult.push(helpResult[flag]);
+                            }
+                        }
+                    } else {
+                        throw new Error('invalid selector1:' + selector);
+                    }
+                } else if (Luna._sizzle_.notLayer(selector)) {
+                    if (Luna._sizzle_.isValidComplex(selector)) {
+                        tempResult = Luna._sizzle_.checkedElems(tempResult, Luna._sizzle_.toComplexSelectorObject(selector));
+                    } else {
+                        throw new Error('invalid selector2:' + selector);
+                    }
+                } else {
+                    throw new Error('undesigned selector:' + selector);
+                }
+            }
+            return tempResult;
         }
     });
 
@@ -150,7 +208,7 @@
         "sizzle": function(selector, context) {
             selector = selector.trim();
             var resultData = [],
-                flag, elems;
+                flag, elems, innerFlag;
 
             //第0部分：选择全部
             if (selector == '*') {
@@ -233,11 +291,106 @@
                     throw new Error('invalid selector2:' + selector);
                 }
             }
-            //第三部分：关系选择器 【'>',"空","~","+"】
-            else if (false) {
-                resultData.push('第三部分：关系选择器 【' > ',"空","~","+"】     开发中');
-            } else {
-                throw new Error('undesigned selector:' + selector);
+            //第三部分：关系选择器 【'>',"空","~","+"】【儿子选择器，子孙选择器，后续兄弟选择器，后续第一个兄弟选择器】
+            else {
+                //切割第三部分选择器为之前部分选择器，用关系符号分割
+                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');;
+
+                //层次上检测
+                for (flag = 0; flag < layerSelectorArray.length; flag++) {
+                    if (layerSelectorArray[flag] == "") {
+                        throw new Error('invalid selector3:' + selector);
+                    }
+                }
+
+                //关系上没有问题以后，开始查找，内部错误会有对应的处理函数暴露，和这里没有关系
+                var nodes = Luna.sizzle(layerSelectorArray[layerSelectorArray.length - 1], context);
+                var helpNodes = [];
+                for (flag = 0; flag < nodes.length; flag++) {
+                    helpNodes.push({
+                        "0": nodes[flag],
+                        "length": 1
+                    });
+                }
+
+                //过滤
+                var filterSelector, filterLayer, _inFlag_, num, tempLuna, tempHelpNodes, tempFlag;
+                for (flag = layerSelectorArray.length - 1; flag > 1; flag = flag - 2) {
+                    filterSelector = layerSelectorArray[flag - 2];
+                    filterLayer = layerSelectorArray[flag - 1];
+                    if ('>' == filterLayer) { //如果是>
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    if (tempLuna.length > 0) {
+                                        helpNodes[innerFlag][num] = tempLuna;
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                            }
+                        }
+                    } else if ('~' == filterLayer) { //如果是~
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                tempHelpNodes = [];
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
+                                        tempHelpNodes[num] = tempLuna[tempFlag];
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                                for (tempFlag = 0; tempFlag < tempHelpNodes.length; tempFlag++) {
+                                    helpNodes[innerFlag][tempFlag] = tempHelpNodes[tempFlag];
+                                }
+                            }
+                        }
+                    } else if ('+' == filterLayer) { //如果是+
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) { //检测每个可能入选的节点
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    if (tempLuna.length > 0) {
+                                        helpNodes[innerFlag][num] = tempLuna;
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                            }
+                        }
+                    } else { //上面都不是，就只可能是空格了
+                        for (innerFlag = 0; innerFlag < nodes.length; innerFlag++) {
+                            num = 0;
+                            if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
+                                tempHelpNodes = [];
+                                for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
+                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
+                                        tempHelpNodes[num] = tempLuna[tempFlag];
+                                        num++;
+                                    }
+                                }
+                                helpNodes[innerFlag].length = num;
+                                for (tempFlag = 0; tempFlag < tempHelpNodes.length; tempFlag++) {
+                                    helpNodes[innerFlag][tempFlag] = tempHelpNodes[tempFlag];
+                                }
+                            }
+                        }
+                    }
+                }
+                //最后被留下的就是我们需要的
+                for (flag = 0; flag < nodes.length; flag++) {
+                    if (!!helpNodes[flag] && helpNodes[flag].length > 0) {
+                        resultData.push(nodes[flag]);
+                    }
+                }
+
             }
             return resultData;
         }
