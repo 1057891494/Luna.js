@@ -1,12 +1,4 @@
-/*! 
-====================================
-    个人内部使用的小型js工具库
-    心叶
-    V0.0.1-alpha
-    最后修改于：2018-02-05
-    repository:git+https://github.com/yelloxing/Luna.js.git
-====================================
-*/
+/*! luna alpha0.0.1 | (c) 2007, 2018 心叶 | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
@@ -1015,7 +1007,7 @@
             //第三部分：关系选择器 【'>',"空","~","+"】【儿子选择器，子孙选择器，后续兄弟选择器，后续第一个兄弟选择器】
             else {
                 //切割第三部分选择器为之前部分选择器，用关系符号分割
-                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');;
+                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');
 
                 //层次上检测
                 for (flag = 0; flag < layerSelectorArray.length; flag++) {

@@ -294,7 +294,7 @@
             //第三部分：关系选择器 【'>',"空","~","+"】【儿子选择器，子孙选择器，后续兄弟选择器，后续第一个兄弟选择器】
             else {
                 //切割第三部分选择器为之前部分选择器，用关系符号分割
-                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');;
+                var layerSelectorArray = selector.replace(/ *([>+~]) */g, '@$1@').replace(/ +/g, '@ @').split('@');
 
                 //层次上检测
                 for (flag = 0; flag < layerSelectorArray.length; flag++) {
