@@ -16,26 +16,67 @@
     <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
+    <style type="text/css">
+    .container{
+        position: relative;
+    }
+    .redD1 {
+        position: relative;
+        width: 101px;
+        height: 101px;
+    }
+
+    .redD2 {
+        position: relative;
+        width: 24px;
+        height: 24px;
+    }
+
+    .redD {
+        display: inline-block;
+        background: linear-gradient(135deg, transparent 29.29%, red 0) top left,
+        linear-gradient(-135deg, transparent 29.29%, red 0) top right,
+        linear-gradient(-45deg, transparent 29.29%, red 0) bottom right,
+        linear-gradient(45deg, transparent 29.29%, red 0) bottom left;
+        background-size: 50% 50%;
+        background-repeat: no-repeat;
+    }
+
+    </style>
     <script src="../luna.js"></script>
     <script>
-        $(function() {
-            console.log(new Date());
-            $.animation(function(deep) {
-                console.log("1 >>> " + deep + "%");
-            }, 1000, function() {
-                console.log("1 >>> " + new Date());
-            });
-            $.animation(function(deep) {
-                console.log("2 >>> " + deep + "%");
-            }, 500, function() {
-                console.log("2 >>> " + new Date());
-            });
-            $.animation(function(deep) {
-                console.log("3 >>> " + deep + "%");
-            }, 100, function() {
-                console.log("3 >>> " + new Date());
-            });
+    $(function() {
+        console.log(new Date());
+        $.animation(function(deep) {
+            console.log("1 >>> " + deep + "%");
+        }, 1000, function() {
+            console.log("1 >>> " + new Date());
         });
+        $.animation(function(deep) {
+            console.log("2 >>> " + deep + "%");
+        }, 500, function() {
+            console.log("2 >>> " + new Date());
+        });
+        $.animation(function(deep) {
+            console.log("3 >>> " + deep + "%");
+        }, 100, function() {
+            console.log("3 >>> " + new Date());
+        });
+        var driver = function() {
+            $.animation(function(deep) {
+                $(".redD").css({ "left": deep + "%", "transform": "rotate(" + deep * 3.6 + "deg)" });
+                $(".container").css("top",(deep*3)+"px");
+                // if(Math.round(deep)==50){
+                //     $(".redD").css()
+                // }
+            }, 3000, function() {
+                console.log("stoped");
+                driver();
+            });
+        };
+        driver();
+    });
+
     </script>
 </head>
 
@@ -52,10 +93,15 @@
             luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
         </section>
     </article>
+    <div class="container">
+        <div class="redD redD2" style="top: -93px;"></div>
+        <div class="redD redD2" style="top: -115px;left: 34px;"></div>
+        <div class="redD redD2" style="top: -55px;left: -10px;"></div>
+        <div class="redD redD1"></div>
+    </div>
 </body>
 
 </html>
-
 <!--
     =================================================
     走一步，再走一步。
