@@ -9,7 +9,7 @@ var sourceScript = [
     './script/sizzle.js',
     './script/search.js'
 ];
-var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %>*/\n';
+var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
     /*配置插件*/
     grunt.initConfig({
