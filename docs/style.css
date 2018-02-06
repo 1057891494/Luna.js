@@ -13,9 +13,13 @@ iframe{
 	display: inline-block;
     font-size: 0;
     height: 100vh;
-    width: 20%;
-    background-color: #6fc5de;
+    width: 200px;
+    background-color: #474c5e;
         vertical-align: top;
+        overflow: auto;
+}
+.leader::-webkit-scrollbar{
+
 }
 ul{
 	list-style: none;
@@ -23,16 +27,15 @@ ul{
     padding: 0;
 }
 .leader>ul>li{
-	background-color: #7fb5ed;
+	background-color: #474c5e;
     font-size: 16px;
-    height: 35px;
-    line-height: 35px;
+    height: 60px;
+    line-height: 60px;
     text-align: center;
     font-weight: bold;
-    color: #fff;
+    color: #e1dfdf;
     position: relative;
-    background-position: 8px;
-    background-size: 14%;
+    background-size: auto auto;
     background-repeat: no-repeat;
 }
 .leader>ul>li:after{
@@ -40,16 +43,19 @@ ul{
     font-size: 16px;
     width: 8px;
     height: 8px;
-    top: 17.5px;
+    top: 27px;
     margin-top: -4px;
-    right: 2px;
+    right: 12px;
     position: absolute;
-    border-bottom: 3px solid #367dff;
-    border-left: 3px solid #367dff;
+    border-bottom: 3px solid #c7c7c9;
+    border-left: 3px solid #c7c7c9;
     transform: rotate(-135deg);
     transform-origin: 5px 6px;
     -webkit-transition: all 0.4s ease-out 0.1s;
     transition: all 0.4s ease-out 0.1s;
+}
+.leader>ul>li.active{
+	background-color: #2f2d2b;
 }
 .leader>ul>li.active:after{
 	transform: rotate(-45deg);
@@ -58,22 +64,37 @@ ul{
     transition: all 0.4s ease-out 0.1s;
 }
 .leader>ul>li>ul{
+	opacity: 0;
 	display: none;
+	transition: all 0.2s ease-out 0.1s;
+	font-weight: normal;
 }
 .leader>ul>li.active>ul{
+	opacity: 1;
 	display: block;
+	transition: all 1s ease-out 0.3s;
 }
 .leader>ul>li>ul>li{
 	padding-left: 20px;
+	background-color: #474c5e;
+	color: #e1dfdf;
+}
+.leader>ul>li>ul>li:hover{
+	    background-color: #4E576E;
+    border-left: 3px solid sandybrown;
+    color: #fff;
+    font-size: 18px;
 }
 .leader>ul>li>ul>li.click{
-	color: #ed0b0c;
-    border-left: 6px solid #ff5800;
+	background-color: #4E576E;
+    border-left: 3px solid sandybrown;
+    color: #fff;
+    font-size: 18px;
 }
 .shower{
-	    display: inline-block;
+	display: inline-block;
     font-size: 0;
-    width: 80%;
-    height: 100vh;
-    background-color: #f1fded;
+    width: calc(100% - 200px);
+    min-height: 100vh;
+    background-color: #ecf0f3;
 }
