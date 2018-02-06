@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <title>luna - API文档</title>
-    <link rel="icon" href="../luna.ico" />
+    <link rel="icon" href="./luna.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,14 +17,64 @@
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="./luna.min.js"></script>
 </head>
 
-<body>
+<body class="index-body">
+    <div class="leader">
+        <ul>
+            <li onclick="goto('dom')" style="background-image: url(./dom.png);">
+                dom
+                <ul>
+                    <li onclick="check('dom1')">dom1</li>
+                    <li onclick="check('dom2')">dom2</li>
+                    <li onclick="check('dom3')">dom3</li>
+                    <li onclick="check('dom4')">dom4</li>
+                </ul>
+            </li>
+            <li onclick="goto('search')" style="background-image: url(./dom.png);">
+                search
+                <ul>
+                    <li onclick="check('dom1')">search1</li>
+                    <li onclick="check('dom2')">search2</li>
+                    <li onclick="check('dom3')">search3</li>
+                </ul>
+            </li>
+            <li onclick="goto('sizzle')" style="background-image: url(./dom.png);">sizzle</li>
+            <li onclick="goto('tool')" style="background-image: url(./dom.png);">tool</li>
+        </ul>
+    </div>
+    <div class="shower">
+        <iframe src="./dom.html" id="dom"></iframe>
+        <iframe src="./search.html" id="search" style="display: none;"></iframe>
+        <iframe src="./sizzle.html" id="sizzle" style="display: none;"></iframe>
+        <iframe src="./tool.html" id="tool" style="display: none;"></iframe>
+    </div>
+    <script type="text/javascript">
+    function goto(where) {
+        $(".leader>ul>li").removeClass("active");
+        $(".shower>iframe").css("display", "none");
+        $("#" + where).css("display", "block");
+        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]').addClass("active");
+        var long = $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul').length ? $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight : 12;
+        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]').css({
+            "transform": "translateY(0px)",
+            "transition": "all 0.4s ease-out 0.1s"
+        });
+        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]~li').css({
+            "transform": "translateY(" + long + "px)",
+            "transition": "all 0.4s ease-out 0.1s"
+        });
+    }
+    function check(where){
+        $('.leader>ul>li>ul>li').removeClass('click');
+        $('.leader>ul>li>ul>li[onclick="check(\'' + where + '\')"]').addClass("click");
+    }
 
+    </script>
 </body>
 
 </html>
-
 <!--
     =================================================
     走一步，再走一步。
