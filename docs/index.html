@@ -23,16 +23,25 @@
 <body class="index-body">
     <div class="leader">
         <ul>
-            <li onclick="goto('dom')" style="background-image: url(./dom.png);">
-                dom
+            <li onclick="goto('dom')" style="background-image: url(./nav.png);background-position: 6px 14px;">
+                <div>dom</div>
                 <ul>
                     <li onclick="check('dom1')">dom1</li>
                     <li onclick="check('dom2')">dom2</li>
                     <li onclick="check('dom3')">dom3</li>
-                    <li onclick="check('dom4')">dom4</li>
+                    <li onclick="check('dom4')">dom4</li><!-- 
+                    <li onclick="check('dom5')">dom5</li>
+                    <li onclick="check('dom6')">dom6</li>
+                    <li onclick="check('dom7')">dom7</li>
+                    <li onclick="check('dom8')">dom8</li>
+                    <li onclick="check('dom9')">dom9</li>
+                    <li onclick="check('dom10')">dom10</li>
+                    <li onclick="check('dom11')">dom11</li>
+                    <li onclick="check('dom12')">dom12</li>
+                    <li onclick="check('dom13')">dom13</li> -->
                 </ul>
             </li>
-            <li onclick="goto('search')" style="background-image: url(./dom.png);">
+            <li onclick="goto('search')" style="background-image: url(./nav.png);background-position: 6px -57px;">
                 search
                 <ul>
                     <li onclick="check('dom1')">search1</li>
@@ -40,8 +49,8 @@
                     <li onclick="check('dom3')">search3</li>
                 </ul>
             </li>
-            <li onclick="goto('sizzle')" style="background-image: url(./dom.png);">sizzle</li>
-            <li onclick="goto('tool')" style="background-image: url(./dom.png);">tool</li>
+            <li onclick="goto('sizzle')" style="background-image: url(./nav.png);background-position: 6px -128px;">sizzle</li>
+            <li onclick="goto('tool')" style="background-image: url(./nav.png);background-position: 6px -199px;">tool</li>
         </ul>
     </div>
     <div class="shower">
@@ -52,21 +61,22 @@
     </div>
     <script type="text/javascript">
     function goto(where) {
+        $(".active~li").css({
+            "transform": "translateY(0px)",
+            "transition": "all 0.4s ease-out 0.1s"
+        });
         $(".leader>ul>li").removeClass("active");
         $(".shower>iframe").css("display", "none");
         $("#" + where).css("display", "block");
         $('.leader>ul>li[onclick="goto(\'' + where + '\')"]').addClass("active");
-        var long = $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul').length ? $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight : 12;
-        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]').css({
-            "transform": "translateY(0px)",
-            "transition": "all 0.4s ease-out 0.1s"
-        });
+        var long = $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul').length ? $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight > 480 ? 480 : $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight : 12;
         $('.leader>ul>li[onclick="goto(\'' + where + '\')"]~li').css({
             "transform": "translateY(" + long + "px)",
             "transition": "all 0.4s ease-out 0.1s"
         });
     }
-    function check(where){
+
+    function check(where) {
         $('.leader>ul>li>ul>li').removeClass('click');
         $('.leader>ul>li>ul>li[onclick="check(\'' + where + '\')"]').addClass("click");
     }
