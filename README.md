@@ -1,4 +1,4 @@
-# Luna.js:The JavaScript Library
+# luna.js:The JavaScript Library
 
 [![hompage](https://github.com/yelloxing/Luna.js/blob/master/SVG/github.svg)](https://github.com/yelloxing)
 [![Luna Code](https://github.com/yelloxing/Luna.js/blob/master/SVG/luna.svg)](https://github.com/yelloxing/Luna.js)
