@@ -21,15 +21,18 @@
 </head>
 
 <body class="index-body">
+    <div class="header">
+        <div class="logo"></div>
+    </div>
     <div class="leader">
         <ul>
-            <li onclick="goto('dom')" style="background-image: url(./nav.png);background-position: 6px 14px;">
-                <div>dom</div>
+            <li>
+                <div style="background-image: url(./nav.png);background-position: 6px 14px;" onclick="goto('dom')">dom</div>
                 <ul>
                     <li onclick="check('dom1')">dom1</li>
                     <li onclick="check('dom2')">dom2</li>
                     <li onclick="check('dom3')">dom3</li>
-                    <li onclick="check('dom4')">dom4</li><!-- 
+                    <li onclick="check('dom4')">dom4</li>
                     <li onclick="check('dom5')">dom5</li>
                     <li onclick="check('dom6')">dom6</li>
                     <li onclick="check('dom7')">dom7</li>
@@ -38,19 +41,23 @@
                     <li onclick="check('dom10')">dom10</li>
                     <li onclick="check('dom11')">dom11</li>
                     <li onclick="check('dom12')">dom12</li>
-                    <li onclick="check('dom13')">dom13</li> -->
+                    <li onclick="check('dom13')">dom13</li>
                 </ul>
             </li>
-            <li onclick="goto('search')" style="background-image: url(./nav.png);background-position: 6px -57px;">
-                search
+            <li>
+                <div style="background-image: url(./nav.png);background-position: 6px -57px;" onclick="goto('search')">search</div>
                 <ul>
                     <li onclick="check('dom1')">search1</li>
                     <li onclick="check('dom2')">search2</li>
                     <li onclick="check('dom3')">search3</li>
                 </ul>
             </li>
-            <li onclick="goto('sizzle')" style="background-image: url(./nav.png);background-position: 6px -128px;">sizzle</li>
-            <li onclick="goto('tool')" style="background-image: url(./nav.png);background-position: 6px -199px;">tool</li>
+            <li>
+                <div style="background-image: url(./nav.png);background-position: 6px -128px;" onclick="goto('sizzle')">sizzle</div>
+            </li>
+            <li>
+                <div style="background-image: url(./nav.png);background-position: 6px -199px;" onclick="goto('tool')">tool</div>
+            </li>
         </ul>
     </div>
     <div class="shower">
@@ -61,25 +68,22 @@
     </div>
     <script type="text/javascript">
     function goto(where) {
-        $(".active~li").css({
-            "transform": "translateY(0px)",
-            "transition": "all 0.4s ease-out 0.1s"
-        });
-        $(".leader>ul>li").removeClass("active");
-        $(".shower>iframe").css("display", "none");
-        $("#" + where).css("display", "block");
-        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]').addClass("active");
-        var long = $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul').length ? $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight > 480 ? 480 : $('.leader>ul>li[onclick="goto(\'' + where + '\')"]>ul')[0].offsetHeight : 12;
-        $('.leader>ul>li[onclick="goto(\'' + where + '\')"]~li').css({
-            "transform": "translateY(" + long + "px)",
-            "transition": "all 0.4s ease-out 0.1s"
-        });
-    }
+        if ($(".active>div")[0] == $('.leader>ul>li>div[onclick="goto(\'' + where + '\')"]')[0]) {
+            $(".leader>ul>li").removeClass("active");
+            $(".shower>iframe").css("display", "none");
+        } else {
+            $(".leader>ul>li").removeClass("active");
+            $(".shower>iframe").css("display", "none");
+            $("#" + where).css("display", "block");
+            $('.leader>ul>li>div[onclick="goto(\'' + where + '\')"]').parent().addClass("active");
+        }
+    };
 
     function check(where) {
         $('.leader>ul>li>ul>li').removeClass('click');
         $('.leader>ul>li>ul>li[onclick="check(\'' + where + '\')"]').addClass("click");
-    }
+
+    };
 
     </script>
 </body>
