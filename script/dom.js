@@ -73,7 +73,7 @@
         "hasClass": function(val) {
             var $this = Luna(this[0]);
             if (typeof val === "string" && val) {
-                if ((" " + $this.class() + " ").search(" "+val+" ") >= 0) {
+                if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
                     return true;
                 }
             }
@@ -166,7 +166,7 @@
             var $this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
-                return $this[0].style[name];
+                return Luna.styles($this[0], name);
             }
             if (typeof name === 'string' && typeof style === 'string') {
                 for (flag = 0; flag < $this.length; flag++) {
@@ -179,7 +179,7 @@
                     }
                 }
             } else {
-                throw new Error("Not acceptable type!");
+                return Luna.styles($this[0]);
             }
             return $this;
         },

@@ -1,4 +1,4 @@
-/*! luna alpha0.0.1 | (c) 2007, 2018 心叶 | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna-library alpha0.0.1 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
@@ -213,7 +213,7 @@
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
-    Luna.description = '不断优化的小型js工具库';
+    Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
 
     window.Luna = window.$ = Luna;
@@ -328,7 +328,7 @@
         "hasClass": function(val) {
             var $this = Luna(this[0]);
             if (typeof val === "string" && val) {
-                if ((" " + $this.class() + " ").search(" "+val+" ") >= 0) {
+                if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
                     return true;
                 }
             }
@@ -421,7 +421,7 @@
             var $this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
-                return $this[0].style[name];
+                return Luna.styles($this[0], name);
             }
             if (typeof name === 'string' && typeof style === 'string') {
                 for (flag = 0; flag < $this.length; flag++) {
@@ -434,7 +434,7 @@
                     }
                 }
             } else {
-                throw new Error("Not acceptable type!");
+                return Luna.styles($this[0]);
             }
             return $this;
         },
@@ -628,6 +628,27 @@
             }
 
             return classString.trim();
+        },
+        /**
+         * 获取全部样式
+         */
+        'styles': function(dom, name) {
+            if (arguments.length < 1 || (dom.nodeType !== 1 && dom.nodeType !== 11 && dom.nodeType !== 9)) {
+                throw new Error('DOM is required!');
+            }
+            if (document.defaultView && document.defaultView.getComputedStyle) {
+                if (name && typeof name === 'string') {
+                    return document.defaultView.getComputedStyle(dom, null).getPropertyValue(name); //第二个参数是伪类
+                } else {
+                    return document.defaultView.getComputedStyle(dom, null);
+                }
+            } else {
+                if (name && typeof name === 'string') {
+                    return dom.currentStyle.getPropertyValue(name);
+                } else {
+                    return dom.currentStyle;
+                }
+            }
         }
     });
 })(window, window.Luna);
@@ -1378,4 +1399,40 @@
             return $this;
         }
     });
+})(window, window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.prototype.extend({
+
+        /**
+         * 获取元素大小
+         */
+        "size": function(type) {
+            var $this = $(this);
+            var elemHeight, elemWidth;
+            if (type == 'content') {
+                elemWidth = $this[0].clientWidth - (($this.css('padding-left') + "").replace('px', '')) - (($this.css('padding-right') + "").replace('px', ''));
+                elemHeight = $this[0].clientHeight - (($this.css('padding-top') + "").replace('px', '')) - (($this.css('padding-bottom') + "").replace('px', ''));
+            } else if (type == 'padding') { //内容+内边距
+                elemWidth = $this[0].clientWidth;
+                elemHeight = $this[0].clientHeight;
+            } else if (type == 'border') { //内容+内边距+边框
+                elemWidth = $this[0].offsetWidth;
+                elemHeight = $this[0].offsetHeight;
+            } else if (type == 'scroll') { //滚动的宽（不包括border）
+                elemWidth = $this[0].scrollWidth;
+                elemHeight = $this[0].scrollHeight;
+            } else {
+                elemWidth = $this[0].offsetWidth;
+                elemHeight = $this[0].offsetHeight;
+            }
+            return {
+                width: elemWidth,
+                height: elemHeight
+            };
+        }
+    });
+
 })(window, window.Luna);

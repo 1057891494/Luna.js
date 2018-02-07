@@ -69,6 +69,27 @@
             }
 
             return classString.trim();
+        },
+        /**
+         * 获取全部样式
+         */
+        'styles': function(dom, name) {
+            if (arguments.length < 1 || (dom.nodeType !== 1 && dom.nodeType !== 11 && dom.nodeType !== 9)) {
+                throw new Error('DOM is required!');
+            }
+            if (document.defaultView && document.defaultView.getComputedStyle) {
+                if (name && typeof name === 'string') {
+                    return document.defaultView.getComputedStyle(dom, null).getPropertyValue(name); //第二个参数是伪类
+                } else {
+                    return document.defaultView.getComputedStyle(dom, null);
+                }
+            } else {
+                if (name && typeof name === 'string') {
+                    return dom.currentStyle.getPropertyValue(name);
+                } else {
+                    return dom.currentStyle;
+                }
+            }
         }
     });
 })(window, window.Luna);

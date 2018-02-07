@@ -212,7 +212,7 @@
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
-    Luna.description = '不断优化的小型js工具库';
+    Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
 
     window.Luna = window.$ = Luna;
