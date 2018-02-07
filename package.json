@@ -1,8 +1,8 @@
 {
-    "name": "luna",
+    "name": "luna-lib",
     "version": "0.0.1",
-    "type":"alpha",
-    "description": "个人内部使用的小型js工具库",
+    "type": "alpha",
+    "description": "The JavaScript library full of elaborate designs",
     "scripts": {
         "start": "node_modules/.bin/grunt"
     },
@@ -10,7 +10,7 @@
         "type": "git",
         "url": "git+https://github.com/yelloxing/Luna.js.git"
     },
-    "author": "心叶",
+    "author": "yelloxing",
     "license": "MIT",
     "devDependencies": {
         "grunt": "^1.0.1",
