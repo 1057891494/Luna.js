@@ -4,11 +4,13 @@
 
     if (global && global.document) {
         factory(global);
+    } else if (typeof module === "object" && typeof module.exports === "object") {
+        exports = module.exports = factory(global, true);
     } else {
-        throw new Error("Luna requires a window with a document!");
+        throw new Error("Unexcepted Error!");
     }
 
-})(window, function(window, undefined) {
+})(typeof window !== "undefined" ? window : this, function(window, noGlobal, undefined) {
     'use strict';
 
     var Luna = function(selector, context) {
@@ -30,6 +32,9 @@
      */
     Luna.prototype.init = function(selector, context, root) {
 
+        if (noGlobal) {
+            return this;
+        }
         //准备工作
         if (typeof selector === 'string') {
             selector = (selector + "").trim();
@@ -155,7 +160,8 @@
 
     };
 
-    var rootLuna = Luna(document);
+
+    var rootLuna = noGlobal ? undefined : Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -215,13 +221,16 @@
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-
     window.Luna = window.$ = Luna;
-
+    return Luna;
 });
 
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.prototype.extend({
 
@@ -251,10 +260,14 @@
             return $this;
         }
     });
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.prototype.extend({
 
@@ -555,10 +568,14 @@
         }
     });
 
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.extend({
 
@@ -651,7 +668,7 @@
             }
         }
     });
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -684,7 +701,12 @@
         //开启唯一的定时器timerId
         "start": function() {
             if (!Luna.clock.timerId) {
-                Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+                if (window && window.setInterval) {
+                    Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+                } else {
+                    Luna.clock.timerId = setInterval(Luna.clock.tick, Luna.clock.interval);
+                }
+
             }
         },
 
@@ -726,14 +748,23 @@
         //停止定时器，重置timerId=null
         "stop": function() {
             if (Luna.clock.timerId) {
-                window.clearInterval(Luna.clock.timerId);
+                if (window && window.setInterval) {
+                    window.clearInterval(Luna.clock.timerId);
+                } else {
+                    clearInterval(Luna.clock.timerId);
+                }
                 Luna.clock.timerId = null;
             }
         }
     });
-})(window, window.Luna);
-(function(window, Luna, undefined) {
+})(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
+
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.extend(Luna._sizzle_, {
         "notLayer": function(selector) {
@@ -1130,11 +1161,14 @@
         }
     });
 
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
-})(window, window.Luna);
-
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.prototype.extend({
         /**
@@ -1399,10 +1433,14 @@
             return $this;
         }
     });
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.prototype.extend({
 
@@ -1412,7 +1450,7 @@
         "size": function(type) {
             var $this = $(this);
             var elemHeight, elemWidth;
-            if (type == 'content') {
+            if (type == 'content') { //内容
                 elemWidth = $this[0].clientWidth - (($this.css('padding-left') + "").replace('px', '')) - (($this.css('padding-right') + "").replace('px', ''));
                 elemHeight = $this[0].clientHeight - (($this.css('padding-top') + "").replace('px', '')) - (($this.css('padding-bottom') + "").replace('px', ''));
             } else if (type == 'padding') { //内容+内边距
@@ -1434,5 +1472,4 @@
             };
         }
     });
-
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);

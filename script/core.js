@@ -3,11 +3,13 @@
 
     if (global && global.document) {
         factory(global);
+    } else if (typeof module === "object" && typeof module.exports === "object") {
+        exports = module.exports = factory(global, true);
     } else {
-        throw new Error("Luna requires a window with a document!");
+        throw new Error("Unexcepted Error!");
     }
 
-})(window, function(window, undefined) {
+})(typeof window !== "undefined" ? window : this, function(window, noGlobal, undefined) {
     'use strict';
 
     var Luna = function(selector, context) {
@@ -29,6 +31,9 @@
      */
     Luna.prototype.init = function(selector, context, root) {
 
+        if (noGlobal) {
+            return this;
+        }
         //准备工作
         if (typeof selector === 'string') {
             selector = (selector + "").trim();
@@ -154,7 +159,8 @@
 
     };
 
-    var rootLuna = Luna(document);
+
+    var rootLuna = noGlobal ? undefined : Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -214,7 +220,6 @@
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-
     window.Luna = window.$ = Luna;
-
+    return Luna;
 });

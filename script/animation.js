@@ -29,7 +29,12 @@
         //开启唯一的定时器timerId
         "start": function() {
             if (!Luna.clock.timerId) {
-                Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+                if (window && window.setInterval) {
+                    Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+                } else {
+                    Luna.clock.timerId = setInterval(Luna.clock.tick, Luna.clock.interval);
+                }
+
             }
         },
 
@@ -71,9 +76,13 @@
         //停止定时器，重置timerId=null
         "stop": function() {
             if (Luna.clock.timerId) {
-                window.clearInterval(Luna.clock.timerId);
+                if (window && window.setInterval) {
+                    window.clearInterval(Luna.clock.timerId);
+                } else {
+                    clearInterval(Luna.clock.timerId);
+                }
                 Luna.clock.timerId = null;
             }
         }
     });
-})(window, window.Luna);
+})(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);

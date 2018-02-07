@@ -1,11 +1,12 @@
 {
     "name": "luna-library",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "type": "alpha",
     "description": "The JavaScript library full of elaborate designs",
     "scripts": {
         "start": "node_modules/.bin/grunt"
     },
+    "main": "./luna.min.js",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/yelloxing/Luna.js.git"

@@ -4,7 +4,7 @@ var sourceScript = [
     './script/core.js',
     './script/event.js',
     './script/dom.js',
-    './script/tool.js',
+    './script/tool-window.js',
     './script/animation.js',
     './script/sizzle.js',
     './script/search.js',

@@ -1,5 +1,9 @@
-(function(window, Luna, undefined) {
+(function(noGlobal, window, Luna, undefined) {
     'use strict';
+
+    if (noGlobal) {
+        return window;
+    }
 
     Luna.prototype.extend({
         /**
@@ -264,4 +268,4 @@
             return $this;
         }
     });
-})(window, window.Luna);
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
