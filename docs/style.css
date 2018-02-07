@@ -11,7 +11,20 @@ iframe {
 .index-body {
     font-size: 0;
 }
-
+.header{
+	background-image: url(./top.png);
+    height: 57px;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.logo{
+	background-image: url(./luna.png);
+    background-repeat: no-repeat;
+    background-position: 20px;
+    width: 70px;
+    height: 57px;
+    background-size: contain;
+}
 .leader {
     display: inline-block;
     font-size: 0;
