@@ -18,11 +18,23 @@
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <script src="../luna.js"></script>
     <script src="./LunaUnit.js"></script>
+    <style>
+
+        body{
+            background-color: white;
+        }
+    </style>
     <script>
         $(function() {
-            $('#luna').bind('click', function() {
+            $('#copy').bind('click', function() {
                 $.clipboard('复制的内容成功');
             })
+            $('#toFull').bind('click', function() {
+                $('body').launchFullScreen()
+            });
+            $('#exitFull').bind('click', function() {
+                $.exitFullScreen();
+            });
         });
     </script>
 </head>
@@ -39,6 +51,9 @@
         <section>
             luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
         </section>
+        <input type="button" id='copy' value="复制">
+        <input type="button" id='toFull' value="进入全屏">
+        <input type="button" id='exitFull' value="退出全屏">
     </article>
 </body>
 

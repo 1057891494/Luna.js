@@ -112,6 +112,15 @@
                 }
             }
             $('#clipboard-textarea').remove();
+        },
+
+        /**
+         * 退出全屏
+         */
+        "exitFullScreen": function() {
+            document.exitFullscreen ? document.exitFullscreen() :
+                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
+                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);

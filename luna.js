@@ -549,7 +549,7 @@
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
-                $parent=Luna($this[flag]).parent();
+                $parent = Luna($this[flag]).parent();
                 $parent[0].removeChild($this[0]);
             }
             return $this;
@@ -565,7 +565,21 @@
                 $($this[flag]).html('');
             }
             return $this;
-        }
+        },
+        /**
+         * 进入全屏
+         */
+        "launchFullScreen": function() {
+            var $this = Luna(this);
+            if ($this[0] && $this[0].requestFullScreen) {
+                $this[0].requestFullScreen();
+            } else if ($this[0] && $this[0].mozRequestFullScreen) {
+                $this[0].mozRequestFullScreen();
+            } else if ($this[0] && $this[0].webkitRequestFullScreen) {
+                $this[0].webkitRequestFullScreen();
+            }
+            return $this;
+        },
     });
 
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
@@ -684,6 +698,15 @@
                 }
             }
             $('#clipboard-textarea').remove();
+        },
+
+        /**
+         * 退出全屏
+         */
+        "exitFullScreen": function() {
+            document.exitFullscreen ? document.exitFullscreen() :
+                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
+                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
