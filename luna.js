@@ -18,10 +18,13 @@
     };
 
     /**
+     *
+     * 如果是window环境下
      * @param selector [string,function,dom,Luna Object] 选择器
      * @param context [dom,Luna Object] 查找上下文，默认document
      *
      * @return Luna Object
+     *
      * {
      *  [],//查找的结果保存在数组中
      *  context,//查找时使用的上下文
@@ -29,134 +32,154 @@
      *  isTouch//返回是否是已经查找过的结点
      *  selector//选择器
      * }
+     *
+     * 如果是node.js环境下
+     * @param selector [string] 选择器
+     * @param context [string,Luna Object] 查找上下文
+     *
+     * @return Luna Object
+     *
+     * {
+     *  [],//查找的结果保存在数组中
+     *  context,//查找上下文
+     *  length,//查找回来的个数
+     *  isTouch//返回是否是已经查找过的结点
+     *  selector//选择器
+     * }
      */
     Luna.prototype.init = function(selector, context, root) {
 
-        if (noGlobal) {
+        if (noGlobal) {//如果是node.js环境
+            // 后期准备添加node.js的sizzle
+            this.length=0;
+            this.context=context;
+            this.selector=selector;
+            this.isTouch=true;
             return this;
-        }
-        //准备工作
-        if (typeof selector === 'string') {
-            selector = (selector + "").trim();
-        }
+        } else {//如果是window环境
+            //准备工作
+            if (typeof selector === 'string') {
+                selector = (selector + "").trim();
+            }
 
-        var flag;
-        this.length = 0;
-        root = root || rootLuna;
+            var flag;
+            this.length = 0;
+            root = root || rootLuna;
 
-        if (!context) {
-            context = document;
-        } else {
-            context = Luna(context)[0];
-        }
+            if (!context) {
+                context = document;
+            } else {
+                context = Luna(context)[0];
+            }
 
-        //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
-        if (!selector) {
-            return this;　　
-        } else {
-            this.selector = selector;
-        }
+            //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
+            if (!selector) {
+                return this;　　
+            } else {
+                this.selector = selector;
+            }
 
-        //body比较特殊，直接提出来
-        if (selector == "body") {
-            this.context = document;
-            this[0] = document.body;
-            this.isTouch = true;
-            this.length = 1;
-            return this;
-        }
-        //document比较特殊，直接提出来
-        if (selector == "document") {
-            this.context = null;
-            this[0] = document;
-            this.isTouch = true;
-            this.length = 1;
-            return this;
-        }
-
-        //如果是字符串
-        if (typeof selector === 'string') {
-            //去掉：换行，换页，回车
-            selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
-            if (/^</.test(selector)) {
-                //如果是html文档
-                if (!context) {
-                    throw new Error("Parameter error!");
-                }
-                var frameDiv = document.createElement("div");
-                frameDiv.innerHTML = selector;
-                this[0] = frameDiv.childNodes[0];
+            //body比较特殊，直接提出来
+            if (selector == "body") {
+                this.context = document;
+                this[0] = document.body;
                 this.isTouch = true;
                 this.length = 1;
-                this.context = undefined;
-                return this;
-            } else {
-                //内置小型sizzle选择器
-                if (!Luna.sizzle) {
-                    throw new Error("Sizzle is necessary for Luna!");
-                }
-                var nodes = Luna.sizzle(selector, context);
-                flag = 0;
-                for (; flag < nodes.length; flag++) {
-                    this[flag] = nodes[flag];
-                }
-                this.length = flag;
-                this.isTouch = true;
-                this.context = context;
                 return this;
             }
-        }
-        //如果是DOM节点
-        if (selector.nodeType === 1 || selector.nodeType === 11 || selector.nodeType === 9) {
-            this.context = context;
-            this[0] = selector;
-            this.isTouch = true;
-            this.length = 1;
-            return this;
-        }
+            //document比较特殊，直接提出来
+            if (selector == "document") {
+                this.context = null;
+                this[0] = document;
+                this.isTouch = true;
+                this.length = 1;
+                return this;
+            }
 
-        //如果是function
-        if (typeof selector === 'function') {
-            if (Luna.__isLoad__) {
-                selector();
-            } else {
-                if (document.addEventListener) {
-                    //Mozilla, Opera and webkit
-                    document.addEventListener("DOMContentLoaded", function doListenter() {
-                        document.removeEventListener("DOMContentLoaded", doListenter, false);
-                        selector();
-                        Luna.__isLoad__ = true;
-                    });
+            //如果是字符串
+            if (typeof selector === 'string') {
+                //去掉：换行，换页，回车
+                selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
+                if (/^</.test(selector)) {
+                    //如果是html文档
+                    if (!context) {
+                        throw new Error("Parameter error!");
+                    }
+                    var frameDiv = document.createElement("div");
+                    frameDiv.innerHTML = selector;
+                    this[0] = frameDiv.childNodes[0];
+                    this.isTouch = true;
+                    this.length = 1;
+                    this.context = undefined;
+                    return this;
+                } else {
+                    //内置小型sizzle选择器
+                    if (!Luna.sizzle) {
+                        throw new Error("Sizzle is necessary for Luna!");
+                    }
+                    var nodes = Luna.sizzle(selector, context);
+                    flag = 0;
+                    for (; flag < nodes.length; flag++) {
+                        this[flag] = nodes[flag];
+                    }
+                    this.length = flag;
+                    this.isTouch = true;
+                    this.context = context;
+                    return this;
+                }
+            }
+            //如果是DOM节点
+            if (selector.nodeType === 1 || selector.nodeType === 11 || selector.nodeType === 9) {
+                this.context = context;
+                this[0] = selector;
+                this.isTouch = true;
+                this.length = 1;
+                return this;
+            }
 
-                } else if (document.attachEvent) {
-                    //IE
-                    document.attachEvent("onreadystatechange", function doListenter() {
-                        if (document.readyState === "complete") {
-                            document.detachEvent("onreadystatechange", doListenter);
+            //如果是function
+            if (typeof selector === 'function') {
+                if (Luna.__isLoad__) {
+                    selector();
+                } else {
+                    if (document.addEventListener) {
+                        //Mozilla, Opera and webkit
+                        document.addEventListener("DOMContentLoaded", function doListenter() {
+                            document.removeEventListener("DOMContentLoaded", doListenter, false);
                             selector();
                             Luna.__isLoad__ = true;
-                        }
-                    });
+                        });
 
+                    } else if (document.attachEvent) {
+                        //IE
+                        document.attachEvent("onreadystatechange", function doListenter() {
+                            if (document.readyState === "complete") {
+                                document.detachEvent("onreadystatechange", doListenter);
+                                selector();
+                                Luna.__isLoad__ = true;
+                            }
+                        });
+
+                    }
                 }
+                return this;
             }
+
+            //如果是Luna对象
+            if (selector.isTouch) {
+                this.isTouch = true;
+                flag = 0;
+                for (; flag < selector.length; flag++) {
+                    this[flag] = selector[flag];
+                }
+                this.context = selector.context || context;
+                this.length = selector.length;
+                this.selector = selector.selector;
+                return this;
+            }
+
             return this;
         }
-
-        //如果是Luna对象
-        if (selector.isTouch) {
-            this.isTouch = true;
-            flag = 0;
-            for (; flag < selector.length; flag++) {
-                this[flag] = selector[flag];
-            }
-            this.context = selector.context || context;
-            this.length = selector.length;
-            this.selector = selector.selector;
-            return this;
-        }
-
-        return this;
 
     };
 
@@ -606,60 +629,6 @@
                 return h;
             })(node);
         },
-
-        /**
-         * 合并若干个class
-         */
-        "uniqueClass": function() {
-            var classString = '',
-                flag = 0;
-            for (; flag < arguments.length; flag++) {
-                if (typeof arguments[flag] !== 'string') {
-                    throw new Error('Only string is valid,not project!');
-                }
-                classString += arguments[flag] + " ";
-            }
-            classString = classString.trim();
-            var classArray = classString.split(/ +/);
-            var classObj = {};
-            classArray.forEach(function(item) {
-                classObj[item] = true;
-            }, this);
-            classString = '';
-            for (var item in classObj) {
-                if (classObj[item])
-                    classString += item + " ";
-            }
-
-            return classString.trim();
-        },
-
-        /**
-         * 删除已经存在的class或toggle，用flag来标记，flag为真表示删除
-         */
-        "operateClass": function(srcClass, opeClass, flag) {
-            if (typeof srcClass !== 'string' || typeof opeClass !== 'string') {
-                throw new Error('Only string is valid,not project!');
-            }
-            srcClass = srcClass.trim();
-            opeClass = opeClass.trim();
-            var srcClassArray = srcClass.split(/ +/);
-            var opeClassArray = opeClass.split(/ +/);
-            var classObj = {};
-            srcClassArray.forEach(function(item) {
-                classObj[item] = true;
-            }, this);
-            opeClassArray.forEach(function(item) {
-                classObj[item] = flag ? false : !classObj[item];
-            }, this);
-            var classString = '';
-            for (var item in classObj) {
-                if (classObj[item])
-                    classString += item + " ";
-            }
-
-            return classString.trim();
-        },
         /**
          * 获取全部样式
          */
@@ -710,95 +679,6 @@
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
-
-(function(window, Luna, undefined) {
-    'use strict';
-    Luna.extend({
-        /*提供动画效果*/
-        "animation": function(doback, duration, callback) {
-            Luna.clock.timer(function(deep) {
-                //其中deep为0-100，单位%，表示改变的程度
-                doback(deep);
-            }, duration, callback);
-        }
-    });
-
-    Luna.extend(Luna.clock, {
-        //把tick函数推入堆栈
-        "timer": function(tick, duration, callback) {
-            if (!tick) {
-                throw new Error('tick is required!');
-            }
-            duration = duration || Luna.clock.speeds;
-            Luna.clock.timers.push({
-                "createTime": new Date(),
-                "tick": tick,
-                "duration": duration,
-                "callback": callback
-            });
-            Luna.clock.start();
-        },
-
-        //开启唯一的定时器timerId
-        "start": function() {
-            if (!Luna.clock.timerId) {
-                if (window && window.setInterval) {
-                    Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
-                } else {
-                    Luna.clock.timerId = setInterval(Luna.clock.tick, Luna.clock.interval);
-                }
-
-            }
-        },
-
-        //被定时器调用，遍历timers堆栈
-        "tick": function() {
-            var createTime, flag, tick, callback, timer, duration, passTime, needStop, deep,
-                timers = Luna.clock.timers;
-            Luna.clock.timers = [];
-            Luna.clock.timers.length = 0;
-            for (flag = 0; flag < timers.length; flag++) {
-                //初始化数据
-                timer = timers[flag];
-                createTime = timer.createTime;
-                tick = timer.tick;
-                duration = timer.duration;
-                callback = timer.callback;
-                needStop = false;
-
-                //执行
-                passTime = (+new Date() - createTime) / duration;
-                if (passTime >= 1) {
-                    needStop = true;
-                }
-                passTime = passTime > 1 ? 1 : passTime;
-                deep = 100 * passTime;
-                tick(deep);
-                if (passTime < 1) {
-                    //动画没有结束再添加
-                    Luna.clock.timers.push(timer);
-                } else if (callback) {
-                    callback();
-                }
-            }
-            if (Luna.clock.timers.length <= 0) {
-                Luna.clock.stop();
-            }
-        },
-
-        //停止定时器，重置timerId=null
-        "stop": function() {
-            if (Luna.clock.timerId) {
-                if (window && window.setInterval) {
-                    window.clearInterval(Luna.clock.timerId);
-                } else {
-                    clearInterval(Luna.clock.timerId);
-                }
-                Luna.clock.timerId = null;
-            }
-        }
-    });
-})(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
 (function(noGlobal, window, Luna, undefined) {
     'use strict';
@@ -1515,22 +1395,150 @@
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
-(function(noGlobal, window, Luna, undefined) {
+(function(window, Luna, undefined) {
     'use strict';
-
-    if (!noGlobal) {
-        return window;
-    }
-
     Luna.extend({
-
-
+        /*提供动画效果*/
+        "animation": function(doback, duration, callback) {
+            Luna.clock.timer(function(deep) {
+                //其中deep为0-100，单位%，表示改变的程度
+                doback(deep);
+            }, duration, callback);
+        }
     });
-})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
+
+    Luna.extend(Luna.clock, {
+        //把tick函数推入堆栈
+        "timer": function(tick, duration, callback) {
+            if (!tick) {
+                throw new Error('tick is required!');
+            }
+            duration = duration || Luna.clock.speeds;
+            Luna.clock.timers.push({
+                "createTime": new Date(),
+                "tick": tick,
+                "duration": duration,
+                "callback": callback
+            });
+            Luna.clock.start();
+        },
+
+        //开启唯一的定时器timerId
+        "start": function() {
+            if (!Luna.clock.timerId) {
+                if (window && window.setInterval) {
+                    Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+                } else {
+                    Luna.clock.timerId = setInterval(Luna.clock.tick, Luna.clock.interval);
+                }
+
+            }
+        },
+
+        //被定时器调用，遍历timers堆栈
+        "tick": function() {
+            var createTime, flag, tick, callback, timer, duration, passTime, needStop, deep,
+                timers = Luna.clock.timers;
+            Luna.clock.timers = [];
+            Luna.clock.timers.length = 0;
+            for (flag = 0; flag < timers.length; flag++) {
+                //初始化数据
+                timer = timers[flag];
+                createTime = timer.createTime;
+                tick = timer.tick;
+                duration = timer.duration;
+                callback = timer.callback;
+                needStop = false;
+
+                //执行
+                passTime = (+new Date() - createTime) / duration;
+                if (passTime >= 1) {
+                    needStop = true;
+                }
+                passTime = passTime > 1 ? 1 : passTime;
+                deep = 100 * passTime;
+                tick(deep);
+                if (passTime < 1) {
+                    //动画没有结束再添加
+                    Luna.clock.timers.push(timer);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            if (Luna.clock.timers.length <= 0) {
+                Luna.clock.stop();
+            }
+        },
+
+        //停止定时器，重置timerId=null
+        "stop": function() {
+            if (Luna.clock.timerId) {
+                if (window && window.setInterval) {
+                    window.clearInterval(Luna.clock.timerId);
+                } else {
+                    clearInterval(Luna.clock.timerId);
+                }
+                Luna.clock.timerId = null;
+            }
+        }
+    });
+})(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
     Luna.extend({
+        /**
+         * 合并若干个class
+         */
+        "uniqueClass": function() {
+            var classString = '',
+                flag = 0;
+            for (; flag < arguments.length; flag++) {
+                if (typeof arguments[flag] !== 'string') {
+                    throw new Error('Only string is valid,not project!');
+                }
+                classString += arguments[flag] + " ";
+            }
+            classString = classString.trim();
+            var classArray = classString.split(/ +/);
+            var classObj = {};
+            classArray.forEach(function(item) {
+                classObj[item] = true;
+            }, this);
+            classString = '';
+            for (var item in classObj) {
+                if (classObj[item])
+                    classString += item + " ";
+            }
 
+            return classString.trim();
+        },
+
+        /**
+         * 删除已经存在的class或toggle，用flag来标记，flag为真表示删除
+         */
+        "operateClass": function(srcClass, opeClass, flag) {
+            if (typeof srcClass !== 'string' || typeof opeClass !== 'string') {
+                throw new Error('Only string is valid,not project!');
+            }
+            srcClass = srcClass.trim();
+            opeClass = opeClass.trim();
+            var srcClassArray = srcClass.split(/ +/);
+            var opeClassArray = opeClass.split(/ +/);
+            var classObj = {};
+            srcClassArray.forEach(function(item) {
+                classObj[item] = true;
+            }, this);
+            opeClassArray.forEach(function(item) {
+                classObj[item] = flag ? false : !classObj[item];
+            }, this);
+            var classString = '';
+            for (var item in classObj) {
+                if (classObj[item])
+                    classString += item + " ";
+            }
+
+            return classString.trim();
+        }
     });
 })(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
