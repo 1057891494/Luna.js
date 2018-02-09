@@ -8,7 +8,9 @@ var sourceScript = [
     './script/animation.js',
     './script/sizzle.js',
     './script/search.js',
-    './script/position.js'
+    './script/position.js',
+    './script/tool-nodejs.js',
+    './script/tool.js'
 ];
 var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {

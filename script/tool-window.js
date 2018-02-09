@@ -94,6 +94,24 @@
                     return dom.currentStyle;
                 }
             }
+        },
+        /**
+         * 把指定文字复制到剪切板
+         */
+        'clipboard': function(text, callback, errorback) {
+            $('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
+            window.document.getElementById("clipboard-textarea").select();
+            try {
+                window.document.execCommand("copy", false, null);
+                if (!!callback) {
+                    callback();
+                }
+            } catch (e) {
+                if (!!errorback) {
+                    errorback();
+                }
+            }
+            $('#clipboard-textarea').remove();
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);

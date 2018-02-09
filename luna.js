@@ -549,8 +549,8 @@
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
-                $parent.removeChild($this[0]);
+                $parent=Luna($this[flag]).parent();
+                $parent[0].removeChild($this[0]);
             }
             return $this;
         },
@@ -666,6 +666,24 @@
                     return dom.currentStyle;
                 }
             }
+        },
+        /**
+         * 把指定文字复制到剪切板
+         */
+        'clipboard': function(text, callback, errorback) {
+            $('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
+            window.document.getElementById("clipboard-textarea").select();
+            try {
+                window.document.execCommand("copy", false, null);
+                if (!!callback) {
+                    callback();
+                }
+            } catch (e) {
+                if (!!errorback) {
+                    errorback();
+                }
+            }
+            $('#clipboard-textarea').remove();
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
@@ -1473,3 +1491,28 @@
         }
     });
 })(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
+
+(function(noGlobal, window, Luna, undefined) {
+    'use strict';
+
+    if (!noGlobal) {
+        return window;
+    }
+
+    Luna.extend({
+         /**
+         * 把指定文字复制到剪切板
+         */
+        'clipboard': function(text, callback, errorback) {
+
+        }
+
+    });
+})(typeof window !== "undefined" ? false : true, typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+    Luna.extend({
+
+    });
+})(typeof window !== "undefined" ? window : this, (typeof window !== "undefined" ? window : this).Luna);

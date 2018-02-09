@@ -285,8 +285,8 @@
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
-                $parent.removeChild($this[0]);
+                $parent=Luna($this[flag]).parent();
+                $parent[0].removeChild($this[0]);
             }
             return $this;
         },
