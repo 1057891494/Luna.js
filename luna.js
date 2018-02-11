@@ -1,4 +1,4 @@
-/*! luna-library alpha1.0.0 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna-library alpha1.0.1 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
@@ -231,31 +231,42 @@
 
         /*添加绑定事件*/
         "bind": function(eventType, callback, useCapture) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (window.attachEvent) {
-                $this[0].attachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].attachEvent("on" + eventType, callback);
+                }
+
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                $this[0].addEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].addEventListener(eventType, callback, useCapture);
+                }
             }
             return $this;
         },
 
         /*解除绑定事件*/
         "unbind": function(eventType, callback, useCapture) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (window.detachEvent) {
-                $this[0].detachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].detachEvent("on" + eventType, callback);
+                }
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                $this[0].removeEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].removeEventListener(eventType, callback, useCapture);
+                }
             }
             return $this;
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
