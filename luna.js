@@ -1,4 +1,4 @@
-/*! luna-library alpha1.0.1 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna-library alpha1.0.2 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
@@ -76,9 +76,7 @@
 
         //如果是字符串
         if (typeof selector === 'string') {
-            //去掉：换行，换页，回车
-            selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
-            if (/^</.test(selector)) {
+            if (/^</.test((selector + "").trim())) {
                 //如果是html文档
                 if (!context) {
                     throw new Error("Parameter error!");
@@ -91,6 +89,8 @@
                 this.context = undefined;
                 return this;
             } else {
+                //去掉：换行，换页，回车
+                selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
                 //内置小型sizzle选择器
                 if (!Luna.sizzle) {
                     throw new Error("Sizzle is necessary for Luna!");

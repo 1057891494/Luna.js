@@ -75,9 +75,7 @@
 
         //如果是字符串
         if (typeof selector === 'string') {
-            //去掉：换行，换页，回车
-            selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
-            if (/^</.test(selector)) {
+            if (/^</.test((selector + "").trim())) {
                 //如果是html文档
                 if (!context) {
                     throw new Error("Parameter error!");
@@ -90,6 +88,8 @@
                 this.context = undefined;
                 return this;
             } else {
+                //去掉：换行，换页，回车
+                selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
                 //内置小型sizzle选择器
                 if (!Luna.sizzle) {
                     throw new Error("Sizzle is necessary for Luna!");
