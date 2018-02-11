@@ -30,9 +30,9 @@
                 <li><a href='index.html'>核心代码</a></li>
                 <li><a href='dom.html'>DOM操作</a></li>
                 <li><a href='tool.html'>工具</a></li>
-                <li class='click'><a href='search.html'>结点查找</a></li>
+                <li><a href='search.html'>结点查找</a></li>
                 <li><a href='animation.html'>动画</a></li>
-                <li><a href='event.html'>事件管理</a></li>
+                <li class='click'><a href='event.html'>事件管理</a></li>
                 <li><a href='position.html'>定位相关</a></li>
             </ul>
         </nav>
@@ -40,74 +40,18 @@
     <article>
         <section>
             <p class="title">
-                parent()
+                bind(eventType, callback, useCapture)
             </p>
             <p class="block">
-                【Luna对象】返回全部被选元素的直接父元素
+                【Luna对象】添加绑定事件
             </p>
         </section>
         <section>
             <p class="title">
-                parents(selector)
+                unbind(eventType, callback, useCapture)
             </p>
             <p class="block">
-                【Luna对象】返回被选元素的所有祖先元素（不包括祖先的兄弟）
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                children(selector)
-            </p>
-            <p class="block">
-                【Luna对象】返回被选元素的所有直接子元素
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                siblings(selector)
-            </p>
-            <p class="block">
-                【Luna对象】返回被选元素的所有同胞元素，包括自己
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                next()
-            </p>
-            <p class="block">
-                【Luna对象】返回全部被选元素的下一个同胞元素
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                nextAll(selector)
-            </p>
-            <p class="block">
-                【Luna对象】返回被选元素的所有跟随的同胞元素
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                prev()
-            </p>
-            <p class="block">
-                【Luna对象】返回全部被选元素的前一个同胞元素
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                prevAll(selector)
-            </p>
-            <p class="block">
-                【Luna对象】返回被选元素的所有之前的同胞元素
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                filter(selector)
-            </p>
-            <p class="block">
-                【Luna对象】根据选择器过滤已经选择的节点
+                【Luna对象】解除绑定事件
             </p>
         </section>
     </article>
