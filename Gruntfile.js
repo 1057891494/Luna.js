@@ -2,20 +2,14 @@
 
 var sourceScript = [
 
-    // 核心代码
     './script/core.js',
-
-    // 浏览器专有
-    './script/only-window.js/event.js',
-    './script/only-window.js/dom.js',
-    './script/only-window.js/tool.js',
-    './script/only-window.js/sizzle.js',
-    './script/only-window.js/search.js',
-    './script/only-window.js/position.js',
-
-    // 二者都可以使用的
-    './script/animation.js',
-    './script/tool.js'
+    './script/event.js',
+    './script/dom.js',
+    './script/tool.js',
+    './script/sizzle.js',
+    './script/search.js',
+    './script/position.js',
+    './script/animation.js'
 ];
 var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
@@ -43,8 +37,6 @@ module.exports = function(grunt) {
                     "$": true,
                     "window": true,
                     "Luna": true,
-                    "module": true,
-                    "exports": true,
                     "setInterval": true,
                     "clearInterval": true,
                     "setTimeout": true,

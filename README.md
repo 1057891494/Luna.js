@@ -18,8 +18,7 @@
 *   除了和结点（Luna对象）相关的操作，在Luna上可以调用一些有价值的、经过不断迭代加以改进的快捷方法。
 
 ### 使用方法
-*   【浏览器环境下】你可以直接在这里下载代码里面的luna.js或luna.min.js来使用，或者通过npm install --save-dev luna-library 命令来安装本项目，然后引用luna.js或luna.min.js也可以。
-*   【node.js环境下】通过npm install --save-dev luna-library 命令来安装本项目，然后var lunaLibrary = require("luna-library")就可以使用了。
+*   你可以直接在这里下载代码里面的luna.js或luna.min.js来使用，或者通过npm install --save-dev luna-library 命令来安装本项目，然后引用luna.js或luna.min.js也可以。
 
 ### 支持的CSS选择器
 *   第一类：class选择器、ID选择器、属性选择器和元素选择器。
