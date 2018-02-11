@@ -3,11 +3,13 @@
 
     if (global && global.document) {
         factory(global);
+    } else if (typeof module === "object" && typeof module.exports === "object") {
+        throw new Error("Node.js is not supported!");
     } else {
-        throw new Error("Luna requires a window with a document!");
+        throw new Error("Unexcepted Error!");
     }
 
-})(window, function(window, undefined) {
+})(typeof window !== "undefined" ? window : this, function(window, undefined) {
     'use strict';
 
     var Luna = function(selector, context) {
@@ -15,10 +17,12 @@
     };
 
     /**
+     *
      * @param selector [string,function,dom,Luna Object] 选择器
      * @param context [dom,Luna Object] 查找上下文，默认document
      *
      * @return Luna Object
+     *
      * {
      *  [],//查找的结果保存在数组中
      *  context,//查找时使用的上下文
@@ -26,6 +30,7 @@
      *  isTouch//返回是否是已经查找过的结点
      *  selector//选择器
      * }
+     *
      */
     Luna.prototype.init = function(selector, context, root) {
 
@@ -70,9 +75,7 @@
 
         //如果是字符串
         if (typeof selector === 'string') {
-            //去掉：换行，换页，回车
-            selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
-            if (/^</.test(selector)) {
+            if (/^</.test((selector + "").trim())) {
                 //如果是html文档
                 if (!context) {
                     throw new Error("Parameter error!");
@@ -85,6 +88,8 @@
                 this.context = undefined;
                 return this;
             } else {
+                //去掉：换行，换页，回车
+                selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
                 //内置小型sizzle选择器
                 if (!Luna.sizzle) {
                     throw new Error("Sizzle is necessary for Luna!");
@@ -151,10 +156,10 @@
         }
 
         return this;
-
     };
 
-    var rootLuna = Luna(document);
+
+    var rootLuna =Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -212,9 +217,8 @@
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
-    Luna.description = '不断优化的小型js工具库';
+    Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-
     window.Luna = window.$ = Luna;
-
+    return Luna;
 });

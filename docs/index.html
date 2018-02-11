@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <title>luna - API文档</title>
-    <link rel="icon" href="./luna.ico" />
+    <link rel="icon" href="luna.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,78 +17,78 @@
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <link rel="stylesheet" href="style.css">
-    <script type="text/javascript" src="./luna.min.js"></script>
+    <script src="luna.min.js"></script>
 </head>
 
-<body class="index-body">
-    <div class="header">
-        <div class="logo"></div>
-    </div>
-    <div class="leader">
-        <ul>
-            <li>
-                <div style="background-image: url(./nav.png);background-position: 6px 14px;" onclick="goto('dom')">dom</div>
-                <ul>
-                    <li onclick="check('dom1')">dom1</li>
-                    <li onclick="check('dom2')">dom2</li>
-                    <li onclick="check('dom3')">dom3</li>
-                    <li onclick="check('dom4')">dom4</li>
-                    <li onclick="check('dom5')">dom5</li>
-                    <li onclick="check('dom6')">dom6</li>
-                    <li onclick="check('dom7')">dom7</li>
-                    <li onclick="check('dom8')">dom8</li>
-                    <li onclick="check('dom9')">dom9</li>
-                    <li onclick="check('dom10')">dom10</li>
-                    <li onclick="check('dom11')">dom11</li>
-                    <li onclick="check('dom12')">dom12</li>
-                    <li onclick="check('dom13')">dom13</li>
-                </ul>
-            </li>
-            <li>
-                <div style="background-image: url(./nav.png);background-position: 6px -57px;" onclick="goto('search')">search</div>
-                <ul>
-                    <li onclick="check('dom1')">search1</li>
-                    <li onclick="check('dom2')">search2</li>
-                    <li onclick="check('dom3')">search3</li>
-                </ul>
-            </li>
-            <li>
-                <div style="background-image: url(./nav.png);background-position: 6px -128px;" onclick="goto('sizzle')">sizzle</div>
-            </li>
-            <li>
-                <div style="background-image: url(./nav.png);background-position: 6px -199px;" onclick="goto('tool')">tool</div>
-            </li>
-        </ul>
-    </div>
-    <div class="shower">
-        <iframe src="./dom.html" id="dom"></iframe>
-        <iframe src="./search.html" id="search" style="display: none;"></iframe>
-        <iframe src="./sizzle.html" id="sizzle" style="display: none;"></iframe>
-        <iframe src="./tool.html" id="tool" style="display: none;"></iframe>
-    </div>
-    <script type="text/javascript">
-    function goto(where) {
-        if ($(".active>div")[0] == $('.leader>ul>li>div[onclick="goto(\'' + where + '\')"]')[0]) {
-            $(".leader>ul>li").removeClass("active");
-            $(".shower>iframe").css("display", "none");
-        } else {
-            $(".leader>ul>li").removeClass("active");
-            $(".shower>iframe").css("display", "none");
-            $("#" + where).css("display", "block");
-            $('.leader>ul>li>div[onclick="goto(\'' + where + '\')"]').parent().addClass("active");
-        }
-    };
-
-    function check(where) {
-        $('.leader>ul>li>ul>li').removeClass('click');
-        $('.leader>ul>li>ul>li[onclick="check(\'' + where + '\')"]').addClass("click");
-
-    };
-
-    </script>
+<body>
+    <header>
+        <div class="logo">
+            Luna.js
+        </div>
+        <nav>
+            <ul>
+                <li class='click'><a href='index.html'>核心代码</a></li>
+                <li><a href='dom.html'>DOM操作</a></li>
+                <li><a href='tool.html'>工具</a></li>
+                <li><a href='search.html'>结点查找</a></li>
+                <li><a href='animation.html'>动画</a></li>
+                <li><a href='event.html'>事件管理</a></li>
+                <li><a href='position.html'>定位相关</a></li>
+            </ul>
+        </nav>
+    </header>
+    <article>
+        <section>
+            <p class="title">第一段：Luna构造函数</p>
+            <p class="block">
+                Luna本身就提供了一系列方法，除此之外你还可以创建一个Luna对象，调用对象身上的方法，二者是不同的；Luna本身的方法很容易理解，直接查看API就清除了，下面来主要说说Luna对象相关问题。
+            </p>
+            <p class="block">
+                改造Luna对象的方法推荐使用var lunaObj=Luna(param1[,param2])的方式，具体的参数说明如下：
+                <span class="list">
+                    1.传递一个函数：比如这样Luna(function(){console.log('这是传递的函数')})，可以保证函数在页面加载完毕的时候执行；
+                </span>
+                <span class="list">
+                    2.传递DOM结点或Luna对象：返回的是Luna对象，传递进去的结点信息会被返回的Luna对象保存，后续调用Luna对象的方法会直接应用到上面去；
+                </span>
+                <span class="list">
+                    3.传递进去的是HTML字符串：这段字符串会被转成结点，并保存在返回的Luna对象中；
+                </span>
+                <span class="list">
+                    4.传递的字符串是CSS选择器：会参考第二段列出的支持的选择器来查找DOM结点并保存在返回的Luna对象中。
+                </span>
+            </p>
+        </section>
+        <section>
+            <p class="title">第二段：CSS选择器</p>
+            <p class="block">
+                提供类似CSS选择器的方法来查找结点的目的是方便操作，具体可以使用的包括下面三类：
+                <span class="list">第一类：class选择器、ID选择器、属性选择器和元素选择器。</span>
+                <span class="list">第二类：第一类选择器的任意组合。</span>
+                <span class="list">第三类：在前面二类中可以增加这四种结点关系选择器：'>',"空","~","+"。</span>
+            </p>
+        </section>
+        <section>
+            <p class="title">第三段：扩展Luna</p>
+            <p class="block">
+                有时候默认提供的方法不足以满足日常开发的时候，可以通过下面的方法来扩展Luna和Luna对象的方法，具体如下：
+                <span class="list">扩展Luna方法：Luna.extend({"funName":function(){}})</span>
+                <span class="list">扩展Luna对象方法：Luna.prototype.extend({"funName":function(){}})</span>
+            </p>
+        </section>
+    </article>
+    <footer>
+        <div class='info'>
+            yelloxing.github.io is sponsored by StepByStep | 本网站由【走一步 再走一步】支持
+        </div>
+        <div class='nav' onclick='window.location.href="https://github.com/yelloxing/Luna.js"'>
+            Fork me on Github
+        </div>
+    </footer>
 </body>
 
 </html>
+
 <!--
     =================================================
     走一步，再走一步。

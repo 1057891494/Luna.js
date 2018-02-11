@@ -29,61 +29,21 @@
             <ul>
                 <li><a href='index.html'>核心代码</a></li>
                 <li><a href='dom.html'>DOM操作</a></li>
-                <li class='click'><a href='tool.html'>工具</a></li>
+                <li><a href='tool.html'>工具</a></li>
                 <li><a href='search.html'>结点查找</a></li>
                 <li><a href='animation.html'>动画</a></li>
                 <li><a href='event.html'>事件管理</a></li>
-                <li><a href='position.html'>定位相关</a></li>
+                <li class='click'><a href='position.html'>定位相关</a></li>
             </ul>
         </nav>
     </header>
     <article>
         <section>
             <p class="title">
-                uniqueClass()
+                size(type)
             </p>
             <p class="block">
-                【Luna】合并若干个class：传递一个字符串（class值），改方法会删除重复的class值。
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                operateClass(srcClass, opeClass, flag)
-            </p>
-            <p class="block">
-                【Luna】删除已经存在的class或toggle，用flag来标记，flag为真表示删除。
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                outerHTML(node)
-            </p>
-            <p class="block">
-                【Luna】获取包括元素自己的字符串：一个支持各种浏览器的outerHTML方法。
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                styles(dom, name)
-            </p>
-            <p class="block">
-                【Luna】获取全部样式：获取全部样式是针对非伪类的，这里的全部样式是指浏览器最终渲染的结果，不是设置的值，这点请注意。
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                clipboard(text, callback, errorback)
-            </p>
-            <p class="block">
-                【Luna】把指定文字复制到剪切板
-            </p>
-        </section>
-        <section>
-            <p class="title">
-                exitFullScreen()
-            </p>
-            <p class="block">
-                【Luna】退出全屏
+                【Luna对象】获取元素大小：type参数是字符串，可以参数的字符串有四个：content（内容）、padding（内容+内边距）、border（内容+内边距+边框）和scroll（滚动的宽，但不包括border），默认是border，返回格式为：{width:宽,height:高}；
             </p>
         </section>
     </article>

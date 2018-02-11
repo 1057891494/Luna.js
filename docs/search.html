@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <title>luna - API文档</title>
-    <link rel="icon" href="./luna.ico" />
+    <link rel="icon" href="luna.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,10 +17,108 @@
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <link rel="stylesheet" href="style.css">
+    <script src="luna.min.js"></script>
 </head>
 
 <body>
-    <div>search</div>
+    <header>
+        <div class="logo">
+            Luna.js
+        </div>
+        <nav>
+            <ul>
+                <li><a href='index.html'>核心代码</a></li>
+                <li><a href='dom.html'>DOM操作</a></li>
+                <li><a href='tool.html'>工具</a></li>
+                <li class='click'><a href='search.html'>结点查找</a></li>
+                <li><a href='animation.html'>动画</a></li>
+                <li><a href='event.html'>事件管理</a></li>
+                <li><a href='position.html'>定位相关</a></li>
+            </ul>
+        </nav>
+    </header>
+    <article>
+        <section>
+            <p class="title">
+                parent()
+            </p>
+            <p class="block">
+                【Luna对象】返回全部被选元素的直接父元素
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                parents(selector)
+            </p>
+            <p class="block">
+                【Luna对象】返回被选元素的所有祖先元素（不包括祖先的兄弟）:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                children(selector)
+            </p>
+            <p class="block">
+                【Luna对象】返回被选元素的所有直接子元素:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                siblings(selector)
+            </p>
+            <p class="block">
+                【Luna对象】返回被选元素的所有同胞元素，包括自己:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                next()
+            </p>
+            <p class="block">
+                【Luna对象】返回全部被选元素的下一个同胞元素
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                nextAll(selector)
+            </p>
+            <p class="block">
+                【Luna对象】返回被选元素的所有跟随的同胞元素:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                prev()
+            </p>
+            <p class="block">
+                【Luna对象】返回全部被选元素的前一个同胞元素
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                prevAll(selector)
+            </p>
+            <p class="block">
+                【Luna对象】返回被选元素的所有之前的同胞元素:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                filter(selector)
+            </p>
+            <p class="block">
+                【Luna对象】根据选择器过滤已经选择的节点:选择器只支持【核心代码】一章中【第二段：CSS选择器】中描述的第一类和第二类。
+            </p>
+        </section>
+    </article>
+    <footer>
+        <div class='info'>
+            yelloxing.github.io is sponsored by StepByStep | 本网站由【走一步 再走一步】支持
+        </div>
+        <div class='nav' onclick='window.location.href="https://github.com/yelloxing/Luna.js"'>
+            Fork me on Github
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <title>luna - API文档</title>
-    <link rel="icon" href="./luna.ico" />
+    <link rel="icon" href="luna.ico" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
     <meta name="format-detection" content="telephone=no" />
@@ -17,10 +17,172 @@
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <link rel="stylesheet" href="style.css">
+    <script src="luna.min.js"></script>
 </head>
 
 <body>
-    <div>dom</div>
+    <header>
+        <div class="logo">
+            Luna.js
+        </div>
+        <nav>
+            <ul>
+                <li><a href='index.html'>核心代码</a></li>
+                <li class='click'><a href='dom.html'>DOM操作</a></li>
+                <li><a href='tool.html'>工具</a></li>
+                <li><a href='search.html'>结点查找</a></li>
+                <li><a href='animation.html'>动画</a></li>
+                <li><a href='event.html'>事件管理</a></li>
+                <li><a href='position.html'>定位相关</a></li>
+            </ul>
+        </nav>
+    </header>
+    <article>
+        <section>
+            <p class="title">
+                html(template)
+            </p>
+            <p class="block">
+                【Luna对象】设置或获取内部html：如果传递参数，就是把Luna对象保存的每个结点的innerHTML设置为template，如果没有传递参数，就是返回Luna对象保存的第一个结点的innerHTML。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                text(val)
+            </p>
+            <p class="block">
+                【Luna对象】设置或返回所选元素的文本内容：如果传递参数，就是把Luna对象保存的每个结点的innerText设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的innerText。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                val(val)
+            </p>
+            <p class="block">
+                【Luna对象】设置或返回表单字段的值：如果传递参数，就是把Luna对象保存的每个结点的表单值设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的表单值。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                attr(attr, val)
+            </p>
+            <p class="block">
+                【Luna对象】用于设置/改变属性值：attr表示属性名称，为必输项，第二个参数表示属性值，如果传递，就是把Luna对象保存的每个结点的该属性设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的该属性值。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                hasClass(val)
+            </p>
+            <p class="block">
+                【Luna对象】判断是否存在指定的class
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                addClass(val)
+            </p>
+            <p class="block">
+                【Luna对象】向被选元素添加一个或多个类：如果有多个class需要添加，可以用空格隔开
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                removeClass(val)
+            </p>
+            <p class="block">
+                【Luna对象】从被选元素删除一个或多个类：如果有多个class需要添加，可以用空格隔开
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                toggleClass(val)
+            </p>
+            <p class="block">
+                【Luna对象】对被选元素进行添加/删除类的切换操作：如果有多个class需要添加，可以用空格隔开
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                class(val)
+            </p>
+            <p class="block">
+                【Luna对象】设置或获取class：如果传递参数，就是把Luna对象保存的每个结点的class设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的class值。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                css(name, style)
+            </p>
+            <p class="block">
+                【Luna对象】设置或返回被选元素的一个样式属性：1.name表示样式名称，为必输项，第二个参数表示样式值，如果传递，就是把Luna对象保存的每个结点的该样式属性设置为style，如果没有传递参数，就是返回Luna对象保存的第一个结点的该样式值；2.除此之外，还可以通过传递键值对对象来一次设置多个样式值。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                append(node)
+            </p>
+            <p class="block">
+                【Luna对象】在被选元素内部的结尾插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                prepend(node)
+            </p>
+            <p class="block">
+                【Luna对象】在被选元素内部的开头插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                after(node)
+            </p>
+            <p class="block">
+                【Luna对象】在被选元素之后插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                before(node)
+            </p>
+            <p class="block">
+                【Luna对象】在被选元素之前插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                remove()
+            </p>
+            <p class="block">
+                【Luna对象】删除被选元素（及其子元素）
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                empty()
+            </p>
+            <p class="block">
+                【Luna对象】从被选元素中删除子元素
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                launchFullScreen()
+            </p>
+            <p class="block">
+                【Luna对象】进入全屏：进入全屏时，屏幕显示的是Luna对象里面保存的第一个DOM结点，也就是说不是页面全屏，而是页面的指定部分全屏。
+            </p>
+        </section>
+    </article>
+    <footer>
+        <div class='info'>
+            yelloxing.github.io is sponsored by StepByStep | 本网站由【走一步 再走一步】支持
+        </div>
+        <div class='nav' onclick='window.location.href="https://github.com/yelloxing/Luna.js"'>
+            Fork me on Github
+        </div>
+    </footer>
 </body>
 
 </html>

@@ -1,14 +1,16 @@
-/*! luna alpha0.0.1 | (c) 2007, 2018 心叶 | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna-library alpha1.0.2 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
     if (global && global.document) {
         factory(global);
+    } else if (typeof module === "object" && typeof module.exports === "object") {
+        throw new Error("Node.js is not supported!");
     } else {
-        throw new Error("Luna requires a window with a document!");
+        throw new Error("Unexcepted Error!");
     }
 
-})(window, function(window, undefined) {
+})(typeof window !== "undefined" ? window : this, function(window, undefined) {
     'use strict';
 
     var Luna = function(selector, context) {
@@ -16,10 +18,12 @@
     };
 
     /**
+     *
      * @param selector [string,function,dom,Luna Object] 选择器
      * @param context [dom,Luna Object] 查找上下文，默认document
      *
      * @return Luna Object
+     *
      * {
      *  [],//查找的结果保存在数组中
      *  context,//查找时使用的上下文
@@ -27,6 +31,7 @@
      *  isTouch//返回是否是已经查找过的结点
      *  selector//选择器
      * }
+     *
      */
     Luna.prototype.init = function(selector, context, root) {
 
@@ -71,9 +76,7 @@
 
         //如果是字符串
         if (typeof selector === 'string') {
-            //去掉：换行，换页，回车
-            selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
-            if (/^</.test(selector)) {
+            if (/^</.test((selector + "").trim())) {
                 //如果是html文档
                 if (!context) {
                     throw new Error("Parameter error!");
@@ -86,6 +89,8 @@
                 this.context = undefined;
                 return this;
             } else {
+                //去掉：换行，换页，回车
+                selector = (selector + "").trim().replace(/[\n\f\r]/g, '');
                 //内置小型sizzle选择器
                 if (!Luna.sizzle) {
                     throw new Error("Sizzle is necessary for Luna!");
@@ -152,10 +157,10 @@
         }
 
         return this;
-
     };
 
-    var rootLuna = Luna(document);
+
+    var rootLuna =Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -213,11 +218,10 @@
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
-    Luna.description = '不断优化的小型js工具库';
+    Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-
     window.Luna = window.$ = Luna;
-
+    return Luna;
 });
 
 (function(window, Luna, undefined) {
@@ -227,26 +231,37 @@
 
         /*添加绑定事件*/
         "bind": function(eventType, callback, useCapture) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (window.attachEvent) {
-                $this[0].attachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].attachEvent("on" + eventType, callback);
+                }
+
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                $this[0].addEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].addEventListener(eventType, callback, useCapture);
+                }
             }
             return $this;
         },
 
         /*解除绑定事件*/
         "unbind": function(eventType, callback, useCapture) {
-            var $this = Luna(this);
+            var $this = Luna(this),
+                flag;
             if (window.detachEvent) {
-                $this[0].detachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].detachEvent("on" + eventType, callback);
+                }
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                $this[0].removeEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].removeEventListener(eventType, callback, useCapture);
+                }
             }
             return $this;
         }
@@ -328,7 +343,7 @@
         "hasClass": function(val) {
             var $this = Luna(this[0]);
             if (typeof val === "string" && val) {
-                if ((" " + $this.class() + " ").search(" "+val+" ") >= 0) {
+                if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
                     return true;
                 }
             }
@@ -421,7 +436,7 @@
             var $this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
-                return $this[0].style[name];
+                return Luna.styles($this[0], name);
             }
             if (typeof name === 'string' && typeof style === 'string') {
                 for (flag = 0; flag < $this.length; flag++) {
@@ -434,7 +449,7 @@
                     }
                 }
             } else {
-                throw new Error("Not acceptable type!");
+                return Luna.styles($this[0]);
             }
             return $this;
         },
@@ -536,8 +551,8 @@
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
-                $parent.removeChild($this[0]);
+                $parent = Luna($this[flag]).parent();
+                $parent[0].removeChild($this[0]);
             }
             return $this;
         },
@@ -552,30 +567,28 @@
                 $($this[flag]).html('');
             }
             return $this;
-        }
+        },
+        /**
+         * 进入全屏
+         */
+        "launchFullScreen": function() {
+            var $this = Luna(this);
+            if ($this[0] && $this[0].requestFullScreen) {
+                $this[0].requestFullScreen();
+            } else if ($this[0] && $this[0].mozRequestFullScreen) {
+                $this[0].mozRequestFullScreen();
+            } else if ($this[0] && $this[0].webkitRequestFullScreen) {
+                $this[0].webkitRequestFullScreen();
+            }
+            return $this;
+        },
     });
 
-})(window, window.Luna);
+})(window,window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
-
     Luna.extend({
-
-        /**
-         * 获取包括元素自己的字符串
-         */
-        "outerHTML": function(node) {
-            return node.outerHTML || (function(n) {
-                var div = document.createElement('div'),
-                    h;
-                div.appendChild(n);
-                h = div.innerHTML;
-                div = null;
-                return h;
-            })(node);
-        },
-
         /**
          * 合并若干个class
          */
@@ -628,89 +641,71 @@
             }
 
             return classString.trim();
-        }
-    });
-})(window, window.Luna);
-
-(function(window, Luna, undefined) {
-    'use strict';
-    Luna.extend({
-        /*提供动画效果*/
-        "animation": function(doback, duration, callback) {
-            Luna.clock.timer(function(deep) {
-                //其中deep为0-100，单位%，表示改变的程度
-                doback(deep);
-            }, duration, callback);
-        }
-    });
-
-    Luna.extend(Luna.clock, {
-        //把tick函数推入堆栈
-        "timer": function(tick, duration, callback) {
-            if (!tick) {
-                throw new Error('tick is required!');
-            }
-            duration = duration || Luna.clock.speeds;
-            Luna.clock.timers.push({
-                "createTime": new Date(),
-                "tick": tick,
-                "duration": duration,
-                "callback": callback
-            });
-            Luna.clock.start();
         },
-
-        //开启唯一的定时器timerId
-        "start": function() {
-            if (!Luna.clock.timerId) {
-                Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
-            }
+        /**
+         * 获取包括元素自己的字符串
+         */
+        "outerHTML": function(node) {
+            return node.outerHTML || (function(n) {
+                var div = document.createElement('div'),
+                    h;
+                div.appendChild(n);
+                h = div.innerHTML;
+                div = null;
+                return h;
+            })(node);
         },
-
-        //被定时器调用，遍历timers堆栈
-        "tick": function() {
-            var createTime, flag, tick, callback, timer, duration, passTime, needStop, deep,
-                timers = Luna.clock.timers;
-            Luna.clock.timers = [];
-            Luna.clock.timers.length = 0;
-            for (flag = 0; flag < timers.length; flag++) {
-                //初始化数据
-                timer = timers[flag];
-                createTime = timer.createTime;
-                tick = timer.tick;
-                duration = timer.duration;
-                callback = timer.callback;
-                needStop = false;
-
-                //执行
-                passTime = (+new Date() - createTime) / duration;
-                if (passTime >= 1) {
-                    needStop = true;
+        /**
+         * 获取全部样式
+         */
+        'styles': function(dom, name) {
+            if (arguments.length < 1 || (dom.nodeType !== 1 && dom.nodeType !== 11 && dom.nodeType !== 9)) {
+                throw new Error('DOM is required!');
+            }
+            if (document.defaultView && document.defaultView.getComputedStyle) {
+                if (name && typeof name === 'string') {
+                    return document.defaultView.getComputedStyle(dom, null).getPropertyValue(name); //第二个参数是伪类
+                } else {
+                    return document.defaultView.getComputedStyle(dom, null);
                 }
-                passTime = passTime > 1 ? 1 : passTime;
-                deep = 100 * passTime;
-                tick(deep);
-                if (passTime < 1) {
-                    //动画没有结束再添加
-                    Luna.clock.timers.push(timer);
-                } else if (callback) {
+            } else {
+                if (name && typeof name === 'string') {
+                    return dom.currentStyle.getPropertyValue(name);
+                } else {
+                    return dom.currentStyle;
+                }
+            }
+        },
+        /**
+         * 把指定文字复制到剪切板
+         */
+        'clipboard': function(text, callback, errorback) {
+            $('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
+            window.document.getElementById("clipboard-textarea").select();
+            try {
+                window.document.execCommand("copy", false, null);
+                if (!!callback) {
                     callback();
                 }
+            } catch (e) {
+                if (!!errorback) {
+                    errorback();
+                }
             }
-            if (Luna.clock.timers.length <= 0) {
-                Luna.clock.stop();
-            }
+            $('#clipboard-textarea').remove();
         },
 
-        //停止定时器，重置timerId=null
-        "stop": function() {
-            if (Luna.clock.timerId) {
-                window.clearInterval(Luna.clock.timerId);
-                Luna.clock.timerId = null;
-            }
+        /**
+         * 退出全屏
+         */
+        "exitFullScreen": function() {
+            document.exitFullscreen ? document.exitFullscreen() :
+                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
+                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
         }
     });
-})(window, window.Luna);
+})(window,window.Luna);
+
 (function(window, Luna, undefined) {
     'use strict';
 
@@ -1109,8 +1104,7 @@
         }
     });
 
-
-})(window, window.Luna);
+})(window,window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -1378,4 +1372,119 @@
             return $this;
         }
     });
-})(window, window.Luna);
+})(window,window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.prototype.extend({
+
+        /**
+         * 获取元素大小
+         */
+        "size": function(type) {
+            var $this = $(this);
+            var elemHeight, elemWidth;
+            if (type == 'content') { //内容
+                elemWidth = $this[0].clientWidth - (($this.css('padding-left') + "").replace('px', '')) - (($this.css('padding-right') + "").replace('px', ''));
+                elemHeight = $this[0].clientHeight - (($this.css('padding-top') + "").replace('px', '')) - (($this.css('padding-bottom') + "").replace('px', ''));
+            } else if (type == 'padding') { //内容+内边距
+                elemWidth = $this[0].clientWidth;
+                elemHeight = $this[0].clientHeight;
+            } else if (type == 'border') { //内容+内边距+边框
+                elemWidth = $this[0].offsetWidth;
+                elemHeight = $this[0].offsetHeight;
+            } else if (type == 'scroll') { //滚动的宽（不包括border）
+                elemWidth = $this[0].scrollWidth;
+                elemHeight = $this[0].scrollHeight;
+            } else {
+                elemWidth = $this[0].offsetWidth;
+                elemHeight = $this[0].offsetHeight;
+            }
+            return {
+                width: elemWidth,
+                height: elemHeight
+            };
+        }
+    });
+})(window,window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+    Luna.extend({
+        /*提供动画效果*/
+        "animation": function(doback, duration, callback) {
+            Luna.clock.timer(function(deep) {
+                //其中deep为0-100，单位%，表示改变的程度
+                doback(deep);
+            }, duration, callback);
+        }
+    });
+
+    Luna.extend(Luna.clock, {
+        //把tick函数推入堆栈
+        "timer": function(tick, duration, callback) {
+            if (!tick) {
+                throw new Error('tick is required!');
+            }
+            duration = duration || Luna.clock.speeds;
+            Luna.clock.timers.push({
+                "createTime": new Date(),
+                "tick": tick,
+                "duration": duration,
+                "callback": callback
+            });
+            Luna.clock.start();
+        },
+
+        //开启唯一的定时器timerId
+        "start": function() {
+            if (!Luna.clock.timerId) {
+                Luna.clock.timerId = window.setInterval(Luna.clock.tick, Luna.clock.interval);
+            }
+        },
+
+        //被定时器调用，遍历timers堆栈
+        "tick": function() {
+            var createTime, flag, tick, callback, timer, duration, passTime, needStop, deep,
+                timers = Luna.clock.timers;
+            Luna.clock.timers = [];
+            Luna.clock.timers.length = 0;
+            for (flag = 0; flag < timers.length; flag++) {
+                //初始化数据
+                timer = timers[flag];
+                createTime = timer.createTime;
+                tick = timer.tick;
+                duration = timer.duration;
+                callback = timer.callback;
+                needStop = false;
+
+                //执行
+                passTime = (+new Date() - createTime) / duration;
+                if (passTime >= 1) {
+                    needStop = true;
+                }
+                passTime = passTime > 1 ? 1 : passTime;
+                deep = 100 * passTime;
+                tick(deep);
+                if (passTime < 1) {
+                    //动画没有结束再添加
+                    Luna.clock.timers.push(timer);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            if (Luna.clock.timers.length <= 0) {
+                Luna.clock.stop();
+            }
+        },
+
+        //停止定时器，重置timerId=null
+        "stop": function() {
+            if (Luna.clock.timerId) {
+                window.clearInterval(Luna.clock.timerId);
+                Luna.clock.timerId = null;
+            }
+        }
+    });
+})(window,window.Luna);

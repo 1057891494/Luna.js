@@ -1,13 +1,15 @@
 'use strict';
 
 var sourceScript = [
+
     './script/core.js',
     './script/event.js',
     './script/dom.js',
     './script/tool.js',
-    './script/animation.js',
     './script/sizzle.js',
-    './script/search.js'
+    './script/search.js',
+    './script/position.js',
+    './script/animation.js'
 ];
 var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
@@ -35,6 +37,8 @@ module.exports = function(grunt) {
                     "$": true,
                     "window": true,
                     "Luna": true,
+                    "setInterval": true,
+                    "clearInterval": true,
                     "setTimeout": true,
                     "document": true,
                     "console": true
