@@ -43,7 +43,7 @@
                 html(template)
             </p>
             <p class="block">
-                【Luna对象】设置或获取内部html
+                【Luna对象】设置或获取内部html：如果传递参数，就是把Luna对象保存的每个结点的innerHTML设置为template，如果没有传递参数，就是返回Luna对象保存的第一个结点的innerHTML。
             </p>
         </section>
         <section>
@@ -51,7 +51,7 @@
                 text(val)
             </p>
             <p class="block">
-                【Luna对象】设置或返回所选元素的文本内容
+                【Luna对象】设置或返回所选元素的文本内容：如果传递参数，就是把Luna对象保存的每个结点的innerText设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的innerText。
             </p>
         </section>
         <section>
@@ -59,7 +59,7 @@
                 val(val)
             </p>
             <p class="block">
-                【Luna对象】设置或返回表单字段的值
+                【Luna对象】设置或返回表单字段的值：如果传递参数，就是把Luna对象保存的每个结点的表单值设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的表单值。
             </p>
         </section>
         <section>
@@ -67,7 +67,7 @@
                 attr(attr, val)
             </p>
             <p class="block">
-                【Luna对象】用于设置/改变属性值
+                【Luna对象】用于设置/改变属性值：attr表示属性名称，为必输项，第二个参数表示属性值，如果传递，就是把Luna对象保存的每个结点的该属性设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的该属性值。
             </p>
         </section>
         <section>
@@ -83,7 +83,7 @@
                 addClass(val)
             </p>
             <p class="block">
-                【Luna对象】向被选元素添加一个或多个类
+                【Luna对象】向被选元素添加一个或多个类：如果有多个class需要添加，可以用空格隔开
             </p>
         </section>
         <section>
@@ -91,7 +91,7 @@
                 removeClass(val)
             </p>
             <p class="block">
-                【Luna对象】从被选元素删除一个或多个类
+                【Luna对象】从被选元素删除一个或多个类：如果有多个class需要添加，可以用空格隔开
             </p>
         </section>
         <section>
@@ -99,7 +99,7 @@
                 toggleClass(val)
             </p>
             <p class="block">
-                【Luna对象】对被选元素进行添加/删除类的切换操作
+                【Luna对象】对被选元素进行添加/删除类的切换操作：如果有多个class需要添加，可以用空格隔开
             </p>
         </section>
         <section>
@@ -107,7 +107,7 @@
                 class(val)
             </p>
             <p class="block">
-                【Luna对象】设置或获取class
+                【Luna对象】设置或获取class：如果传递参数，就是把Luna对象保存的每个结点的class设置为val，如果没有传递参数，就是返回Luna对象保存的第一个结点的class值。
             </p>
         </section>
         <section>
@@ -115,7 +115,7 @@
                 css(name, style)
             </p>
             <p class="block">
-                【Luna对象】设置或返回被选元素的一个样式属性
+                【Luna对象】设置或返回被选元素的一个样式属性：1.name表示样式名称，为必输项，第二个参数表示样式值，如果传递，就是把Luna对象保存的每个结点的该样式属性设置为style，如果没有传递参数，就是返回Luna对象保存的第一个结点的该样式值；2.除此之外，还可以通过传递键值对对象来一次设置多个样式值。
             </p>
         </section>
         <section>
@@ -123,7 +123,7 @@
                 append(node)
             </p>
             <p class="block">
-                【Luna对象】在被选元素内部的结尾插入内容
+                【Luna对象】在被选元素内部的结尾插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
             </p>
         </section>
         <section>
@@ -131,7 +131,7 @@
                 prepend(node)
             </p>
             <p class="block">
-                【Luna对象】在被选元素内部的开头插入内容
+                【Luna对象】在被选元素内部的开头插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
             </p>
         </section>
         <section>
@@ -139,7 +139,7 @@
                 after(node)
             </p>
             <p class="block">
-                【Luna对象】在被选元素之后插入内容
+                【Luna对象】在被选元素之后插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
             </p>
         </section>
         <section>
@@ -147,7 +147,7 @@
                 before(node)
             </p>
             <p class="block">
-                【Luna对象】在被选元素之前插入内容
+                【Luna对象】在被选元素之前插入内容：传递的可以是HTML字符串，Luna对象或者DOM结点
             </p>
         </section>
         <section>
@@ -171,7 +171,7 @@
                 launchFullScreen()
             </p>
             <p class="block">
-                【Luna对象】进入全屏
+                【Luna对象】进入全屏：进入全屏时，屏幕显示的是Luna对象里面保存的第一个DOM结点，也就是说不是页面全屏，而是页面的指定部分全屏。
             </p>
         </section>
     </article>
