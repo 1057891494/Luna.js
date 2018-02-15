@@ -1,4 +1,4 @@
-/*! luna-library alpha1.0.2 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna-library alpha1.2.0 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
