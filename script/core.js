@@ -80,7 +80,23 @@
                 if (!context) {
                     throw new Error("Parameter error!");
                 }
-                var frameDiv = document.createElement("div");
+                var frameDiv;
+                switch (Luna._code_environment_) {
+                    case 'HTML':
+                        {
+                            frameDiv = document.createElement("div");
+                            break;
+                        }
+                    case 'SVG':
+                        {
+                            frameDiv = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+                            break;
+                        }
+                    default:
+                        {
+                            frameDiv = document.createElement("div");
+                        }
+                }
                 frameDiv.innerHTML = selector;
                 this[0] = frameDiv.childNodes[0];
                 this.isTouch = true;
@@ -159,7 +175,7 @@
     };
 
 
-    var rootLuna =Luna(document);
+    var rootLuna = Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -212,6 +228,9 @@
 
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
+
+    // 代码环境【默认HTML】
+    Luna._code_environment_ = 'HTML';
 
     /* 一些核心说明 */
     Luna.author = '心叶';

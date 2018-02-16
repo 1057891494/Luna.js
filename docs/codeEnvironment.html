@@ -38,20 +38,28 @@
                 <li><a href='dom.html'>DOM操作</a></li>
                 <li><a href='tool.html'>工具</a></li>
                 <li><a href='search.html'>结点查找</a></li>
-                <li class='click'><a href='animation.html'>动画</a></li>
+                <li><a href='animation.html'>动画</a></li>
                 <li><a href='event.html'>事件管理</a></li>
                 <li><a href='position.html'>定位相关</a></li>
-                <li><a href='codeEnvironment.html'>模式切换</a></li>
+                <li class='click'><a href='codeEnvironment.html'>模式切换</a></li>
             </ul>
         </nav>
     </header>
     <article>
         <section>
             <p class="title">
-                animation(doback, duration, callback)
+                SVG(selector, context, root)
             </p>
             <p class="block">
-                【Luna】动画效果：规定时间内不断调用doback函数，并传递进度，其中第二个参数是动画进行多久，第三个参数是动画结束回调，需要注意的是进度的单位是百分比。
+                【Luna】切换模式到SVG，这意味着在SVG格式下操作，比如字符串变成DOM结点，命名空间就是SVG而不是HTML，该方法的调用和Luna()没有其它的区别。
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                HTML(selector, context, root)
+            </p>
+            <p class="block">
+                【Luna】切换模式到HTML，这是默认模式。
             </p>
         </section>
     </article>
