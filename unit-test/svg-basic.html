@@ -20,6 +20,8 @@
 
     </style>
     <script src="../luna.js"></script>
+    <!-- <script src="../script/sizzle.js"></script> -->
+    <!-- <script src="../script/search.js"></script> -->
     <script>
     $(function() {
         $.SVG('body').append('<svg><a><circle cx="10" cy="10" fill="green" r="5"></circle><path></path></a></svg>');
@@ -32,7 +34,7 @@
         });
         console.log($('#svg ~ section'));
         console.log($('circle'));
-        console.log($('circle~a'));//节点查找有问题
+        console.log($('a>circle'));//节点查找有问题
     });
 
     </script>
