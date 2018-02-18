@@ -230,6 +230,9 @@
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
 
+    /*SVG配置使用 */
+    Luna._SVG_config_={};
+
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
 
@@ -287,7 +290,7 @@
     });
 })(window, window.Luna);
 
-(function(window, Luna, undefined) {
+(function (window, Luna, undefined) {
     'use strict';
 
     Luna.prototype.extend({
@@ -295,7 +298,7 @@
         /**
          * 设置或获取内部html
          */
-        "html": function(template) {
+        "html": function (template) {
             var $this = Luna(this);
             if ('' != template && !template) {
                 return $this[0].innerHTML;
@@ -311,7 +314,7 @@
         /**
          * 设置或返回所选元素的文本内容
          */
-        "text": function(val) {
+        "text": function (val) {
             var $this = Luna(this);
             if (!val) {
                 return $this[0].innerText;
@@ -327,7 +330,7 @@
         /**
          * 设置或返回表单字段的值
          */
-        "val": function(val) {
+        "val": function (val) {
             var $this = Luna(this);
             if (!val) {
                 return $this[0].value;
@@ -343,14 +346,18 @@
         /**
          * 用于设置/改变属性值
          */
-        "attr": function(attr, val) {
+        "attr": function (attr, val) {
             var $this = Luna(this);
             if (!val) {
                 return $this[0].getAttribute(attr);
             } else {
                 var flag = 0;
                 for (; flag < $this.length; flag++) {
-                    $this[0].setAttribute(attr, val);
+                    if (Luna._code_environment_ == 'SVG' && Luna._SVG_config_.xlink[attr]) {
+                        $this[flag].setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:' + attr, val);
+                    } else {
+                        $this[flag].setAttribute(attr, val);
+                    }
                 }
                 return $this;
             }
@@ -359,7 +366,7 @@
         /**
          * 判断是否存在指定的class
          */
-        "hasClass": function(val) {
+        "hasClass": function (val) {
             var $this = Luna(this[0]);
             if (typeof val === "string" && val) {
                 if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
@@ -372,7 +379,7 @@
         /**
          * 向被选元素添加一个或多个类
          */
-        "addClass": function(val) {
+        "addClass": function (val) {
             var $this = Luna(this);
             var node;
             var curClass;
@@ -392,7 +399,7 @@
         /**
          * 从被选元素删除一个或多个类
          */
-        "removeClass": function(val) {
+        "removeClass": function (val) {
             var $this = Luna(this);
             var node;
             var curClass;
@@ -412,7 +419,7 @@
         /**
          * 对被选元素进行添加/删除类的切换操作
          */
-        "toggleClass": function(val) {
+        "toggleClass": function (val) {
             var $this = Luna(this);
             var node;
             var curClass;
@@ -432,7 +439,7 @@
         /**
          * 设置或获取class
          */
-        "class": function(val) {
+        "class": function (val) {
             var $this = Luna(this);
             var node;
             if (typeof val === "string" && val) {
@@ -451,7 +458,7 @@
         /**
          * 设置或返回被选元素的一个样式属性
          */
-        "css": function(name, style) {
+        "css": function (name, style) {
             var $this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
@@ -476,7 +483,7 @@
         /**
          * 在被选元素内部的结尾插入内容
          */
-        "append": function(node) {
+        "append": function (node) {
             var $this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
@@ -500,7 +507,7 @@
         /**
          * 在被选元素内部的开头插入内容
          */
-        "prepend": function(node) {
+        "prepend": function (node) {
             var $this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
@@ -524,7 +531,7 @@
         /**
          * 在被选元素之后插入内容
          */
-        "after": function(node) {
+        "after": function (node) {
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
@@ -545,7 +552,7 @@
         /**
          * 在被选元素之前插入内容
          */
-        "before": function(node) {
+        "before": function (node) {
             var $this = Luna(this),
                 $parent, flag;
             for (flag = 0; flag < $this.length; flag++) {
@@ -566,7 +573,7 @@
         /**
          * 删除被选元素（及其子元素）
          */
-        "remove": function() {
+        "remove": function () {
             var $this = Luna(this),
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
@@ -579,7 +586,7 @@
         /**
          * 从被选元素中删除子元素
          */
-        "empty": function() {
+        "empty": function () {
             var $this = Luna(this),
                 flag;
             for (flag = 0; flag < $this.length; flag++) {
@@ -590,7 +597,7 @@
         /**
          * 进入全屏
          */
-        "launchFullScreen": function() {
+        "launchFullScreen": function () {
             var $this = Luna(this);
             if ($this[0] && $this[0].requestFullScreen) {
                 $this[0].requestFullScreen();
@@ -603,7 +610,7 @@
         },
     });
 
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -1527,4 +1534,20 @@
             return Luna(arguments[0], arguments[1], arguments[2]);
         }
     });
+})(window, window.Luna);
+
+(function (window, Luna, undefined) {
+    'use strict';
+
+    Luna.extend(Luna._SVG_config_, {
+        "xlink": {
+            "href": true,
+            "title": true,
+            "show": true,
+            "type": true,
+            "role": true,
+            "actuate": true
+        }
+    });
+
 })(window, window.Luna);

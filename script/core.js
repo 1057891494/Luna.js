@@ -229,6 +229,9 @@
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
 
+    /*SVG配置使用 */
+    Luna._SVG_config_={};
+
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
 

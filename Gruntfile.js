@@ -10,7 +10,8 @@ var sourceScript = [
     './script/search.js',
     './script/position.js',
     './script/animation.js',
-    './script/codeEnvironment.js'
+    './script/codeEnvironment.js',
+    './script/SVG.config.js'
 ];
 var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
