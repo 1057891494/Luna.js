@@ -117,7 +117,7 @@
             for (flag = 0; flag < needCheckResultArray.length; flag++) {
                 isAccept = true;
                 if (!!selectorObj._elem_ && isAccept) { //1.检测元素类型
-                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase()) {
+                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase() && needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toLowerCase()) {
                         isAccept = false;
                     }
                 }
@@ -174,7 +174,7 @@
                         helpResult = tempResult;
                         tempResult = [];
                         for (flag = 0; flag < helpResult.length; flag++) {
-                            if (helpResult[flag].tagName == ((selector + "").toUpperCase())) {
+                            if (helpResult[flag].tagName == ((selector + "").toUpperCase()) || helpResult[flag].tagName == ((selector + "").toLowerCase())) {
                                 tempResult.push(helpResult[flag]);
                             }
                         }
