@@ -32,3 +32,7 @@
 
 ### 查询文档API
 *   Luna.js官方API地址： https://yelloxing.github.io/Luna.js/index.html 
+
+### 设计需求
+*   提供HTML页面的快捷、兼容和可维护的工具库，帮助快速开发和交流。
+*   提供SVG透明操作，让对SVG的操作和HTML一样容易，不过这不是针对某个方面的SVG。

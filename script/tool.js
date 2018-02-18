@@ -1,10 +1,10 @@
-(function(window, Luna, undefined) {
+(function (window, Luna, undefined) {
     'use strict';
     Luna.extend({
         /**
          * 合并若干个class
          */
-        "uniqueClass": function() {
+        "uniqueClass": function () {
             var classString = '',
                 flag = 0;
             for (; flag < arguments.length; flag++) {
@@ -16,7 +16,7 @@
             classString = classString.trim();
             var classArray = classString.split(/ +/);
             var classObj = {};
-            classArray.forEach(function(item) {
+            classArray.forEach(function (item) {
                 classObj[item] = true;
             }, this);
             classString = '';
@@ -31,7 +31,7 @@
         /**
          * 删除已经存在的class或toggle，用flag来标记，flag为真表示删除
          */
-        "operateClass": function(srcClass, opeClass, flag) {
+        "operateClass": function (srcClass, opeClass, flag) {
             if (typeof srcClass !== 'string' || typeof opeClass !== 'string') {
                 throw new Error('Only string is valid,not project!');
             }
@@ -40,10 +40,10 @@
             var srcClassArray = srcClass.split(/ +/);
             var opeClassArray = opeClass.split(/ +/);
             var classObj = {};
-            srcClassArray.forEach(function(item) {
+            srcClassArray.forEach(function (item) {
                 classObj[item] = true;
             }, this);
-            opeClassArray.forEach(function(item) {
+            opeClassArray.forEach(function (item) {
                 classObj[item] = flag ? false : !classObj[item];
             }, this);
             var classString = '';
@@ -57,8 +57,8 @@
         /**
          * 获取包括元素自己的字符串
          */
-        "outerHTML": function(node) {
-            return node.outerHTML || (function(n) {
+        "outerHTML": function (node) {
+            return node.outerHTML || (function (n) {
                 var div = document.createElement('div'),
                     h;
                 div.appendChild(n);
@@ -70,7 +70,7 @@
         /**
          * 获取全部样式
          */
-        'styles': function(dom, name) {
+        'styles': function (dom, name) {
             if (arguments.length < 1 || (dom.nodeType !== 1 && dom.nodeType !== 11 && dom.nodeType !== 9)) {
                 throw new Error('DOM is required!');
             }
@@ -91,7 +91,7 @@
         /**
          * 把指定文字复制到剪切板
          */
-        'clipboard': function(text, callback, errorback) {
+        'clipboard': function (text, callback, errorback) {
             Luna('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
             window.document.getElementById("clipboard-textarea").select();
             try {
@@ -110,10 +110,16 @@
         /**
          * 退出全屏
          */
-        "exitFullScreen": function() {
-            document.exitFullscreen ? document.exitFullscreen() :
-                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
-                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
+        "exitFullScreen": function () {
+            if (!!document.exitFullscreen) { 
+                document.exitFullscreen(); 
+            } else if (!!document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (!!document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else {
+                console.error('退出全屏失败！');
+            }
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);
