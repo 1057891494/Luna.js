@@ -39,6 +39,7 @@ module.exports = function(grunt) {
                     "$": true,
                     "window": true,
                     "Luna": true,
+                    "module":true,
                     "setInterval": true,
                     "clearInterval": true,
                     "setTimeout": true,
