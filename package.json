@@ -1,7 +1,6 @@
 {
-    "name": "luna-library",
-    "version": "1.2.0",
-    "type": "alpha",
+    "name": "luna.js",
+    "version": "0.0.1",
     "description": "The JavaScript library full of elaborate designs",
     "scripts": {
         "start": "node_modules/.bin/grunt"
