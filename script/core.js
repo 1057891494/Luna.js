@@ -230,10 +230,23 @@
     Luna._sizzle_ = {};
 
     /*SVG配置使用 */
-    Luna._SVG_config_={};
+    Luna._SVG_config_ = {};
 
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
+
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$ */
+    var _Luna = window.Luna,
+        _$ = window.$;
+    Luna.noConflict = function(flag) {
+        if (window.$ === Luna) {
+            window.$ = _$;
+        }
+        if (flag && window.Luna === Luna) {
+            window.Luna = _Luna;
+        }
+        return Luna;
+    };
 
     /* 一些核心说明 */
     Luna.author = '心叶';

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset='utf-8'>
+    <title>luna - 单元测试</title>
+    <link rel="icon" href="../luna.ico" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no,maximum-scale=1" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta name="Keywords" content="luna - 单元测试" />
+    <meta name="description" content="luna - 单元测试" />
+    <meta name="author" content="心叶" />
+    <link rel="apple-touch-icon" sizes="52x52" href="52icon.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
+    <style type="text/css">
+        .container {
+            position: relative;
+        }
+
+        .redD1 {
+            position: relative;
+            width: 101px;
+            height: 101px;
+        }
+
+        .redD2 {
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+
+        .redD {
+            display: inline-block;
+            background: linear-gradient(135deg, transparent 29.29%, red 0) top left, linear-gradient(-135deg, transparent 29.29%, red 0) top right, linear-gradient(-45deg, transparent 29.29%, red 0) bottom right, linear-gradient(45deg, transparent 29.29%, red 0) bottom left;
+            background-size: 50% 50%;
+            background-repeat: no-repeat;
+        }
+    </style>
+    <script>
+        window.$={};
+    </script>
+    <script src="../luna.js"></script>
+    <script src="../script/event.js"></script>
+    <script>
+        $(function() {
+            console.log($('body>div'));
+            $('body>div').bind('click',function(event){
+                var target=event.target;
+                console.log(target);
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <h1>luna - 单元测试</h1>
+    <article>
+        <header>
+            luna说明
+        </header>
+        <section>
+            luna的定位是个人使用和技巧积累，同时是快速测试环境和相关项目开发快速助手，总体而言，都只是个人使用。
+        </section>
+        <section>
+            luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
+        </section>
+    </article>
+    <div style="width:400px; height:400px; background:red">
+        <div id="div2" style="width:300px; height:300px; background:palevioletred">
+            <div style="width:200px; height:200px; background:yellow">
+                <div id="div1" style="width:100px; height:100px; background:palegreen">
+                    最内部
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+<!--
+    =================================================
+    走一步，再走一步。
+    =================================================
+-->

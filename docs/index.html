@@ -20,10 +20,10 @@
     <script src="luna.min.js"></script>
     <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script>
-      (adsbygoogle = window.adsbygoogle || []).push({
-        google_ad_client: "ca-pub-7416565268644863",
-        enable_page_level_ads: true
-      });
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-7416565268644863",
+            enable_page_level_ads: true
+        });
     </script>
 </head>
 
@@ -82,6 +82,12 @@
                 有时候默认提供的方法不足以满足日常开发的时候，可以通过下面的方法来扩展Luna和Luna对象的方法，具体如下：
                 <span class="list">扩展Luna方法：Luna.extend({"funName":function(){}})</span>
                 <span class="list">扩展Luna对象方法：Luna.prototype.extend({"funName":function(){}})</span>
+            </p>
+        </section>
+        <section>
+            <p class="title">第四段：重要方法</p>
+            <p class="block">
+                <span class="list">如果之前有$或者Luna对象，现在被本库覆盖了，可以调用Luna上面的noConflict方法来恢复，传递一个boolean，如果是true表示也恢复Luna，否则只恢复$。</span>
             </p>
         </section>
     </article>

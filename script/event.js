@@ -50,7 +50,7 @@
                 // IE浏览器支持fireEvent方法
                 event = document.createEventObject();
                 for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].fireEvent('on' + eventType, event)
+                    $this[flag].fireEvent('on' + eventType, event);
                 }
             } else {
                 // 其他标准浏览器使用dispatchEvent方法
@@ -68,7 +68,7 @@
         /* 取消冒泡事件 */
         "cancelBubble": function(event) {
             var $this = Luna(this);
-            event = event || window.event || arguments.callee.caller.arguments[0];
+            event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.stopPropagation();
             } else {
@@ -80,7 +80,7 @@
         /* 阻止默认事件 */
         "preventDefault": function(event) {
             var $this = Luna(this);
-            event = event || window.event || arguments.callee.caller.arguments[0];
+            event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.preventDefault();
             } else {

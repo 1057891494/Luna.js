@@ -231,10 +231,23 @@
     Luna._sizzle_ = {};
 
     /*SVG配置使用 */
-    Luna._SVG_config_={};
+    Luna._SVG_config_ = {};
 
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
+
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$ */
+    var _Luna = window.Luna,
+        _$ = window.$;
+    Luna.noConflict = function(flag) {
+        if (window.$ === Luna) {
+            window.$ = _$;
+        }
+        if (flag && window.Luna === Luna) {
+            window.Luna = _Luna;
+        }
+        return Luna;
+    };
 
     /* 一些核心说明 */
     Luna.author = '心叶';
@@ -298,7 +311,7 @@
                 // IE浏览器支持fireEvent方法
                 event = document.createEventObject();
                 for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].fireEvent('on' + eventType, event)
+                    $this[flag].fireEvent('on' + eventType, event);
                 }
             } else {
                 // 其他标准浏览器使用dispatchEvent方法
@@ -316,7 +329,7 @@
         /* 取消冒泡事件 */
         "cancelBubble": function(event) {
             var $this = Luna(this);
-            event = event || window.event || arguments.callee.caller.arguments[0];
+            event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.stopPropagation();
             } else {
@@ -328,7 +341,7 @@
         /* 阻止默认事件 */
         "preventDefault": function(event) {
             var $this = Luna(this);
-            event = event || window.event || arguments.callee.caller.arguments[0];
+            event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.preventDefault();
             } else {
