@@ -38,6 +38,29 @@
                 }
             }
             return $this;
+        },
+
+        /* 在特定元素上面触发特定事件*/
+        "trigger": function(eventType, useCapture) {
+            var $this = Luna(this),
+                event, flag;
+            useCapture = useCapture || false;
+            //创建event的对象实例。
+            if (document.createEventObject) {
+                // IE浏览器支持fireEvent方法
+                event = document.createEventObject();
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].fireEvent('on' + eventType, event)
+                }
+            } else {
+                // 其他标准浏览器使用dispatchEvent方法
+                event = document.createEvent('HTMLEvents');
+                // 3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为
+                event.initEvent(eventType, !useCapture, false);
+                for (flag = 0; flag < $this.length; flag++) {
+                    $this[flag].dispatchEvent(event);
+                }
+            }
         }
     });
 })(window, window.Luna);
