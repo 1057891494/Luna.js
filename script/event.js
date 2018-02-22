@@ -63,4 +63,30 @@
             }
         }
     });
+
+    Luna.extend({
+        /* 取消冒泡事件 */
+        "cancelBubble": function(event) {
+            var $this = Luna(this);
+            event = event || window.event || arguments.callee.caller.arguments[0];
+            if (event && event.stopPropagation) { //这是其他非IE浏览器
+                event.stopPropagation();
+            } else {
+                event.cancelBubble = true;
+            }
+            return $this;
+        },
+
+        /* 阻止默认事件 */
+        "preventDefault": function(event) {
+            var $this = Luna(this);
+            event = event || window.event || arguments.callee.caller.arguments[0];
+            if (event && event.stopPropagation) { //这是其他非IE浏览器
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+            return $this;
+        }
+    });
 })(window, window.Luna);
