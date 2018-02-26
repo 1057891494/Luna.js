@@ -11,7 +11,8 @@ var sourceScript = [
     './script/position.js',
     './script/animation.js',
     './script/codeEnvironment.js',
-    './script/SVG.config.js'
+    './script/SVG.config.js',
+    './script/date.js'
 ];
 var banner = '/*! <%= pkg.name %> V<%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
