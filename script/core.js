@@ -112,10 +112,14 @@
                 }
                 var nodes = Luna.sizzle(selector, context);
                 flag = 0;
+                var _flag_ = 0
                 for (; flag < nodes.length; flag++) {
-                    this[flag] = nodes[flag];
+                    if (nodes[flag]) {
+                        this[_flag_] = nodes[flag];
+                        _flag_++;
+                    }
                 }
-                this.length = flag;
+                this.length = _flag_;
                 this.isTouch = true;
                 this.context = context;
                 return this;
