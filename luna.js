@@ -616,11 +616,11 @@
             for (flag = 0; flag < $this.length; flag++) {
                 $parent = $this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[0].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
+                    $parent.insertBefore(node, $this[flag].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[0].nextSibling);
+                    $parent.insertBefore(node[0], $this[flag].nextSibling);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[0].nextSibling);
+                    $parent.insertBefore(Luna(node)[0], $this[flag].nextSibling);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
@@ -635,13 +635,13 @@
             var $this = Luna(this),
                 $parent, flag;
             for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[0].parentNode || Luna('body')[0];
+                $parent = $this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[0]);
+                    $parent.insertBefore(node, $this[flag]);
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[0]);
+                    $parent.insertBefore(node[0], $this[flag]);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[0]);
+                    $parent.insertBefore(Luna(node)[0], $this[flag]);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
@@ -657,7 +657,7 @@
                 flag, $parent;
             for (flag = 0; flag < $this.length; flag++) {
                 $parent = Luna($this[flag]).parent();
-                $parent[0].removeChild($this[0]);
+                $parent[0].removeChild($this[flag]);
             }
             return $this;
         },
