@@ -27,7 +27,7 @@
          * 计算某年某月第一天是星期几
          */
         'getBeginWeek': function(year, month) {
-            var beginWeek = new Date(year + "/" + (month - (-1)) + "/1").getDay();
+            var beginWeek = new Date(year + "/" + month + "/1").getDay();
             if (beginWeek == 0) {
                 return 7;
             }
