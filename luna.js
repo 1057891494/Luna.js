@@ -322,6 +322,19 @@
                     $this[flag].dispatchEvent(event);
                 }
             }
+        },
+        /*让元素获取焦点*/
+        "focus": function() {
+            var $this = Luna(this);
+            if ($this.length > 0) {
+                $this[0].focus();
+            }
+            return $this;
+        },
+        /*判断元素是否获取焦点*/
+        "isFocus": function() {
+            var $this = Luna(this);
+            return (!document.hasFocus || document.hasFocus()) && $this.length > 0 && document.activeElement === $this[0] && !!($this[0].type || $this[0].href || ~$this[0].tabIndex);
         }
     });
 

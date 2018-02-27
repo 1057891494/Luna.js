@@ -23,6 +23,8 @@
             $('#mul').bind('touch',function(){
                 console.log('点击我');
             }).trigger('touch');
+            $('#input').focus();
+            console.log($('#input').isFocus());
         });
     </script>
 </head>
