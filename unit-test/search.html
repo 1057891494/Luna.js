@@ -19,33 +19,33 @@
     <script src="../luna.js"></script>
     <script src="./LunaUnit.js"></script>
     <script>
-        $(function() {
-            toEqual(2, $('.info').parent(), 'length');
-            toEqual(1, $('body').parent(), 'length');
-            toEqual(1, $('html').parent(), 'length');
-            toEqual(0, $('#ddf').parent(), 'length');
-            toEqual(0, $('document').parent(), 'length');
-            toEqual(4, $('#dd').parents(), 'length');
-            toEqual(1, $('#dd').parents('#luna'), 'length');
-            toEqual(1, $('#dd').parents('body'), 'length');
-            toEqual(0, $('#ddf').parents('body'), 'length');
-            toEqual(1, $('#dd').parents('.fff[class="fff"]'), 'length');
-            toEqual(1, $('body').children('.fff'), 'length');
-            toEqual(3, $('#dd').siblings(), 'length');
-            toEqual(2, $('#dd').siblings('.info'), 'length');
-            toEqual(2, $('#dd').siblings('.info[class="info"]'), 'length');
-            toEqual(1, $('#dd').next(), 'length');
-            toEqual(0, $('#ddf').next(), 'length');
-            toEqual(1, $('.info').prev(), 'length');
-            toEqual(0, $('#ddf').prev(), 'length');
-            toEqual(0, $('#ddf').nextAll(), 'length');
-            toEqual(1, $('#dd').nextAll('.info[class="info"]'), 'length');
-            toEqual(0, $('.info').prevAll(), 'length');
-            toEqual(1, $('[data="_f"]').prevAll(), 'length');
-            toEqual(1, $('[data="_f"]').filter(), 'length');
-            toEqual(1, $('[data="_f"]').filter('*'), 'length');
-            toEqual(0, $('[data="_f"]').filter('.tp'), 'length');
-            toEqual(2, $('*').filter('.info'), 'length');
+        $$(function() {
+            toEqual(2, $$('.info').parent(), 'length');
+            toEqual(1, $$('body').parent(), 'length');
+            toEqual(1, $$('html').parent(), 'length');
+            toEqual(0, $$('#ddf').parent(), 'length');
+            toEqual(0, $$('document').parent(), 'length');
+            toEqual(4, $$('#dd').parents(), 'length');
+            toEqual(1, $$('#dd').parents('#luna'), 'length');
+            toEqual(1, $$('#dd').parents('body'), 'length');
+            toEqual(0, $$('#ddf').parents('body'), 'length');
+            toEqual(1, $$('#dd').parents('.fff[class="fff"]'), 'length');
+            toEqual(1, $$('body').children('.fff'), 'length');
+            toEqual(3, $$('#dd').siblings(), 'length');
+            toEqual(2, $$('#dd').siblings('.info'), 'length');
+            toEqual(2, $$('#dd').siblings('.info[class="info"]'), 'length');
+            toEqual(1, $$('#dd').next(), 'length');
+            toEqual(0, $$('#ddf').next(), 'length');
+            toEqual(1, $$('.info').prev(), 'length');
+            toEqual(0, $$('#ddf').prev(), 'length');
+            toEqual(0, $$('#ddf').nextAll(), 'length');
+            toEqual(1, $$('#dd').nextAll('.info[class="info"]'), 'length');
+            toEqual(0, $$('.info').prevAll(), 'length');
+            toEqual(1, $$('[data="_f"]').prevAll(), 'length');
+            toEqual(1, $$('[data="_f"]').filter(), 'length');
+            toEqual(1, $$('[data="_f"]').filter('*'), 'length');
+            toEqual(0, $$('[data="_f"]').filter('.tp'), 'length');
+            toEqual(2, $$('*').filter('.info'), 'length');
         });
     </script>
 </head>

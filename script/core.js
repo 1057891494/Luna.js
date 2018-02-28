@@ -49,7 +49,7 @@
             context = Luna(context)[0];
         }
 
-        //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
+        //选择器: $$(""), $$(null), $$(undefined), $$(false)，兼容一下
         if (!selector) {
             return this;　　
         } else {
@@ -239,12 +239,12 @@
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
 
-    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$ */
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$$ */
     var _Luna = window.Luna,
-        _$ = window.$;
+        _$$ = window.$$;
     Luna.noConflict = function(flag) {
-        if (window.$ === Luna) {
-            window.$ = _$;
+        if (window.$$ === Luna) {
+            window.$$ = _$$;
         }
         if (flag && window.Luna === Luna) {
             window.Luna = _Luna;
@@ -258,6 +258,6 @@
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-    window.Luna = window.$ = Luna;
+    window.Luna = window.$$ = Luna;
     return Luna;
 });

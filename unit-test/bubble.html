@@ -43,7 +43,7 @@
     <script src="../luna.js"></script>
     <script src="../script/event.js"></script>
     <script>
-        $(function() {
+        $$(function() {
             // var oDiv1 = document.getElementById('div1');
             // var oDiv2 = document.getElementById('div2');
 
@@ -60,7 +60,7 @@
             //return false;
             // }
 
-            // $('#div2').bind('click', function(event) {
+            // $$('#div2').bind('click', function(event) {
             //     event = event || window.event;
 
             //     // var e = arguments.callee.caller.arguments[0] || event; //这里是因为除了IE有event其他浏览器没有所以要做兼容
@@ -73,9 +73,9 @@
             //     // }
             //     // event.stopPropagation();
             // });
-            $('#div2').bind('click', function(event) {
-                $.cancelBubble(event);
-                $.preventDefault(event);
+            $$('#div2').bind('click', function(event) {
+                $$.cancelBubble(event);
+                $$.preventDefault(event);
             });
 
             // oDiv2.onclick = function(ev) {

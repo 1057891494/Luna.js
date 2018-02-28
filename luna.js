@@ -50,7 +50,7 @@
             context = Luna(context)[0];
         }
 
-        //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
+        //选择器: $$(""), $$(null), $$(undefined), $$(false)，兼容一下
         if (!selector) {
             return this;　　
         } else {
@@ -240,12 +240,12 @@
     // 代码环境【默认HTML】
     Luna._code_environment_ = 'HTML';
 
-    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$ */
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$$ */
     var _Luna = window.Luna,
-        _$ = window.$;
+        _$$ = window.$$;
     Luna.noConflict = function(flag) {
-        if (window.$ === Luna) {
-            window.$ = _$;
+        if (window.$$ === Luna) {
+            window.$$ = _$$;
         }
         if (flag && window.Luna === Luna) {
             window.Luna = _Luna;
@@ -259,7 +259,7 @@
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-    window.Luna = window.$ = Luna;
+    window.Luna = window.$$ = Luna;
     return Luna;
 });
 
@@ -270,101 +270,101 @@
 
         /*添加绑定事件*/
         "bind": function(eventType, callback, useCapture) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (window.attachEvent) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].attachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].attachEvent("on" + eventType, callback);
                 }
 
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].addEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].addEventListener(eventType, callback, useCapture);
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /*解除绑定事件*/
         "unbind": function(eventType, callback, useCapture) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (window.detachEvent) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].detachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].detachEvent("on" + eventType, callback);
                 }
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].removeEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].removeEventListener(eventType, callback, useCapture);
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /* 在特定元素上面触发特定事件*/
         "trigger": function(eventType, useCapture) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 event, flag;
             useCapture = useCapture || false;
             //创建event的对象实例。
             if (document.createEventObject) {
                 // IE浏览器支持fireEvent方法
                 event = document.createEventObject();
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].fireEvent('on' + eventType, event);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].fireEvent('on' + eventType, event);
                 }
             } else {
                 // 其他标准浏览器使用dispatchEvent方法
                 event = document.createEvent('HTMLEvents');
                 // 3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为
                 event.initEvent(eventType, !useCapture, false);
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].dispatchEvent(event);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].dispatchEvent(event);
                 }
             }
         },
         /*让元素获取焦点*/
         "focus": function() {
-            var $this = Luna(this);
-            if ($this.length > 0) {
-                $this[0].focus();
+            var $$this = Luna(this);
+            if ($$this.length > 0) {
+                $$this[0].focus();
             }
-            return $this;
+            return $$this;
         },
         /*判断元素是否获取焦点*/
         "isFocus": function() {
-            var $this = Luna(this);
-            return (!document.hasFocus || document.hasFocus()) && $this.length > 0 && document.activeElement === $this[0] && !!($this[0].type || $this[0].href || ~$this[0].tabIndex);
+            var $$this = Luna(this);
+            return (!document.hasFocus || document.hasFocus()) && $$this.length > 0 && document.activeElement === $$this[0] && !!($$this[0].type || $$this[0].href || ~$$this[0].tabIndex);
         }
     });
 
     Luna.extend({
         /* 取消冒泡事件 */
         "cancelBubble": function(event) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.stopPropagation();
             } else {
                 event.cancelBubble = true;
             }
-            return $this;
+            return $$this;
         },
 
         /* 阻止默认事件 */
         "preventDefault": function(event) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             event = event || window.event;
             if (event && event.stopPropagation) { //这是其他非IE浏览器
                 event.preventDefault();
             } else {
                 event.returnValue = false;
             }
-            return $this;
+            return $$this;
         }
     });
 })(window, window.Luna);
@@ -378,15 +378,15 @@
          * 设置或获取内部html
          */
         "html": function (template) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             if ('' != template && !template) {
-                return $this[0].innerHTML;
+                return $$this[0].innerHTML;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[flag].innerHTML = template;
+                for (; flag < $$this.length; flag++) {
+                    $$this[flag].innerHTML = template;
                 }
-                return $this;
+                return $$this;
             }
         },
 
@@ -394,15 +394,15 @@
          * 设置或返回所选元素的文本内容
          */
         "text": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].innerText;
+                return $$this[0].innerText;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[0].innerText = val;
+                for (; flag < $$this.length; flag++) {
+                    $$this[0].innerText = val;
                 }
-                return $this;
+                return $$this;
             }
         },
 
@@ -410,15 +410,15 @@
          * 设置或返回表单字段的值
          */
         "val": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].value;
+                return $$this[0].value;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[0].value = val;
+                for (; flag < $$this.length; flag++) {
+                    $$this[0].value = val;
                 }
-                return $this;
+                return $$this;
             }
         },
 
@@ -426,19 +426,19 @@
          * 用于设置/改变属性值
          */
         "attr": function (attr, val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].getAttribute(attr);
+                return $$this[0].getAttribute(attr);
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
+                for (; flag < $$this.length; flag++) {
                     if (Luna._code_environment_ == 'SVG' && Luna._SVG_config_.xlink[attr]) {
-                        $this[flag].setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:' + attr, val);
+                        $$this[flag].setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:' + attr, val);
                     } else {
-                        $this[flag].setAttribute(attr, val);
+                        $$this[flag].setAttribute(attr, val);
                     }
                 }
-                return $this;
+                return $$this;
             }
         },
 
@@ -446,9 +446,9 @@
          * 判断是否存在指定的class
          */
         "hasClass": function (val) {
-            var $this = Luna(this[0]);
+            var $$this = Luna(this[0]);
             if (typeof val === "string" && val) {
-                if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
+                if ((" " + $$this.class() + " ").search(" " + val + " ") >= 0) {
                     return true;
                 }
             }
@@ -459,233 +459,233 @@
          * 向被选元素添加一个或多个类
          */
         "addClass": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var uniqueClass = Luna.uniqueClass(curClass, val);
                     node.setAttribute('class', uniqueClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 从被选元素删除一个或多个类
          */
         "removeClass": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var resultClass = Luna.operateClass(curClass, val, true);
                     node.setAttribute('class', resultClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 对被选元素进行添加/删除类的切换操作
          */
         "toggleClass": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var resultClass = Luna.operateClass(curClass, val);
                     node.setAttribute('class', resultClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 设置或获取class
          */
         "class": function (val) {
-            var $this = Luna(this);
+            var $$this = Luna(this);
             var node;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     node.setAttribute('class', Luna.uniqueClass(val));
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             } else {
-                return $this[0].getAttribute('class') || '';
+                return $$this[0].getAttribute('class') || '';
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 设置或返回被选元素的一个样式属性
          */
         "css": function (name, style) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
-                return Luna.styles($this[0], name);
+                return Luna.styles($$this[0], name);
             }
             if (typeof name === 'string' && typeof style === 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].style[name] = style;
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].style[name] = style;
                 }
             } else if (typeof name === 'object') {
                 for (var key in name) {
-                    for (flag = 0; flag < $this.length; flag++) {
-                        $this[flag].style[key] = name[key];
+                    for (flag = 0; flag < $$this.length; flag++) {
+                        $$this[flag].style[key] = name[key];
                     }
                 }
             } else {
-                return Luna.styles($this[0]);
+                return Luna.styles($$this[0]);
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素内部的结尾插入内容
          */
         "append": function (node) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(node);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(node);
                 }
             } else if (node.isTouch) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(node[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(node[0]);
                 }
             } else if (typeof node == 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(Luna(node)[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(Luna(node)[0]);
                 }
             } else {
                 throw new Error("Not acceptable type!");
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素内部的开头插入内容
          */
         "prepend": function (node) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(node, $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(node, $$this[0].childNodes[0]);
                 }
             } else if (node.isTouch) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(node[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(node[0], $$this[0].childNodes[0]);
                 }
             } else if (typeof node == 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(Luna(node)[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(Luna(node)[0], $$this[0].childNodes[0]);
                 }
             } else {
                 throw new Error("Not acceptable type!");
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素之后插入内容
          */
         "after": function (node) {
-            var $this = Luna(this),
-                flag, $parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
+            var $$this = Luna(this),
+                flag, $$parent;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = $$this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[flag].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
+                    $$parent.insertBefore(node, $$this[flag].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[flag].nextSibling);
+                    $$parent.insertBefore(node[0], $$this[flag].nextSibling);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[flag].nextSibling);
+                    $$parent.insertBefore(Luna(node)[0], $$this[flag].nextSibling);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素之前插入内容
          */
         "before": function (node) {
-            var $this = Luna(this),
-                $parent, flag;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
+            var $$this = Luna(this),
+                $$parent, flag;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = $$this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[flag]);
+                    $$parent.insertBefore(node, $$this[flag]);
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[flag]);
+                    $$parent.insertBefore(node[0], $$this[flag]);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[flag]);
+                    $$parent.insertBefore(Luna(node)[0], $$this[flag]);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 删除被选元素（及其子元素）
          */
         "remove": function () {
-            var $this = Luna(this),
-                flag, $parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = Luna($this[flag]).parent();
-                $parent[0].removeChild($this[flag]);
+            var $$this = Luna(this),
+                flag, $$parent;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = Luna($$this[flag]).parent();
+                $$parent[0].removeChild($$this[flag]);
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 从被选元素中删除子元素
          */
         "empty": function () {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
-            for (flag = 0; flag < $this.length; flag++) {
-                $($this[flag]).html('');
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$($$this[flag]).html('');
             }
-            return $this;
+            return $$this;
         },
         /**
          * 进入全屏
          */
         "launchFullScreen": function () {
-            var $this = Luna(this);
-            if ($this[0] && $this[0].requestFullScreen) {
-                $this[0].requestFullScreen();
-            } else if ($this[0] && $this[0].mozRequestFullScreen) {
-                $this[0].mozRequestFullScreen();
-            } else if ($this[0] && $this[0].webkitRequestFullScreen) {
-                $this[0].webkitRequestFullScreen();
+            var $$this = Luna(this);
+            if ($$this[0] && $$this[0].requestFullScreen) {
+                $$this[0].requestFullScreen();
+            } else if ($$this[0] && $$this[0].mozRequestFullScreen) {
+                $$this[0].mozRequestFullScreen();
+            } else if ($$this[0] && $$this[0].webkitRequestFullScreen) {
+                $$this[0].webkitRequestFullScreen();
             }
-            return $this;
+            return $$this;
         },
     });
 
@@ -1142,7 +1142,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1157,7 +1157,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1174,7 +1174,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1189,7 +1189,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1225,27 +1225,27 @@
          * 返回全部被选元素的直接父元素
          */
         "parent": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    parent = $this[flag].parentNode;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    parent = $$this[flag].parentNode;
                 }
                 while (parent && parent.nodeType !== 1 && parent.nodeType !== 11 && parent.nodeType !== 9 && parent.parentNode) {
                     parent = parent.parentNode;
                 }
                 if (parent && (parent.nodeType === 1 || parent.nodeType === 11 || parent.nodeType === 9)) {
-                    $this[num] = parent;
+                    $$this[num] = parent;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":parent()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":parent()";
+            return $$this;
         },
 
         /**
@@ -1254,9 +1254,9 @@
          */
         "parents": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                parent = $this[0],
+                parent = $$this[0],
                 tempResult = [];
             while (parent && parent.parentNode) {
                 parent = parent.parentNode;
@@ -1265,15 +1265,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":parents('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":parents('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -1282,9 +1282,9 @@
          */
         "children": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                child = $this[0],
+                child = $$this[0],
                 tempResult = [];
             if (!child) {
                 tempResult = [];
@@ -1298,15 +1298,15 @@
                 tempResult = Luna._sizzle_.filter(tempResult, selector);
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":children('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":children('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -1315,9 +1315,9 @@
          */
         "siblings": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                sibling = $this[0],
+                sibling = $$this[0],
                 tempResult = [];
             if (!sibling) {
                 tempResult = [];
@@ -1340,42 +1340,42 @@
 
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":siblings('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":siblings('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的下一个同胞元素
          */
         "next": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 next;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    next = $this[flag].nextSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    next = $$this[flag].nextSibling;
                 }
                 while (next && next.nodeType !== 1 && next.nodeType !== 11 && next.nodeType !== 9 && next.nextSibling) {
                     next = next.nextSibling;
                 }
                 if (next && (next.nodeType === 1 || next.nodeType === 11 || next.nodeType === 9)) {
-                    $this[num] = next;
+                    $$this[num] = next;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":next()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":next()";
+            return $$this;
         },
 
         /**
@@ -1384,9 +1384,9 @@
          */
         "nextAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                next = $this[0],
+                next = $$this[0],
                 tempResult = [];
             while (next && next.nextSibling) {
                 next = next.nextSibling;
@@ -1395,42 +1395,42 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":nextAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":nextAll('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的前一个同胞元素
          */
         "prev": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 prev;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    prev = $this[flag].previousSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    prev = $$this[flag].previousSibling;
                 }
                 while (prev && prev.nodeType !== 1 && prev.nodeType !== 11 && prev.nodeType !== 9 && prev.previousSibling) {
                     prev = prev.previousSibling;
                 }
                 if (prev && (prev.nodeType === 1 || prev.nodeType === 11 || prev.nodeType === 9)) {
-                    $this[num] = prev;
+                    $$this[num] = prev;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":prev()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":prev()";
+            return $$this;
         },
 
         /**
@@ -1439,9 +1439,9 @@
          */
         "prevAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                prev = $this[0],
+                prev = $$this[0],
                 tempResult = [];
             while (prev && prev.previousSibling) {
                 prev = prev.previousSibling;
@@ -1450,15 +1450,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":prevAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":prevAll('" + selector + "')";
+            return $$this;
         },
         /**
          * 根据选择器过滤已经选择的节点
@@ -1466,21 +1466,21 @@
          */
         "filter": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, tempResult = [];
-            for (flag = 0; flag < $this.length; flag++) {
-                tempResult.push($this[flag]);
+            for (flag = 0; flag < $$this.length; flag++) {
+                tempResult.push($$this[flag]);
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":filter('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":filter('" + selector + "')";
+            return $$this;
         }
     });
 })(window,window.Luna);
@@ -1494,23 +1494,23 @@
          * 获取元素大小
          */
         "size": function(type) {
-            var $this = $(this);
+            var $$this = $$(this);
             var elemHeight, elemWidth;
             if (type == 'content') { //内容
-                elemWidth = $this[0].clientWidth - (($this.css('padding-left') + "").replace('px', '')) - (($this.css('padding-right') + "").replace('px', ''));
-                elemHeight = $this[0].clientHeight - (($this.css('padding-top') + "").replace('px', '')) - (($this.css('padding-bottom') + "").replace('px', ''));
+                elemWidth = $$this[0].clientWidth - (($$this.css('padding-left') + "").replace('px', '')) - (($$this.css('padding-right') + "").replace('px', ''));
+                elemHeight = $$this[0].clientHeight - (($$this.css('padding-top') + "").replace('px', '')) - (($$this.css('padding-bottom') + "").replace('px', ''));
             } else if (type == 'padding') { //内容+内边距
-                elemWidth = $this[0].clientWidth;
-                elemHeight = $this[0].clientHeight;
+                elemWidth = $$this[0].clientWidth;
+                elemHeight = $$this[0].clientHeight;
             } else if (type == 'border') { //内容+内边距+边框
-                elemWidth = $this[0].offsetWidth;
-                elemHeight = $this[0].offsetHeight;
+                elemWidth = $$this[0].offsetWidth;
+                elemHeight = $$this[0].offsetHeight;
             } else if (type == 'scroll') { //滚动的宽（不包括border）
-                elemWidth = $this[0].scrollWidth;
-                elemHeight = $this[0].scrollHeight;
+                elemWidth = $$this[0].scrollWidth;
+                elemHeight = $$this[0].scrollHeight;
             } else {
-                elemWidth = $this[0].offsetWidth;
-                elemHeight = $this[0].offsetHeight;
+                elemWidth = $$this[0].offsetWidth;
+                elemHeight = $$this[0].offsetHeight;
             }
             return {
                 width: elemWidth,

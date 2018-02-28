@@ -45,29 +45,29 @@
     </style>
     <script src="../luna.js"></script>
     <script>
-    $(function() {
+    $$(function() {
         console.log(new Date());
-        $.animation(function(deep) {
+        $$.animation(function(deep) {
             console.log("1 >>> " + deep + "%");
         }, 1000, function() {
             console.log("1 >>> " + new Date());
         });
-        $.animation(function(deep) {
+        $$.animation(function(deep) {
             console.log("2 >>> " + deep + "%");
         }, 500, function() {
             console.log("2 >>> " + new Date());
         });
-        $.animation(function(deep) {
+        $$.animation(function(deep) {
             console.log("3 >>> " + deep + "%");
         }, 100, function() {
             console.log("3 >>> " + new Date());
         });
         var driver = function() {
-            $.animation(function(deep) {
-                $(".redD").css({ "left": deep + "%", "transform": "rotate(" + deep * 3.6 + "deg)" });
-                $(".container").css("top",(deep*3)+"px");
+            $$.animation(function(deep) {
+                $$(".redD").css({ "left": deep + "%", "transform": "rotate(" + deep * 3.6 + "deg)" });
+                $$(".container").css("top",(deep*3)+"px");
                 // if(Math.round(deep)==50){
-                //     $(".redD").css()
+                //     $$(".redD").css()
                 // }
             }, 3000, function() {
                 console.log("stoped");

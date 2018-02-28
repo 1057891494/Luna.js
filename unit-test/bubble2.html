@@ -41,14 +41,14 @@
         }
     </style>
     <script>
-        window.$={};
+        window.$$={};
     </script>
     <script src="../luna.js"></script>
     <script src="../script/event.js"></script>
     <script>
-        $(function() {
-            console.log($('body>div'));
-            $('body>div').bind('click',function(event){
+        $$(function() {
+            console.log($$('body>div'));
+            $$('body>div').bind('click',function(event){
                 var target=event.target;
                 console.log(target);
             });

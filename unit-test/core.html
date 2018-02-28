@@ -19,28 +19,28 @@
     <script src="../luna.js"></script>
     <script src="./LunaUnit.js"></script>
     <script>
-        $(function() {
-            toEqual(0, $(""), 'length');
-            toEqual(0, $(null), 'length');
-            toEqual(0, $(undefined), 'length');
-            toEqual(0, $(false), 'length');
+        $$(function() {
+            toEqual(0, $$(""), 'length');
+            toEqual(0, $$(null), 'length');
+            toEqual(0, $$(undefined), 'length');
+            toEqual(0, $$(false), 'length');
 
-            toEqual(1, $('<div>luna - 单元测试</div>'), 'length');
-            toEqual(1, $('body'), 'length');
+            toEqual(1, $$('<div>luna - 单元测试</div>'), 'length');
+            toEqual(1, $$('body'), 'length');
 
-            toEqual(1, $(document.getElementById('luna')), 'length');
-            toEqual(1, $($(document.getElementById('luna'))), 'length');
+            toEqual(1, $$(document.getElementById('luna')), 'length');
+            toEqual(1, $$($$(document.getElementById('luna'))), 'length');
 
-            toEqual('来自测试的目测1', $.extend({
+            toEqual('来自测试的目测1', $$.extend({
                 info: '来自测试的目测1'
             }).info);
             var target = {};
-            $.extend(target, {
+            $$.extend(target, {
                 info: '来自测试的目测2'
             });
             toEqual('来自测试的目测2', target.info);
 
-            toEqual('来自测试的目测3', $('body').extend({
+            toEqual('来自测试的目测3', $$('body').extend({
                 info: '来自测试的目测3'
             }), 'info');
         });
