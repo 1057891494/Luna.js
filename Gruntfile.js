@@ -8,7 +8,7 @@ var sourceScript = [
     './script/tool.js',
     './script/sizzle.js',
     './script/search.js',
-    './script/position.js',
+    './script/size.js',
     './script/animation.js',
     './script/codeEnvironment.js',
     './script/SVG.config.js',
