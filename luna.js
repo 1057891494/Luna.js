@@ -691,13 +691,13 @@
 
 })(window, window.Luna);
 
-(function (window, Luna, undefined) {
+(function(window, Luna, undefined) {
     'use strict';
     Luna.extend({
         /**
          * 合并若干个class
          */
-        "uniqueClass": function () {
+        "uniqueClass": function() {
             var classString = '',
                 flag = 0;
             for (; flag < arguments.length; flag++) {
@@ -709,7 +709,7 @@
             classString = classString.trim();
             var classArray = classString.split(/ +/);
             var classObj = {};
-            classArray.forEach(function (item) {
+            classArray.forEach(function(item) {
                 classObj[item] = true;
             }, this);
             classString = '';
@@ -724,7 +724,7 @@
         /**
          * 删除已经存在的class或toggle，用flag来标记，flag为真表示删除
          */
-        "operateClass": function (srcClass, opeClass, flag) {
+        "operateClass": function(srcClass, opeClass, flag) {
             if (typeof srcClass !== 'string' || typeof opeClass !== 'string') {
                 throw new Error('Only string is valid,not project!');
             }
@@ -733,10 +733,10 @@
             var srcClassArray = srcClass.split(/ +/);
             var opeClassArray = opeClass.split(/ +/);
             var classObj = {};
-            srcClassArray.forEach(function (item) {
+            srcClassArray.forEach(function(item) {
                 classObj[item] = true;
             }, this);
-            opeClassArray.forEach(function (item) {
+            opeClassArray.forEach(function(item) {
                 classObj[item] = flag ? false : !classObj[item];
             }, this);
             var classString = '';
@@ -750,8 +750,8 @@
         /**
          * 获取包括元素自己的字符串
          */
-        "outerHTML": function (node) {
-            return node.outerHTML || (function (n) {
+        "outerHTML": function(node) {
+            return node.outerHTML || (function(n) {
                 var div = document.createElement('div'),
                     h;
                 div.appendChild(n);
@@ -763,7 +763,7 @@
         /**
          * 获取全部样式
          */
-        'styles': function (dom, name) {
+        'styles': function(dom, name) {
             if (arguments.length < 1 || (dom.nodeType !== 1 && dom.nodeType !== 11 && dom.nodeType !== 9)) {
                 throw new Error('DOM is required!');
             }
@@ -784,7 +784,7 @@
         /**
          * 把指定文字复制到剪切板
          */
-        'clipboard': function (text, callback, errorback) {
+        'clipboard': function(text, callback, errorback) {
             Luna('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
             window.document.getElementById("clipboard-textarea").select();
             try {
@@ -803,9 +803,9 @@
         /**
          * 退出全屏
          */
-        "exitFullScreen": function () {
-            if (!!document.exitFullscreen) { 
-                document.exitFullscreen(); 
+        "exitFullScreen": function() {
+            if (!!document.exitFullscreen) {
+                document.exitFullscreen();
             } else if (!!document.mozCancelFullScreen) {
                 document.mozCancelFullScreen();
             } else if (!!document.webkitExitFullscreen) {
@@ -813,6 +813,13 @@
             } else {
                 console.error('退出全屏失败！');
             }
+        },
+
+        /**
+         * 执行一定字符串的js代码
+         */
+        "eval": function(js) {
+            return (new Function("return " + "" + js + ""))();
         }
     });
 })(window, window.Luna);
@@ -1671,6 +1678,62 @@
                 return 7;
             }
             return beginWeek;
+        }
+    });
+})(window, window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.extend({
+
+        /**
+         * 获取XHR对象
+         */
+        "getXHR": function() {
+            if (!!Luna.XHR) {
+                return Luna.XHR;
+            }
+
+            if (window.XMLHttpRequest) {
+                Luna.XHR = new window.XMLHttpRequest();
+            } else {
+                Luna.XHR = new window.ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            return Luna.XHR;
+        },
+
+        /**
+         * 通过HTTP GET获取指定路径文件
+         */
+        "get": function(url, callback, errorback) {
+            var xmlhttp = Luna.getXHR();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        if (callback) {
+                            callback(this.responseText);
+                        }
+                    } else {
+                        if (errorback) {
+                            errorback();
+                        }
+                    }
+                }
+            };
+            xmlhttp.open('get', url + "?Token=" + (new Date()).valueOf(), true);
+            xmlhttp.send();
+        },
+
+        /**
+         * 通过HTTP GET形式的加载JavaScript文件并在全局运行它
+         */
+        "getScript": function(url, callback, errorback) {
+            Luna.get(url, function(js) {
+                Luna.eval(js);
+                callback();
+            }, errorback);
         }
     });
 })(window, window.Luna);

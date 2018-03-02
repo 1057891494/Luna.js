@@ -41,27 +41,35 @@
                 <li><a href='animation.html'>动画</a></li>
                 <li><a href='event.html'>事件管理</a></li>
                 <li><a href='size.html'>尺寸</a></li>
-                <li class='click'><a href='codeEnvironment.html'>标签模式切换</a></li>
+                <li><a href='codeEnvironment.html'>标签模式切换</a></li>
                 <li><a href='date.html'>日期计算</a></li>
-                <li><a href='ajax.html'>AJAX</a></li>
+                <li class='click'><a href='ajax.html'>AJAX</a></li>
             </ul>
         </nav>
     </header>
     <article>
         <section>
             <p class="title">
-                SVG(selector, context, root)
+                getXHR()
             </p>
             <p class="block">
-                【Luna】切换模式到SVG，这意味着在SVG格式下操作，比如字符串变成DOM结点，命名空间就是SVG而不是HTML，该方法的调用和Luna()没有其它的区别。
+                【Luna】获取XMLHttpRequest对象
             </p>
         </section>
         <section>
             <p class="title">
-                HTML(selector, context, root)
+                get(doback, duration, callback)
             </p>
             <p class="block">
-                【Luna】切换模式到HTML，这是默认模式。
+                【Luna】通过HTTP GET获取指定路径文件
+            </p>
+        </section>
+        <section>
+            <p class="title">
+                getScript(doback, duration, callback)
+            </p>
+            <p class="block">
+                【Luna】通过HTTP GET形式的加载JavaScript文件并在全局运行它
             </p>
         </section>
     </article>

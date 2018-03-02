@@ -12,7 +12,8 @@ var sourceScript = [
     './script/animation.js',
     './script/codeEnvironment.js',
     './script/SVG.config.js',
-    './script/date.js'
+    './script/date.js',
+    './script/ajax.js'
 ];
 var banner = '/*! <%= pkg.name %> V<%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
@@ -40,7 +41,7 @@ module.exports = function(grunt) {
                     "$": true,
                     "window": true,
                     "Luna": true,
-                    "module":true,
+                    "module": true,
                     "setInterval": true,
                     "clearInterval": true,
                     "setTimeout": true,
