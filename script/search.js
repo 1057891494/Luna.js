@@ -262,6 +262,30 @@
             }
             $$this.selector = $$this.selector + ":filter('" + selector + "')";
             return $$this;
+        },
+        /**
+         * 返回第一个被选元素的满足条件的元素
+         * selector只支持二类选择器
+         */
+        "find": function(selector) {
+            selector = selector || '';
+            var $$this = Luna(this),
+                flag,
+                tempResult;
+            if ($$this.length <= 0) {
+                tempResult = [];
+            } else {
+                tempResult = Luna.sizzle(selector, $$this[0]);
+            }
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
+            }
+            $$this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $$this[flag] = tempResult[flag];
+            }
+            $$this.selector = $$this.selector + ":find('" + selector + "')";
+            return $$this;
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);

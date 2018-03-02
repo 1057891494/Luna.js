@@ -46,6 +46,11 @@
             toEqual(1, $$('[data="_f"]').filter('*'), 'length');
             toEqual(0, $$('[data="_f"]').filter('.tp'), 'length');
             toEqual(2, $$('*').filter('.info'), 'length');
+            toEqual(2, $$('#luna').find('.info'), 'length');
+            toEqual(1, $$('#luna').find('[data]'), 'length');
+            toEqual(0, $$('#luna').find('[data7]'), 'length');
+            toEqual(1, $$('#luna').find('[data="_f"]'), 'length');
+            toEqual(0, $$('#luna').find('[data="_f_"]'), 'length');
         });
     </script>
 </head>
@@ -56,7 +61,7 @@
         <header name='info' class='info' id='dd'>
             luna说明
         </header>
-        <section name='info' class='info' data='_f'>
+        <section name='info' class='info' data='_f' dd>
             luna的定位是个人使用和技巧积累，同时是快速测试环境和相关项目开发快速助手，总体而言，都只是个人使用。
         </section>
         <section>
