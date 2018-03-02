@@ -323,7 +323,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -338,7 +338,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -355,7 +355,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -370,7 +370,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;

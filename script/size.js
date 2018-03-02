@@ -7,7 +7,7 @@
          * 获取元素大小
          */
         "size": function(type) {
-            var $$this = $$(this);
+            var $$this = Luna(this);
             var elemHeight, elemWidth;
             if (type == 'content') { //内容
                 elemWidth = $$this[0].clientWidth - (($$this.css('padding-left') + "").replace('px', '')) - (($$this.css('padding-right') + "").replace('px', ''));

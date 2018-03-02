@@ -298,7 +298,7 @@
             var $$this = Luna(this),
                 flag;
             for (flag = 0; flag < $$this.length; flag++) {
-                $$($$this[flag]).html('');
+                Luna($$this[flag]).html('');
             }
             return $$this;
         },

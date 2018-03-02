@@ -113,7 +113,7 @@
                 }
                 var nodes = Luna.sizzle(selector, context);
                 flag = 0;
-                var _flag_ = 0
+                var _flag_ = 0;
                 for (; flag < nodes.length; flag++) {
                     if (nodes[flag]) {
                         this[_flag_] = nodes[flag];
@@ -669,7 +669,7 @@
             var $$this = Luna(this),
                 flag;
             for (flag = 0; flag < $$this.length; flag++) {
-                $$($$this[flag]).html('');
+                Luna($$this[flag]).html('');
             }
             return $$this;
         },
@@ -1149,7 +1149,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1164,7 +1164,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1181,7 +1181,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1196,7 +1196,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $$(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1501,7 +1501,7 @@
          * 获取元素大小
          */
         "size": function(type) {
-            var $$this = $$(this);
+            var $$this = Luna(this);
             var elemHeight, elemWidth;
             if (type == 'content') { //内容
                 elemWidth = $$this[0].clientWidth - (($$this.css('padding-left') + "").replace('px', '')) - (($$this.css('padding-right') + "").replace('px', ''));

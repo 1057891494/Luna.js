@@ -38,7 +38,6 @@ module.exports = function(grunt) {
                 "eqnull": true,
                 "undef": true,
                 "globals": {
-                    "$": true,
                     "window": true,
                     "Luna": true,
                     "module": true,

@@ -112,7 +112,7 @@
                 }
                 var nodes = Luna.sizzle(selector, context);
                 flag = 0;
-                var _flag_ = 0
+                var _flag_ = 0;
                 for (; flag < nodes.length; flag++) {
                     if (nodes[flag]) {
                         this[_flag_] = nodes[flag];
