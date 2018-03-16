@@ -123,7 +123,7 @@
         },
 
         /**
-         * 执行一定字符串的js代码
+         * 执行一段字符串的js代码
          */
         "eval": function(js) {
             return (new Function("return " + "" + js + ""))();
