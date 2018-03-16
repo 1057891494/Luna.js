@@ -315,7 +315,7 @@
                 $$this[0].webkitRequestFullScreen();
             }
             return $$this;
-        },
+        }
     });
 
 })(window, window.Luna);
