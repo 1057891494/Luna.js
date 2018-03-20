@@ -1,7 +1,6 @@
 'use strict';
 
 var sourceScript = [
-
     './script/core.js',
     './script/event.js',
     './script/dom.js',
@@ -13,7 +12,8 @@ var sourceScript = [
     './script/codeEnvironment.js',
     './script/SVG.config.js',
     './script/date.js',
-    './script/ajax.js'
+    './script/ajax.js',
+    './script/position.js'
 ];
 var banner = '/*! <%= pkg.name %> V<%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
