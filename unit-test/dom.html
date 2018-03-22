@@ -19,42 +19,42 @@
     <script src="../luna.js"></script>
     <script src="./LunaUnit.js"></script>
     <script>
-        $(function() {
-            toEqual('<label>luna说明</label>', $(document.getElementById('header')).html().trim());
-            toEqual('luna说明', $(document.getElementById('header')).text().trim());
+        $$(function() {
+            toEqual('<label>luna说明</label>', $$(document.getElementById('header')).html().trim());
+            toEqual('luna说明', $$(document.getElementById('header')).text().trim());
 
-            toEqual('测试数据pre', $(document.getElementById('input')).val());
-            toEqual('测试数据new', $(document.getElementById('input')).val("测试数据new").val());
+            toEqual('测试数据pre', $$(document.getElementById('input')).val());
+            toEqual('测试数据new', $$(document.getElementById('input')).val("测试数据new").val());
 
-            toEqual('旧名字', $(document.getElementById('input')).attr('name'));
-            toEqual('新名字', $(document.getElementById('input')).attr('name', "新名字").attr('name'));
+            toEqual('旧名字', $$(document.getElementById('input')).attr('name'));
+            toEqual('新名字', $$(document.getElementById('input')).attr('name', "新名字").attr('name'));
 
-            toEqual('class1', $(document.getElementById('input')).class());
-            toEqual('class2', $(document.getElementById('input')).class('class2').class());
-            toEqual('class2 class3', $(document.getElementById('input')).addClass('class3').class());
-            toEqual('class2', $(document.getElementById('input')).removeClass('class3').class());
-            toEqual('class2 class3', $(document.getElementById('input')).toggleClass('class3').class());
-            toEqual('class2', $(document.getElementById('input')).toggleClass('class3').class());
+            toEqual('class1', $$(document.getElementById('input')).class());
+            toEqual('class2', $$(document.getElementById('input')).class('class2').class());
+            toEqual('class2 class3', $$(document.getElementById('input')).addClass('class3').class());
+            toEqual('class2', $$(document.getElementById('input')).removeClass('class3').class());
+            toEqual('class2 class3', $$(document.getElementById('input')).toggleClass('class3').class());
+            toEqual('class2', $$(document.getElementById('input')).toggleClass('class3').class());
 
-            // toEqual('red', $(document.getElementById('input')).css('color', 'red').css('color'));
-            // toEqual('pink', $(document.getElementById('input')).css({
+            // toEqual('red', $$(document.getElementById('input')).css('color', 'red').css('color'));
+            // toEqual('pink', $$(document.getElementById('input')).css({
             //     border: "1px solid blue",
             //     'background-color': "pink"
             // }).css('background-color'));
 
-            toEqual('内部内容append', $(document.getElementById('mul')).append('<label id="append">append</label>').text().trim());
-            toEqual('prepend内部内容append', $(document.getElementById('mul')).prepend('<label id="prepend">prepend</label>').text().trim());
-            $(document.getElementById('append')).after('<label>after</label>');
-            toEqual('prepend内部内容appendafter', $(document.getElementById('mul')).text().trim());
-            $(document.getElementById('prepend')).before('<label>before</label>');
-            toEqual('beforeprepend内部内容appendafter', $(document.getElementById('mul')).text().trim());
-            console.warn($(document.getElementById('append')).empty());
-            toEqual('', $(document.getElementById('append')).text().trim());
-            console.warn($(document.getElementById('prepend')).remove());
-            toEqual(0, $(document.getElementById('prepend')), 'length');
-            toEqual(true, $('#luna').hasClass('luna'));
-            toEqual(false, $('#luna').hasClass('luna1'));
-            // toEqual('blue', $('#luna').css('background-color'));
+            toEqual('内部内容append', $$(document.getElementById('mul')).append('<label id="append">append</label>').text().trim());
+            toEqual('prepend内部内容append', $$(document.getElementById('mul')).prepend('<label id="prepend">prepend</label>').text().trim());
+            $$(document.getElementById('append')).after('<label>after</label>');
+            toEqual('prepend内部内容appendafter', $$(document.getElementById('mul')).text().trim());
+            $$(document.getElementById('prepend')).before('<label>before</label>');
+            toEqual('beforeprepend内部内容appendafter', $$(document.getElementById('mul')).text().trim());
+            console.warn($$(document.getElementById('append')).empty());
+            toEqual('', $$(document.getElementById('append')).text().trim());
+            console.warn($$(document.getElementById('prepend')).remove());
+            toEqual(0, $$(document.getElementById('prepend')), 'length');
+            toEqual(true, $$('#luna').hasClass('luna'));
+            toEqual(false, $$('#luna').hasClass('luna1'));
+            // toEqual('blue', $$('#luna').css('background-color'));
         });
     </script>
 </head>

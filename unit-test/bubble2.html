@@ -16,24 +16,41 @@
     <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
-    <script src="../luna.js"></script>
-    <script src="./LunaUnit.js"></script>
-    <style>
+    <style type="text/css">
+        .container {
+            position: relative;
+        }
 
-        body{
-            background-color: white;
+        .redD1 {
+            position: relative;
+            width: 101px;
+            height: 101px;
+        }
+
+        .redD2 {
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+
+        .redD {
+            display: inline-block;
+            background: linear-gradient(135deg, transparent 29.29%, red 0) top left, linear-gradient(-135deg, transparent 29.29%, red 0) top right, linear-gradient(-45deg, transparent 29.29%, red 0) bottom right, linear-gradient(45deg, transparent 29.29%, red 0) bottom left;
+            background-size: 50% 50%;
+            background-repeat: no-repeat;
         }
     </style>
     <script>
+        window.$$={};
+    </script>
+    <script src="../luna.js"></script>
+    <script src="../script/event.js"></script>
+    <script>
         $$(function() {
-            $$('#copy').bind('click', function() {
-                $$.clipboard('复制的内容成功');
-            })
-            $$('#toFull').bind('click', function() {
-                $$('body').launchFullScreen()
-            });
-            $$('#exitFull').bind('click', function() {
-                $$.exitFullScreen();
+            console.log($$('body>div'));
+            $$('body>div').bind('click',function(event){
+                var target=event.target;
+                console.log(target);
             });
         });
     </script>
@@ -41,7 +58,7 @@
 
 <body>
     <h1>luna - 单元测试</h1>
-    <article id='luna'>
+    <article>
         <header>
             luna说明
         </header>
@@ -51,14 +68,19 @@
         <section>
             luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
         </section>
-        <input type="button" id='copy' value="复制">
-        <input type="button" id='toFull' value="进入全屏">
-        <input type="button" id='exitFull' value="退出全屏">
     </article>
+    <div style="width:400px; height:400px; background:red">
+        <div id="div2" style="width:300px; height:300px; background:palevioletred">
+            <div style="width:200px; height:200px; background:yellow">
+                <div id="div1" style="width:100px; height:100px; background:palegreen">
+                    最内部
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
-
 <!--
     =================================================
     走一步，再走一步。

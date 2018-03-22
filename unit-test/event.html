@@ -18,14 +18,34 @@
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <script src="../luna.js"></script>
     <script src="./LunaUnit.js"></script>
-    <script src="../script/position.js"></script>
     <script>
-
+        $$(function() {
+            $$('#mul').bind('touch',function(){
+                console.log('点击我');
+            }).trigger('touch');
+            $$('#input').focus();
+            console.log($$('#input').isFocus());
+        });
     </script>
 </head>
 
 <body>
-
+    <h1>luna - 单元测试</h1>
+    <article id='luna' class='luna luna12'>
+        <header id='header'>
+            <label>luna说明</label>
+        </header>
+        <section>
+            luna的定位是个人使用和技巧积累，同时是快速测试环境和相关项目开发快速助手，总体而言，都只是个人使用。
+        </section>
+        <section>
+            luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
+        </section>
+        <section>
+            <input type="text" id='input' value='测试数据pre' name='旧名字' class='class1'>
+        </section>
+        <div id="mul">内部内容</div>
+    </article>
 </body>
 
 </html>

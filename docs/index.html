@@ -18,6 +18,13 @@
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
     <link rel="stylesheet" href="style.css">
     <script src="luna.min.js"></script>
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>
+        (adsbygoogle = window.adsbygoogle || []).push({
+            google_ad_client: "ca-pub-7416565268644863",
+            enable_page_level_ads: true
+        });
+    </script>
 </head>
 
 <body>
@@ -33,7 +40,11 @@
                 <li><a href='search.html'>结点查找</a></li>
                 <li><a href='animation.html'>动画</a></li>
                 <li><a href='event.html'>事件管理</a></li>
-                <li><a href='position.html'>定位相关</a></li>
+                <li><a href='size.html'>尺寸</a></li>
+                <li><a href='codeEnvironment.html'>标签模式切换</a></li>
+                <li><a href='date.html'>日期计算</a></li>
+                <li><a href='ajax.html'>AJAX</a></li>
+                <li><a href="position.html">位置计算</a></li>
             </ul>
         </nav>
     </header>
@@ -41,10 +52,10 @@
         <section>
             <p class="title">第一段：Luna构造函数</p>
             <p class="block">
-                Luna本身就提供了一系列方法，除此之外你还可以创建一个Luna对象，调用对象身上的方法，二者是不同的；Luna本身的方法很容易理解，直接查看API就清除了，下面来主要说说Luna对象相关问题。
+                Luna本身就提供了一系列方法，除此之外你还可以创建一个Luna对象，调用对象身上的方法，二者是不同的；Luna本身的方法很容易理解，直接查看API就清楚了，下面来主要说说Luna对象相关问题。
             </p>
             <p class="block">
-                改造Luna对象的方法推荐使用var lunaObj=Luna(param1[,param2])的方式，具体的参数说明如下：
+                创建Luna对象的方法推荐使用var lunaObj=Luna(param1[,param2])的方式，具体的参数说明如下：
                 <span class="list">
                     1.传递一个函数：比如这样Luna(function(){console.log('这是传递的函数')})，可以保证函数在页面加载完毕的时候执行；
                 </span>
@@ -76,10 +87,16 @@
                 <span class="list">扩展Luna对象方法：Luna.prototype.extend({"funName":function(){}})</span>
             </p>
         </section>
+        <section>
+            <p class="title">第四段：重要方法</p>
+            <p class="block">
+                <span class="list">如果之前有$$或者Luna对象，现在被本库覆盖了，可以调用Luna上面的noConflict方法来恢复，传递一个boolean，如果是true表示也恢复Luna，否则只恢复$$。</span>
+            </p>
+        </section>
     </article>
     <footer>
         <div class='info'>
-            yelloxing.github.io is sponsored by StepByStep | 本网站由【走一步 再走一步】支持
+            Luna.js is sponsored by StepByStep | 本网站由【走一步 再走一步】支持
         </div>
         <div class='nav' onclick='window.location.href="https://github.com/yelloxing/Luna.js"'>
             Fork me on Github

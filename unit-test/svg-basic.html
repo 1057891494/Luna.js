@@ -16,33 +16,47 @@
     <link rel="apple-touch-icon" sizes="72x72" href="72icon.png" />
     <link rel="apple-touch-icon" sizes="120x120" href="120icon.png" />
     <link rel="apple-touch-icon" sizes="144x144" href="144icon.png" />
-    <script src="../luna.js"></script>
-    <script src="./LunaUnit.js"></script>
-    <style>
+    <style type="text/css">
 
-        body{
-            background-color: white;
-        }
     </style>
+    <script src="../luna.js"></script>
+    <!-- <script src="../script/sizzle.js"></script> -->
+    <!-- <script src="../script/search.js"></script> -->
     <script>
-        $$(function() {
-            $$('#copy').bind('click', function() {
-                $$.clipboard('复制的内容成功');
-            })
-            $$('#toFull').bind('click', function() {
-                $$('body').launchFullScreen()
-            });
-            $$('#exitFull').bind('click', function() {
-                $$.exitFullScreen();
-            });
+    $$(function() {
+        $$.SVG('body').append('<svg><a><circle cx="10" cy="10" fill="green" r="5"></circle><path></path></a></svg>');
+
+        $$("circle").attr('r','10');
+        $$("a").attr('href','https://www.baidu.com').css({
+            "width":"100px",
+            "height":"100px",
+            "background-color":"blue"
         });
+        console.log($$('#svg ~ section'));
+        console.log($$('circle'));
+        console.log($$('a>circle'));//节点查找有问题
+
+        // 事件问题
+        $$('svg').append('<polygon points="200,10 250,190 160,210" style = "fill:lime;stroke:purple;stroke-width:1" />')
+        .bind('click',function(e){
+            e=e||window.event;
+            var target=e.target;
+            debugger;
+        });
+        $$('polygon').bind('click', function (e) {
+            e = e || window.event;
+            var target = e.target;
+            debugger;
+        });
+    });
+
     </script>
 </head>
 
 <body>
     <h1>luna - 单元测试</h1>
-    <article id='luna'>
-        <header>
+    <article>
+        <header id='svg'>
             luna说明
         </header>
         <section>
@@ -51,16 +65,20 @@
         <section>
             luna遵循MIT协议，任何人都可以自由的使用这里的经验，给出建议，修改和支持bug，并且这是期待的。
         </section>
-        <input type="button" id='copy' value="复制">
-        <input type="button" id='toFull' value="进入全屏">
-        <input type="button" id='exitFull' value="退出全屏">
     </article>
+    <div class="container">
+        <div class="redD redD2" style="top: -93px;"></div>
+        <div class="redD redD2" style="top: -115px;left: 34px;"></div>
+        <div class="redD redD2" style="top: -55px;left: -10px;"></div>
+        <div class="redD redD1"></div>
+    </div>
 </body>
 
 </html>
-
 <!--
     =================================================
+
     走一步，再走一步。
+
     =================================================
 -->

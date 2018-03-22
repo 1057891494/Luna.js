@@ -6,27 +6,27 @@
          * 返回全部被选元素的直接父元素
          */
         "parent": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    parent = $this[flag].parentNode;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    parent = $$this[flag].parentNode;
                 }
                 while (parent && parent.nodeType !== 1 && parent.nodeType !== 11 && parent.nodeType !== 9 && parent.parentNode) {
                     parent = parent.parentNode;
                 }
                 if (parent && (parent.nodeType === 1 || parent.nodeType === 11 || parent.nodeType === 9)) {
-                    $this[num] = parent;
+                    $$this[num] = parent;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":parent()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":parent()";
+            return $$this;
         },
 
         /**
@@ -35,9 +35,9 @@
          */
         "parents": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                parent = $this[0],
+                parent = $$this[0],
                 tempResult = [];
             while (parent && parent.parentNode) {
                 parent = parent.parentNode;
@@ -46,15 +46,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":parents('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":parents('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -63,9 +63,9 @@
          */
         "children": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                child = $this[0],
+                child = $$this[0],
                 tempResult = [];
             if (!child) {
                 tempResult = [];
@@ -79,15 +79,15 @@
                 tempResult = Luna._sizzle_.filter(tempResult, selector);
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":children('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":children('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -96,9 +96,9 @@
          */
         "siblings": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                sibling = $this[0],
+                sibling = $$this[0],
                 tempResult = [];
             if (!sibling) {
                 tempResult = [];
@@ -121,42 +121,42 @@
 
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":siblings('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":siblings('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的下一个同胞元素
          */
         "next": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 next;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    next = $this[flag].nextSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    next = $$this[flag].nextSibling;
                 }
                 while (next && next.nodeType !== 1 && next.nodeType !== 11 && next.nodeType !== 9 && next.nextSibling) {
                     next = next.nextSibling;
                 }
                 if (next && (next.nodeType === 1 || next.nodeType === 11 || next.nodeType === 9)) {
-                    $this[num] = next;
+                    $$this[num] = next;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":next()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":next()";
+            return $$this;
         },
 
         /**
@@ -165,9 +165,9 @@
          */
         "nextAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                next = $this[0],
+                next = $$this[0],
                 tempResult = [];
             while (next && next.nextSibling) {
                 next = next.nextSibling;
@@ -176,42 +176,42 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":nextAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":nextAll('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的前一个同胞元素
          */
         "prev": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 prev;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    prev = $this[flag].previousSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    prev = $$this[flag].previousSibling;
                 }
                 while (prev && prev.nodeType !== 1 && prev.nodeType !== 11 && prev.nodeType !== 9 && prev.previousSibling) {
                     prev = prev.previousSibling;
                 }
                 if (prev && (prev.nodeType === 1 || prev.nodeType === 11 || prev.nodeType === 9)) {
-                    $this[num] = prev;
+                    $$this[num] = prev;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":prev()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":prev()";
+            return $$this;
         },
 
         /**
@@ -220,9 +220,9 @@
          */
         "prevAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                prev = $this[0],
+                prev = $$this[0],
                 tempResult = [];
             while (prev && prev.previousSibling) {
                 prev = prev.previousSibling;
@@ -231,15 +231,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":prevAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":prevAll('" + selector + "')";
+            return $$this;
         },
         /**
          * 根据选择器过滤已经选择的节点
@@ -247,21 +247,45 @@
          */
         "filter": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, tempResult = [];
-            for (flag = 0; flag < $this.length; flag++) {
-                tempResult.push($this[flag]);
+            for (flag = 0; flag < $$this.length; flag++) {
+                tempResult.push($$this[flag]);
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":filter('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":filter('" + selector + "')";
+            return $$this;
+        },
+        /**
+         * 返回第一个被选元素的满足条件的元素
+         * selector只支持二类选择器
+         */
+        "find": function(selector) {
+            selector = selector || '';
+            var $$this = Luna(this),
+                flag,
+                tempResult;
+            if ($$this.length <= 0) {
+                tempResult = [];
+            } else {
+                tempResult = Luna.sizzle(selector, $$this[0]);
+            }
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
+            }
+            $$this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $$this[flag] = tempResult[flag];
+            }
+            $$this.selector = $$this.selector + ":find('" + selector + "')";
+            return $$this;
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);

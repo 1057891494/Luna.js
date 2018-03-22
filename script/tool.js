@@ -92,7 +92,7 @@
          * 把指定文字复制到剪切板
          */
         'clipboard': function(text, callback, errorback) {
-            $('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
+            Luna('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
             window.document.getElementById("clipboard-textarea").select();
             try {
                 window.document.execCommand("copy", false, null);
@@ -104,16 +104,29 @@
                     errorback();
                 }
             }
-            $('#clipboard-textarea').remove();
+            Luna('#clipboard-textarea').remove();
         },
 
         /**
          * 退出全屏
          */
         "exitFullScreen": function() {
-            document.exitFullscreen ? document.exitFullscreen() :
-                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
-                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
+            if (!!document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (!!document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (!!document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else {
+                console.error('退出全屏失败！');
+            }
+        },
+
+        /**
+         * 执行一段字符串的js代码
+         */
+        "eval": function(js) {
+            return (new Function("return " + "" + js + ""))();
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);

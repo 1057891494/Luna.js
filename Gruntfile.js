@@ -1,17 +1,21 @@
 'use strict';
 
 var sourceScript = [
-
     './script/core.js',
     './script/event.js',
     './script/dom.js',
     './script/tool.js',
     './script/sizzle.js',
     './script/search.js',
-    './script/position.js',
-    './script/animation.js'
+    './script/size.js',
+    './script/animation.js',
+    './script/codeEnvironment.js',
+    './script/SVG.config.js',
+    './script/date.js',
+    './script/ajax.js',
+    './script/position.js'
 ];
-var banner = '/*! <%= pkg.name %> <%= pkg.type %><%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
+var banner = '/*! <%= pkg.name %> V<%= pkg.version %> | (c) 2007, 2018 <%= pkg.author %> | <%= pkg.license %> <%= pkg.repository.url %> */\n';
 module.exports = function(grunt) {
     /*配置插件*/
     grunt.initConfig({
@@ -34,9 +38,9 @@ module.exports = function(grunt) {
                 "eqnull": true,
                 "undef": true,
                 "globals": {
-                    "$": true,
                     "window": true,
                     "Luna": true,
+                    "module": true,
                     "setInterval": true,
                     "clearInterval": true,
                     "setTimeout": true,

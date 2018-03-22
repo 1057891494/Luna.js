@@ -1,4 +1,4 @@
-/*! luna-library alpha1.0.2 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
+/*! luna.js V0.0.1 | (c) 2007, 2018 yelloxing | MIT git+https://github.com/yelloxing/Luna.js.git */
 (function(global, factory, undefined) {
     'use strict';
 
@@ -50,7 +50,7 @@
             context = Luna(context)[0];
         }
 
-        //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
+        //选择器: $$(""), $$(null), $$(undefined), $$(false)，兼容一下
         if (!selector) {
             return this;　　
         } else {
@@ -81,7 +81,23 @@
                 if (!context) {
                     throw new Error("Parameter error!");
                 }
-                var frameDiv = document.createElement("div");
+                var frameDiv;
+                switch (Luna._code_environment_) {
+                    case 'HTML':
+                        {
+                            frameDiv = document.createElement("div");
+                            break;
+                        }
+                    case 'SVG':
+                        {
+                            frameDiv = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+                            break;
+                        }
+                    default:
+                        {
+                            frameDiv = document.createElement("div");
+                        }
+                }
                 frameDiv.innerHTML = selector;
                 this[0] = frameDiv.childNodes[0];
                 this.isTouch = true;
@@ -97,10 +113,14 @@
                 }
                 var nodes = Luna.sizzle(selector, context);
                 flag = 0;
+                var _flag_ = 0;
                 for (; flag < nodes.length; flag++) {
-                    this[flag] = nodes[flag];
+                    if (nodes[flag]) {
+                        this[_flag_] = nodes[flag];
+                        _flag_++;
+                    }
                 }
-                this.length = flag;
+                this.length = _flag_;
                 this.isTouch = true;
                 this.context = context;
                 return this;
@@ -160,7 +180,7 @@
     };
 
 
-    var rootLuna =Luna(document);
+    var rootLuna = Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -214,13 +234,32 @@
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
 
+    /*SVG配置使用 */
+    Luna._SVG_config_ = {};
+
+    // 代码环境【默认HTML】
+    Luna._code_environment_ = 'HTML';
+
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$$ */
+    var _Luna = window.Luna,
+        _$$ = window.$$;
+    Luna.noConflict = function(flag) {
+        if (window.$$ === Luna) {
+            window.$$ = _$$;
+        }
+        if (flag && window.Luna === Luna) {
+            window.Luna = _Luna;
+        }
+        return Luna;
+    };
+
     /* 一些核心说明 */
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-    window.Luna = window.$ = Luna;
+    window.Luna = window.$$ = Luna;
     return Luna;
 });
 
@@ -231,44 +270,106 @@
 
         /*添加绑定事件*/
         "bind": function(eventType, callback, useCapture) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (window.attachEvent) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].attachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].attachEvent("on" + eventType, callback);
                 }
 
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].addEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].addEventListener(eventType, callback, useCapture);
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /*解除绑定事件*/
         "unbind": function(eventType, callback, useCapture) {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag;
             if (window.detachEvent) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].detachEvent("on" + eventType, callback);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].detachEvent("on" + eventType, callback);
                 }
             } else {
                 //默认捕获
                 useCapture = useCapture || false;
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].removeEventListener(eventType, callback, useCapture);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].removeEventListener(eventType, callback, useCapture);
                 }
             }
-            return $this;
+            return $$this;
+        },
+
+        /* 在特定元素上面触发特定事件*/
+        "trigger": function(eventType, useCapture) {
+            var $$this = Luna(this),
+                event, flag;
+            useCapture = useCapture || false;
+            //创建event的对象实例。
+            if (document.createEventObject) {
+                // IE浏览器支持fireEvent方法
+                event = document.createEventObject();
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].fireEvent('on' + eventType, event);
+                }
+            } else {
+                // 其他标准浏览器使用dispatchEvent方法
+                event = document.createEvent('HTMLEvents');
+                // 3个参数：事件类型，是否冒泡，是否阻止浏览器的默认行为
+                event.initEvent(eventType, !useCapture, false);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].dispatchEvent(event);
+                }
+            }
+        },
+        /*让元素获取焦点*/
+        "focus": function() {
+            var $$this = Luna(this);
+            if ($$this.length > 0) {
+                $$this[0].focus();
+            }
+            return $$this;
+        },
+        /*判断元素是否获取焦点*/
+        "isFocus": function() {
+            var $$this = Luna(this);
+            return (!document.hasFocus || document.hasFocus()) && $$this.length > 0 && document.activeElement === $$this[0] && !!($$this[0].type || $$this[0].href || ~$$this[0].tabIndex);
+        }
+    });
+
+    Luna.extend({
+        /* 取消冒泡事件 */
+        "cancelBubble": function(event) {
+            var $$this = Luna(this);
+            event = event || window.event;
+            if (event && event.stopPropagation) { //这是其他非IE浏览器
+                event.stopPropagation();
+            } else {
+                event.cancelBubble = true;
+            }
+            return $$this;
+        },
+
+        /* 阻止默认事件 */
+        "preventDefault": function(event) {
+            var $$this = Luna(this);
+            event = event || window.event;
+            if (event && event.stopPropagation) { //这是其他非IE浏览器
+                event.preventDefault();
+            } else {
+                event.returnValue = false;
+            }
+            return $$this;
         }
     });
 })(window, window.Luna);
 
-(function(window, Luna, undefined) {
+(function (window, Luna, undefined) {
     'use strict';
 
     Luna.prototype.extend({
@@ -276,74 +377,78 @@
         /**
          * 设置或获取内部html
          */
-        "html": function(template) {
-            var $this = Luna(this);
+        "html": function (template) {
+            var $$this = Luna(this);
             if ('' != template && !template) {
-                return $this[0].innerHTML;
+                return $$this[0].innerHTML;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[flag].innerHTML = template;
+                for (; flag < $$this.length; flag++) {
+                    $$this[flag].innerHTML = template;
                 }
-                return $this;
+                return $$this;
             }
         },
 
         /**
          * 设置或返回所选元素的文本内容
          */
-        "text": function(val) {
-            var $this = Luna(this);
+        "text": function (val) {
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].innerText;
+                return $$this[0].innerText;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[0].innerText = val;
+                for (; flag < $$this.length; flag++) {
+                    $$this[0].innerText = val;
                 }
-                return $this;
+                return $$this;
             }
         },
 
         /**
          * 设置或返回表单字段的值
          */
-        "val": function(val) {
-            var $this = Luna(this);
+        "val": function (val) {
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].value;
+                return $$this[0].value;
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[0].value = val;
+                for (; flag < $$this.length; flag++) {
+                    $$this[0].value = val;
                 }
-                return $this;
+                return $$this;
             }
         },
 
         /**
          * 用于设置/改变属性值
          */
-        "attr": function(attr, val) {
-            var $this = Luna(this);
+        "attr": function (attr, val) {
+            var $$this = Luna(this);
             if (!val) {
-                return $this[0].getAttribute(attr);
+                return $$this[0].getAttribute(attr);
             } else {
                 var flag = 0;
-                for (; flag < $this.length; flag++) {
-                    $this[0].setAttribute(attr, val);
+                for (; flag < $$this.length; flag++) {
+                    if (Luna._code_environment_ == 'SVG' && Luna._SVG_config_.xlink[attr]) {
+                        $$this[flag].setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:' + attr, val);
+                    } else {
+                        $$this[flag].setAttribute(attr, val);
+                    }
                 }
-                return $this;
+                return $$this;
             }
         },
 
         /**
          * 判断是否存在指定的class
          */
-        "hasClass": function(val) {
-            var $this = Luna(this[0]);
+        "hasClass": function (val) {
+            var $$this = Luna(this[0]);
             if (typeof val === "string" && val) {
-                if ((" " + $this.class() + " ").search(" " + val + " ") >= 0) {
+                if ((" " + $$this.class() + " ").search(" " + val + " ") >= 0) {
                     return true;
                 }
             }
@@ -353,238 +458,238 @@
         /**
          * 向被选元素添加一个或多个类
          */
-        "addClass": function(val) {
-            var $this = Luna(this);
+        "addClass": function (val) {
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var uniqueClass = Luna.uniqueClass(curClass, val);
                     node.setAttribute('class', uniqueClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 从被选元素删除一个或多个类
          */
-        "removeClass": function(val) {
-            var $this = Luna(this);
+        "removeClass": function (val) {
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var resultClass = Luna.operateClass(curClass, val, true);
                     node.setAttribute('class', resultClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 对被选元素进行添加/删除类的切换操作
          */
-        "toggleClass": function(val) {
-            var $this = Luna(this);
+        "toggleClass": function (val) {
+            var $$this = Luna(this);
             var node;
             var curClass;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     curClass = node.getAttribute('class') || '';
                     var resultClass = Luna.operateClass(curClass, val);
                     node.setAttribute('class', resultClass);
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 设置或获取class
          */
-        "class": function(val) {
-            var $this = Luna(this);
+        "class": function (val) {
+            var $$this = Luna(this);
             var node;
             if (typeof val === "string" && val) {
                 var i = 0;
-                node = $this[i++];
+                node = $$this[i++];
                 while (node) {
                     node.setAttribute('class', Luna.uniqueClass(val));
-                    node = $this[i++];
+                    node = $$this[i++];
                 }
             } else {
-                return $this[0].getAttribute('class') || '';
+                return $$this[0].getAttribute('class') || '';
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 设置或返回被选元素的一个样式属性
          */
-        "css": function(name, style) {
-            var $this = Luna(this),
+        "css": function (name, style) {
+            var $$this = Luna(this),
                 flag;
             if (typeof name === 'string' && arguments.length === 1) {
-                return Luna.styles($this[0], name);
+                return Luna.styles($$this[0], name);
             }
             if (typeof name === 'string' && typeof style === 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].style[name] = style;
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].style[name] = style;
                 }
             } else if (typeof name === 'object') {
                 for (var key in name) {
-                    for (flag = 0; flag < $this.length; flag++) {
-                        $this[flag].style[key] = name[key];
+                    for (flag = 0; flag < $$this.length; flag++) {
+                        $$this[flag].style[key] = name[key];
                     }
                 }
             } else {
-                return Luna.styles($this[0]);
+                return Luna.styles($$this[0]);
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素内部的结尾插入内容
          */
-        "append": function(node) {
-            var $this = Luna(this),
+        "append": function (node) {
+            var $$this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(node);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(node);
                 }
             } else if (node.isTouch) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(node[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(node[0]);
                 }
             } else if (typeof node == 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].appendChild(Luna(node)[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].appendChild(Luna(node)[0]);
                 }
             } else {
                 throw new Error("Not acceptable type!");
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素内部的开头插入内容
          */
-        "prepend": function(node) {
-            var $this = Luna(this),
+        "prepend": function (node) {
+            var $$this = Luna(this),
                 flag;
             if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(node, $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(node, $$this[0].childNodes[0]);
                 }
             } else if (node.isTouch) {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(node[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(node[0], $$this[0].childNodes[0]);
                 }
             } else if (typeof node == 'string') {
-                for (flag = 0; flag < $this.length; flag++) {
-                    $this[flag].insertBefore(Luna(node)[0], $this[0].childNodes[0]);
+                for (flag = 0; flag < $$this.length; flag++) {
+                    $$this[flag].insertBefore(Luna(node)[0], $$this[0].childNodes[0]);
                 }
             } else {
                 throw new Error("Not acceptable type!");
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素之后插入内容
          */
-        "after": function(node) {
-            var $this = Luna(this),
-                flag, $parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[flag].parentNode || Luna('body')[0];
+        "after": function (node) {
+            var $$this = Luna(this),
+                flag, $$parent;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = $$this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[0].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
+                    $$parent.insertBefore(node, $$this[flag].nextSibling); //如果第二个参数undefined,在结尾追加，目的一样达到
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[0].nextSibling);
+                    $$parent.insertBefore(node[0], $$this[flag].nextSibling);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[0].nextSibling);
+                    $$parent.insertBefore(Luna(node)[0], $$this[flag].nextSibling);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 在被选元素之前插入内容
          */
-        "before": function(node) {
-            var $this = Luna(this),
-                $parent, flag;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = $this[0].parentNode || Luna('body')[0];
+        "before": function (node) {
+            var $$this = Luna(this),
+                $$parent, flag;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = $$this[flag].parentNode || Luna('body')[0];
                 if (node.nodeType === 1 || node.nodeType === 11 || node.nodeType === 9) {
-                    $parent.insertBefore(node, $this[0]);
+                    $$parent.insertBefore(node, $$this[flag]);
                 } else if (node.isTouch) {
-                    $parent.insertBefore(node[0], $this[0]);
+                    $$parent.insertBefore(node[0], $$this[flag]);
                 } else if (typeof node == 'string') {
-                    $parent.insertBefore(Luna(node)[0], $this[0]);
+                    $$parent.insertBefore(Luna(node)[0], $$this[flag]);
                 } else {
                     throw new Error("Not acceptable type!");
                 }
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 删除被选元素（及其子元素）
          */
-        "remove": function() {
-            var $this = Luna(this),
-                flag, $parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                $parent = Luna($this[flag]).parent();
-                $parent[0].removeChild($this[0]);
+        "remove": function () {
+            var $$this = Luna(this),
+                flag, $$parent;
+            for (flag = 0; flag < $$this.length; flag++) {
+                $$parent = Luna($$this[flag]).parent();
+                $$parent[0].removeChild($$this[flag]);
             }
-            return $this;
+            return $$this;
         },
 
         /**
          * 从被选元素中删除子元素
          */
-        "empty": function() {
-            var $this = Luna(this),
+        "empty": function () {
+            var $$this = Luna(this),
                 flag;
-            for (flag = 0; flag < $this.length; flag++) {
-                $($this[flag]).html('');
+            for (flag = 0; flag < $$this.length; flag++) {
+                Luna($$this[flag]).html('');
             }
-            return $this;
+            return $$this;
         },
         /**
          * 进入全屏
          */
-        "launchFullScreen": function() {
-            var $this = Luna(this);
-            if ($this[0] && $this[0].requestFullScreen) {
-                $this[0].requestFullScreen();
-            } else if ($this[0] && $this[0].mozRequestFullScreen) {
-                $this[0].mozRequestFullScreen();
-            } else if ($this[0] && $this[0].webkitRequestFullScreen) {
-                $this[0].webkitRequestFullScreen();
+        "launchFullScreen": function () {
+            var $$this = Luna(this);
+            if ($$this[0] && $$this[0].requestFullScreen) {
+                $$this[0].requestFullScreen();
+            } else if ($$this[0] && $$this[0].mozRequestFullScreen) {
+                $$this[0].mozRequestFullScreen();
+            } else if ($$this[0] && $$this[0].webkitRequestFullScreen) {
+                $$this[0].webkitRequestFullScreen();
             }
-            return $this;
-        },
+            return $$this;
+        }
     });
 
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -680,7 +785,7 @@
          * 把指定文字复制到剪切板
          */
         'clipboard': function(text, callback, errorback) {
-            $('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
+            Luna('body').prepend(Luna('<textarea id="clipboard-textarea" style="position:absolute">' + text + '</textarea>')[0]);
             window.document.getElementById("clipboard-textarea").select();
             try {
                 window.document.execCommand("copy", false, null);
@@ -692,19 +797,32 @@
                     errorback();
                 }
             }
-            $('#clipboard-textarea').remove();
+            Luna('#clipboard-textarea').remove();
         },
 
         /**
          * 退出全屏
          */
         "exitFullScreen": function() {
-            document.exitFullscreen ? document.exitFullscreen() :
-                document.mozCancelFullScreen ? document.mozCancelFullScreen() :
-                document.webkitExitFullscreen ? document.webkitExitFullscreen() : '';
+            if (!!document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (!!document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (!!document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else {
+                console.error('退出全屏失败！');
+            }
+        },
+
+        /**
+         * 执行一定字符串的js代码
+         */
+        "eval": function(js) {
+            return (new Function("return " + "" + js + ""))();
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -771,7 +889,7 @@
         },
         "isAttr": function(selector) {
             //[attr="val"] 前置条件：已经知道是最单纯的选择器
-            if (/^\[([^=]+)=(["'])([^=]+)\2\]$/.test(selector)) {
+            if (/^\[([^=]+)(=(["'])([^=]+)\2){0,1}\]$/.test(selector)) {
                 return true;
             } else {
                 return false;
@@ -780,7 +898,7 @@
         "isValidComplex": function(selector) {
             //判断是不是合法的第二类选择器 前置条件：已经知道只可能是第二类选择器或者非法
             selector = selector.replace(/^[^#.[]+/, ''); //去掉开头的标签选择器
-            selector = selector.replace(/\[([^=]+)=(["'])([^=]+)\2\]/g, ''); //去掉合法的属性选择器
+            selector = selector.replace(/\[([^=]+)(=(["'])([^=]+)\2){0,1}\]/g, ''); //去掉合法的属性选择器
             selector = selector.replace(/#[^#.[]+/g, ''); //去掉id选择器
             selector = selector.replace(/\.[^#.[]+/g, ''); //去掉class选择器
             if (selector != "") { //如果此时还存在，一定是非法的
@@ -797,7 +915,7 @@
             if (!!currentSelector && currentSelector.length > 0) {
                 selectorObj._elem_ = currentSelector[0];
             }
-            currentSelector = selector.match(/\[([^=]+)=(["'])([^=]+)\2\]/g); //属性选择器
+            currentSelector = selector.match(/\[([^=]+)(=(["'])([^=]+)\2){0,1}\]/g); //属性选择器
             if (!!currentSelector && currentSelector.length > 0) {
                 selectorObj._attr_ = [];
                 for (flag = 0; flag < currentSelector.length; flag++) {
@@ -825,7 +943,7 @@
             for (flag = 0; flag < needCheckResultArray.length; flag++) {
                 isAccept = true;
                 if (!!selectorObj._elem_ && isAccept) { //1.检测元素类型
-                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase()) {
+                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase() && needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toLowerCase()) {
                         isAccept = false;
                     }
                 }
@@ -844,9 +962,17 @@
                 }
                 if (!!selectorObj._attr_ && selectorObj._attr_.length > 0 && isAccept) { //3.检测attr
                     for (innerFlag = 0; innerFlag < selectorObj._attr_.length && isAccept; innerFlag++) {
-                        selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
-                        if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
-                            isAccept = false;
+
+                        if (/^\[([^=]+)]$/.test(selectorObj._attr_[innerFlag])) {
+                            selector_exec = /^\[([^=]+)\]$/.exec(selectorObj._attr_[innerFlag]);
+                            if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) == null) {
+                                isAccept = false;
+                            }
+                        } else {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
+                            if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
+                                isAccept = false;
+                            }
                         }
                     }
                 }
@@ -882,7 +1008,7 @@
                         helpResult = tempResult;
                         tempResult = [];
                         for (flag = 0; flag < helpResult.length; flag++) {
-                            if (helpResult[flag].tagName == ((selector + "").toUpperCase())) {
+                            if (helpResult[flag].tagName == ((selector + "").toUpperCase()) || helpResult[flag].tagName == ((selector + "").toLowerCase())) {
                                 tempResult.push(helpResult[flag]);
                             }
                         }
@@ -890,9 +1016,16 @@
                         helpResult = tempResult;
                         tempResult = [];
                         for (flag = 0; flag < helpResult.length; flag++) {
-                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
-                            if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
-                                tempResult.push(helpResult[flag]);
+                            if (/^\[([^=]+)]$/.test(selector)) {
+                                selector_exec = /^\[([^=]+)\]$/.exec(selector);
+                                if (!helpResult[flag].getAttribute || helpResult[flag].getAttribute(selector_exec[1]) != null) {
+                                    tempResult.push(helpResult[flag]);
+                                }
+                            } else {
+                                selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                                if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
+                                    tempResult.push(helpResult[flag]);
+                                }
                             }
                         }
                     } else {
@@ -963,12 +1096,25 @@
                         }
                     } else {
                         elems = context.getElementsByTagName('*');
-                        var selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
-                        for (flag = 0; flag < elems.length; flag++) {
-                            if (selector_exec[3] == Luna(elems[flag]).attr(selector_exec[1])) {
-                                resultData.push(elems[flag]);
+
+                        var selector_exec;
+
+                        if (/^\[([^=]+)]$/.test(selector)) {
+                            selector_exec = /^\[([^=]+)\]$/.exec(selector);
+                            for (flag = 0; flag < elems.length; flag++) {
+                                if (!elems[flag].getAttribute || elems[flag].getAttribute(selector_exec[1]) != null) {
+                                    resultData.push(elems[flag]);
+                                }
+                            }
+                        } else {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                            for (flag = 0; flag < elems.length; flag++) {
+                                if (selector_exec[3] == Luna(elems[flag]).attr(selector_exec[1])) {
+                                    resultData.push(elems[flag]);
+                                }
                             }
                         }
+
                     }
                 } else {
                     throw new Error('invalid selector1:' + selector);
@@ -1031,7 +1177,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1046,7 +1192,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1063,7 +1209,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -1078,7 +1224,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -1104,7 +1250,7 @@
         }
     });
 
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -1114,27 +1260,27 @@
          * 返回全部被选元素的直接父元素
          */
         "parent": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 parent;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    parent = $this[flag].parentNode;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    parent = $$this[flag].parentNode;
                 }
                 while (parent && parent.nodeType !== 1 && parent.nodeType !== 11 && parent.nodeType !== 9 && parent.parentNode) {
                     parent = parent.parentNode;
                 }
                 if (parent && (parent.nodeType === 1 || parent.nodeType === 11 || parent.nodeType === 9)) {
-                    $this[num] = parent;
+                    $$this[num] = parent;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":parent()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":parent()";
+            return $$this;
         },
 
         /**
@@ -1143,9 +1289,9 @@
          */
         "parents": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                parent = $this[0],
+                parent = $$this[0],
                 tempResult = [];
             while (parent && parent.parentNode) {
                 parent = parent.parentNode;
@@ -1154,15 +1300,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":parents('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":parents('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -1171,9 +1317,9 @@
          */
         "children": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                child = $this[0],
+                child = $$this[0],
                 tempResult = [];
             if (!child) {
                 tempResult = [];
@@ -1187,15 +1333,15 @@
                 tempResult = Luna._sizzle_.filter(tempResult, selector);
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":children('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":children('" + selector + "')";
+            return $$this;
         },
 
         /**
@@ -1204,9 +1350,9 @@
          */
         "siblings": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                sibling = $this[0],
+                sibling = $$this[0],
                 tempResult = [];
             if (!sibling) {
                 tempResult = [];
@@ -1229,42 +1375,42 @@
 
             }
 
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":siblings('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":siblings('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的下一个同胞元素
          */
         "next": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 next;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    next = $this[flag].nextSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    next = $$this[flag].nextSibling;
                 }
                 while (next && next.nodeType !== 1 && next.nodeType !== 11 && next.nodeType !== 9 && next.nextSibling) {
                     next = next.nextSibling;
                 }
                 if (next && (next.nodeType === 1 || next.nodeType === 11 || next.nodeType === 9)) {
-                    $this[num] = next;
+                    $$this[num] = next;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":next()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":next()";
+            return $$this;
         },
 
         /**
@@ -1273,9 +1419,9 @@
          */
         "nextAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                next = $this[0],
+                next = $$this[0],
                 tempResult = [];
             while (next && next.nextSibling) {
                 next = next.nextSibling;
@@ -1284,42 +1430,42 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":nextAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":nextAll('" + selector + "')";
+            return $$this;
         },
 
         /**
          * 返回全部被选元素的前一个同胞元素
          */
         "prev": function() {
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, num = 0,
                 prev;
-            for (flag = 0; flag < $this.length; flag++) {
-                if (!!$this[flag]) {
-                    prev = $this[flag].previousSibling;
+            for (flag = 0; flag < $$this.length; flag++) {
+                if (!!$$this[flag]) {
+                    prev = $$this[flag].previousSibling;
                 }
                 while (prev && prev.nodeType !== 1 && prev.nodeType !== 11 && prev.nodeType !== 9 && prev.previousSibling) {
                     prev = prev.previousSibling;
                 }
                 if (prev && (prev.nodeType === 1 || prev.nodeType === 11 || prev.nodeType === 9)) {
-                    $this[num] = prev;
+                    $$this[num] = prev;
                     num++;
                 }
             }
-            for (flag = num; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = num; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = num;
-            $this.selector = $this.selector + ":prev()";
-            return $this;
+            $$this.length = num;
+            $$this.selector = $$this.selector + ":prev()";
+            return $$this;
         },
 
         /**
@@ -1328,9 +1474,9 @@
          */
         "prevAll": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag,
-                prev = $this[0],
+                prev = $$this[0],
                 tempResult = [];
             while (prev && prev.previousSibling) {
                 prev = prev.previousSibling;
@@ -1339,15 +1485,15 @@
                 }
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":prevAll('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":prevAll('" + selector + "')";
+            return $$this;
         },
         /**
          * 根据选择器过滤已经选择的节点
@@ -1355,24 +1501,48 @@
          */
         "filter": function(selector) {
             selector = selector || '';
-            var $this = Luna(this),
+            var $$this = Luna(this),
                 flag, tempResult = [];
-            for (flag = 0; flag < $this.length; flag++) {
-                tempResult.push($this[flag]);
+            for (flag = 0; flag < $$this.length; flag++) {
+                tempResult.push($$this[flag]);
             }
             tempResult = Luna._sizzle_.filter(tempResult, selector);
-            for (flag = tempResult.length; flag < $this.length; flag++) {
-                delete $this[flag];
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
             }
-            $this.length = tempResult.length;
+            $$this.length = tempResult.length;
             for (flag = 0; flag < tempResult.length; flag++) {
-                $this[flag] = tempResult[flag];
+                $$this[flag] = tempResult[flag];
             }
-            $this.selector = $this.selector + ":filter('" + selector + "')";
-            return $this;
+            $$this.selector = $$this.selector + ":filter('" + selector + "')";
+            return $$this;
+        },
+        /**
+         * 返回第一个被选元素的满足条件的元素
+         * selector只支持二类选择器
+         */
+        "find": function(selector) {
+            selector = selector || '';
+            var $$this = Luna(this),
+                flag,
+                tempResult;
+            if ($$this.length <= 0) {
+                tempResult = [];
+            } else {
+                tempResult = Luna.sizzle(selector, $$this[0]);
+            }
+            for (flag = tempResult.length; flag < $$this.length; flag++) {
+                delete $$this[flag];
+            }
+            $$this.length = tempResult.length;
+            for (flag = 0; flag < tempResult.length; flag++) {
+                $$this[flag] = tempResult[flag];
+            }
+            $$this.selector = $$this.selector + ":find('" + selector + "')";
+            return $$this;
         }
     });
-})(window,window.Luna);
+})(window, window.Luna);
 
 (function(window, Luna, undefined) {
     'use strict';
@@ -1383,23 +1553,23 @@
          * 获取元素大小
          */
         "size": function(type) {
-            var $this = $(this);
+            var $$this = Luna(this);
             var elemHeight, elemWidth;
             if (type == 'content') { //内容
-                elemWidth = $this[0].clientWidth - (($this.css('padding-left') + "").replace('px', '')) - (($this.css('padding-right') + "").replace('px', ''));
-                elemHeight = $this[0].clientHeight - (($this.css('padding-top') + "").replace('px', '')) - (($this.css('padding-bottom') + "").replace('px', ''));
+                elemWidth = $$this[0].clientWidth - (($$this.css('padding-left') + "").replace('px', '')) - (($$this.css('padding-right') + "").replace('px', ''));
+                elemHeight = $$this[0].clientHeight - (($$this.css('padding-top') + "").replace('px', '')) - (($$this.css('padding-bottom') + "").replace('px', ''));
             } else if (type == 'padding') { //内容+内边距
-                elemWidth = $this[0].clientWidth;
-                elemHeight = $this[0].clientHeight;
+                elemWidth = $$this[0].clientWidth;
+                elemHeight = $$this[0].clientHeight;
             } else if (type == 'border') { //内容+内边距+边框
-                elemWidth = $this[0].offsetWidth;
-                elemHeight = $this[0].offsetHeight;
+                elemWidth = $$this[0].offsetWidth;
+                elemHeight = $$this[0].offsetHeight;
             } else if (type == 'scroll') { //滚动的宽（不包括border）
-                elemWidth = $this[0].scrollWidth;
-                elemHeight = $this[0].scrollHeight;
+                elemWidth = $$this[0].scrollWidth;
+                elemHeight = $$this[0].scrollHeight;
             } else {
-                elemWidth = $this[0].offsetWidth;
-                elemHeight = $this[0].offsetHeight;
+                elemWidth = $$this[0].offsetWidth;
+                elemHeight = $$this[0].offsetHeight;
             }
             return {
                 width: elemWidth,
@@ -1488,3 +1658,134 @@
         }
     });
 })(window,window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.extend({
+        /**
+         * 切换到SVG模式
+         */
+        "SVG": function() {
+            Luna._code_environment_ = 'SVG';
+            return Luna(arguments[0], arguments[1], arguments[2]);
+        },
+        /**
+         * 切换到HTML模式
+         */
+        "HTML": function() {
+            Luna._code_environment_ = 'HTML';
+            return Luna(arguments[0], arguments[1], arguments[2]);
+        }
+    });
+})(window, window.Luna);
+
+(function (window, Luna, undefined) {
+    'use strict';
+
+    Luna.extend(Luna._SVG_config_, {
+        "xlink": {
+            "href": true,
+            "title": true,
+            "show": true,
+            "type": true,
+            "role": true,
+            "actuate": true
+        }
+    });
+
+})(window, window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+    Luna.extend({
+        /**
+         * 判断是不是闰年
+         */
+        'isLeapYear': function(year) {
+            if ((year % 4 == 0) && (year % 100 != 0 || year % 400 == 0)) {
+                return true;
+            } else {
+                return false;
+            }
+        },
+        /**
+         * 判断某年某月多少天
+         */
+        'getMonthDay': function(month, year) {
+            var monthDay = [31, -1, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month - 1];
+            if (!!monthDay && monthDay > 0) {
+                return monthDay;
+            } else if (!!year && month >= 1 && month <= 12) {
+                return Luna.isLeapYear(year) ? 29 : 28;
+            }
+            throw new Error('parameter is unexcepted!');
+        },
+        /**
+         * 计算某年某月第一天是星期几
+         */
+        'getBeginWeek': function(year, month) {
+            var beginWeek = new Date(year + "/" + month + "/1").getDay();
+            if (beginWeek == 0) {
+                return 7;
+            }
+            return beginWeek;
+        }
+    });
+})(window, window.Luna);
+
+(function(window, Luna, undefined) {
+    'use strict';
+
+    Luna.extend({
+
+        /**
+         * 获取XHR对象
+         */
+        "getXHR": function() {
+            if (!!Luna.XHR) {
+                return Luna.XHR;
+            }
+
+            if (window.XMLHttpRequest) {
+                Luna.XHR = new window.XMLHttpRequest();
+            } else {
+                Luna.XHR = new window.ActiveXObject("Microsoft.XMLHTTP");
+            }
+
+            return Luna.XHR;
+        },
+
+        /**
+         * 通过HTTP GET获取指定路径文件
+         */
+        "get": function(url, callback, errorback) {
+            var xmlhttp = Luna.getXHR();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                    if (this.status == 200) {
+                        if (callback) {
+                            callback(this.responseText);
+                        }
+                    } else {
+                        if (errorback) {
+                            errorback();
+                        }
+                    }
+                }
+            };
+            xmlhttp.open('get', url + "?Token=" + (new Date()).valueOf(), true);
+            xmlhttp.send();
+        },
+
+        /**
+         * 通过HTTP GET形式的加载JavaScript文件并在全局运行它
+         */
+        "getScript": function(url, callback, errorback) {
+            Luna.get(url, function(js) {
+                Luna.eval(js);
+                callback();
+            }, errorback);
+        }
+    });
+})(window, window.Luna);

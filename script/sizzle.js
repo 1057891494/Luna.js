@@ -63,7 +63,7 @@
         },
         "isAttr": function(selector) {
             //[attr="val"] 前置条件：已经知道是最单纯的选择器
-            if (/^\[([^=]+)=(["'])([^=]+)\2\]$/.test(selector)) {
+            if (/^\[([^=]+)(=(["'])([^=]+)\2){0,1}\]$/.test(selector)) {
                 return true;
             } else {
                 return false;
@@ -72,7 +72,7 @@
         "isValidComplex": function(selector) {
             //判断是不是合法的第二类选择器 前置条件：已经知道只可能是第二类选择器或者非法
             selector = selector.replace(/^[^#.[]+/, ''); //去掉开头的标签选择器
-            selector = selector.replace(/\[([^=]+)=(["'])([^=]+)\2\]/g, ''); //去掉合法的属性选择器
+            selector = selector.replace(/\[([^=]+)(=(["'])([^=]+)\2){0,1}\]/g, ''); //去掉合法的属性选择器
             selector = selector.replace(/#[^#.[]+/g, ''); //去掉id选择器
             selector = selector.replace(/\.[^#.[]+/g, ''); //去掉class选择器
             if (selector != "") { //如果此时还存在，一定是非法的
@@ -89,7 +89,7 @@
             if (!!currentSelector && currentSelector.length > 0) {
                 selectorObj._elem_ = currentSelector[0];
             }
-            currentSelector = selector.match(/\[([^=]+)=(["'])([^=]+)\2\]/g); //属性选择器
+            currentSelector = selector.match(/\[([^=]+)(=(["'])([^=]+)\2){0,1}\]/g); //属性选择器
             if (!!currentSelector && currentSelector.length > 0) {
                 selectorObj._attr_ = [];
                 for (flag = 0; flag < currentSelector.length; flag++) {
@@ -117,7 +117,7 @@
             for (flag = 0; flag < needCheckResultArray.length; flag++) {
                 isAccept = true;
                 if (!!selectorObj._elem_ && isAccept) { //1.检测元素类型
-                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase()) {
+                    if (needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toUpperCase() && needCheckResultArray[flag].tagName != (selectorObj._elem_ + "").toLowerCase()) {
                         isAccept = false;
                     }
                 }
@@ -136,9 +136,17 @@
                 }
                 if (!!selectorObj._attr_ && selectorObj._attr_.length > 0 && isAccept) { //3.检测attr
                     for (innerFlag = 0; innerFlag < selectorObj._attr_.length && isAccept; innerFlag++) {
-                        selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
-                        if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
-                            isAccept = false;
+
+                        if (/^\[([^=]+)]$/.test(selectorObj._attr_[innerFlag])) {
+                            selector_exec = /^\[([^=]+)\]$/.exec(selectorObj._attr_[innerFlag]);
+                            if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) == null) {
+                                isAccept = false;
+                            }
+                        } else {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selectorObj._attr_[innerFlag]);
+                            if (!needCheckResultArray[flag].getAttribute || needCheckResultArray[flag].getAttribute(selector_exec[1]) != selector_exec[3]) {
+                                isAccept = false;
+                            }
                         }
                     }
                 }
@@ -174,7 +182,7 @@
                         helpResult = tempResult;
                         tempResult = [];
                         for (flag = 0; flag < helpResult.length; flag++) {
-                            if (helpResult[flag].tagName == ((selector + "").toUpperCase())) {
+                            if (helpResult[flag].tagName == ((selector + "").toUpperCase()) || helpResult[flag].tagName == ((selector + "").toLowerCase())) {
                                 tempResult.push(helpResult[flag]);
                             }
                         }
@@ -182,9 +190,16 @@
                         helpResult = tempResult;
                         tempResult = [];
                         for (flag = 0; flag < helpResult.length; flag++) {
-                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
-                            if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
-                                tempResult.push(helpResult[flag]);
+                            if (/^\[([^=]+)]$/.test(selector)) {
+                                selector_exec = /^\[([^=]+)\]$/.exec(selector);
+                                if (!helpResult[flag].getAttribute || helpResult[flag].getAttribute(selector_exec[1]) != null) {
+                                    tempResult.push(helpResult[flag]);
+                                }
+                            } else {
+                                selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                                if (helpResult[flag].getAttribute && helpResult[flag].getAttribute(selector_exec[1]) == selector_exec[3]) {
+                                    tempResult.push(helpResult[flag]);
+                                }
                             }
                         }
                     } else {
@@ -255,12 +270,25 @@
                         }
                     } else {
                         elems = context.getElementsByTagName('*');
-                        var selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
-                        for (flag = 0; flag < elems.length; flag++) {
-                            if (selector_exec[3] == Luna(elems[flag]).attr(selector_exec[1])) {
-                                resultData.push(elems[flag]);
+
+                        var selector_exec;
+
+                        if (/^\[([^=]+)]$/.test(selector)) {
+                            selector_exec = /^\[([^=]+)\]$/.exec(selector);
+                            for (flag = 0; flag < elems.length; flag++) {
+                                if (!elems[flag].getAttribute || elems[flag].getAttribute(selector_exec[1]) != null) {
+                                    resultData.push(elems[flag]);
+                                }
+                            }
+                        } else {
+                            selector_exec = /^\[([^=]+)=(["'])([^=]+)\2\]$/.exec(selector);
+                            for (flag = 0; flag < elems.length; flag++) {
+                                if (selector_exec[3] == Luna(elems[flag]).attr(selector_exec[1])) {
+                                    resultData.push(elems[flag]);
+                                }
                             }
                         }
+
                     }
                 } else {
                     throw new Error('invalid selector1:' + selector);
@@ -323,7 +351,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parent().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -338,7 +366,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prevAll(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -355,7 +383,7 @@
                             num = 0;
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).prev().filter(filterSelector);
                                     if (tempLuna.length > 0) {
                                         helpNodes[innerFlag][num] = tempLuna;
                                         num++;
@@ -370,7 +398,7 @@
                             if (!!helpNodes[innerFlag] && helpNodes[innerFlag].length > 0) {
                                 tempHelpNodes = [];
                                 for (_inFlag_ = 0; _inFlag_ < helpNodes[innerFlag].length; _inFlag_++) { //检测判断是否合法路径，有一个合法即可
-                                    tempLuna = $(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
+                                    tempLuna = Luna(helpNodes[innerFlag][_inFlag_]).parents(filterSelector);
                                     for (tempFlag = 0; tempFlag < tempLuna.length; tempFlag++) {
                                         tempHelpNodes[num] = tempLuna[tempFlag];
                                         num++;
@@ -396,4 +424,4 @@
         }
     });
 
-})(window,window.Luna);
+})(window, window.Luna);

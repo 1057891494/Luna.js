@@ -49,7 +49,7 @@
             context = Luna(context)[0];
         }
 
-        //选择器: $(""), $(null), $(undefined), $(false)，兼容一下
+        //选择器: $$(""), $$(null), $$(undefined), $$(false)，兼容一下
         if (!selector) {
             return this;　　
         } else {
@@ -80,7 +80,23 @@
                 if (!context) {
                     throw new Error("Parameter error!");
                 }
-                var frameDiv = document.createElement("div");
+                var frameDiv;
+                switch (Luna._code_environment_) {
+                    case 'HTML':
+                        {
+                            frameDiv = document.createElement("div");
+                            break;
+                        }
+                    case 'SVG':
+                        {
+                            frameDiv = document.createElementNS("http://www.w3.org/2000/svg", 'svg');
+                            break;
+                        }
+                    default:
+                        {
+                            frameDiv = document.createElement("div");
+                        }
+                }
                 frameDiv.innerHTML = selector;
                 this[0] = frameDiv.childNodes[0];
                 this.isTouch = true;
@@ -96,10 +112,14 @@
                 }
                 var nodes = Luna.sizzle(selector, context);
                 flag = 0;
+                var _flag_ = 0;
                 for (; flag < nodes.length; flag++) {
-                    this[flag] = nodes[flag];
+                    if (nodes[flag]) {
+                        this[_flag_] = nodes[flag];
+                        _flag_++;
+                    }
                 }
-                this.length = flag;
+                this.length = _flag_;
                 this.isTouch = true;
                 this.context = context;
                 return this;
@@ -159,7 +179,7 @@
     };
 
 
-    var rootLuna =Luna(document);
+    var rootLuna = Luna(document);
 
     Luna.prototype.extend = Luna.extend = function() {
 
@@ -213,12 +233,31 @@
     /*sizzle特殊使用 */
     Luna._sizzle_ = {};
 
+    /*SVG配置使用 */
+    Luna._SVG_config_ = {};
+
+    // 代码环境【默认HTML】
+    Luna._code_environment_ = 'HTML';
+
+    /* 恢复旧的Luna(可以通过参数来控制是否恢复)和$$ */
+    var _Luna = window.Luna,
+        _$$ = window.$$;
+    Luna.noConflict = function(flag) {
+        if (window.$$ === Luna) {
+            window.$$ = _$$;
+        }
+        if (flag && window.Luna === Luna) {
+            window.Luna = _Luna;
+        }
+        return Luna;
+    };
+
     /* 一些核心说明 */
     Luna.author = '心叶';
     Luna.author_english = 'yelloxing';
     Luna.email = 'yelloxing@gmail.com';
     Luna.description = 'The JavaScript library full of elaborate designs';
     Luna.build = '2018/02/01';
-    window.Luna = window.$ = Luna;
+    window.Luna = window.$$ = Luna;
     return Luna;
 });
